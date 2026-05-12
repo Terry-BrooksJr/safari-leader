@@ -1,0 +1,50 @@
+[project]
+name = "safari-leader"
+version = "0.1.0"
+description = "A comprehensive childcare management platform built for daycare centers and after-school programs. Handles enrollment, attendance tracking, student handoff, staff scheduling, and parent communication - all in one unified system. Designed to reduce administrative overhead and surface real-time operational visibility."
+authors = [
+    {name = "Terry A. Brooks, Jr.",email = "Terry.Arthur@BrooksJr.com"}
+]
+license = {text = "MIT"}
+requires-python = ">=3.12"
+package-mode = false
+
+dependencies = [
+    "django (>=6.0.4,<7.0.0)",
+    "django-redis (>=6.0.0,<7.0.0)",
+    "psycopg2-binary (>=2.9.12,<3.0.0)",
+    "django-crispy-forms (>=2.6,<3.0)",
+    "django-recaptcha (>=4.1.0,<5.0.0)",
+    "django-storages (>=1.14.6,<2.0.0)",
+    "crispy-bootstrap5 (>=2026.3,<2027.0)",
+    "django-widget-tweaks (>=1.5.1,<2.0.0)",
+    "django-pgcrypto (>=3.1.0,<4.0.0)",
+    "django-allauth (>=65.16.1,<66.0.0)",
+    "django-pgcrypto-fields (>=2.6.0,<3.0.0)",
+    "django-extensions (>=4.1,<5.0)",
+    "django-address (>=0.2.8,<0.3.0)",
+    "django-fernet-fields (>=0.6,<0.7)",
+    "cryptography (>=48.0.0,<49.0.0)",
+    "arrow (>=1.4.0,<2.0.0)",
+    "whitenoise (>=6.12.0,<7.0.0)",
+    "django-cors-headers (>=4.9.0,<5.0.0)",
+    "argon2-cffi (>=25.1.0,<26.0.0)",
+    "django-prometheus (>=2.4.1,<3.0.0)"
+
+]
+
+[tool.poetry.group.dev.dependencies]
+black = "^26.3.1"
+pip = "^26.0"
+isort = "^5.12.0"
+mypy = "^1.6.1"
+pylint = "^3.0.2"
+pre-commit = "^3.5.0"
+kolo = ">=3.1.0"
+autoflake = "^2.2.1"
+ruff = "^0.15.2"
+djlint = "^1.36.4"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,20 @@
+from django.db import models
+from applications.accounts.models import User
+from applications.children.models import Child
+from django.utils.translation import gettext_lazy as _
+
+class DOCUMENT_TYPE(models.TextChoices):
+    GENERAL = 'G', _("General")
+    FINANCIAL = 'F', _("Financial")
+    LEGAL = 'L', _("Legal")
+    INTERNAL = 'I', _("Internal")
+    OTHER = 'O', _("Other")
+    MEDICIAL = 'M', _("Medicial")
+    
+
+class Document(models.Model):
+    child_id = models.ForeignKey(Child, on_delete=models.CASCADE, related_name="documents")
+    uploaded_by_id =  models.ForeignKey(User, on_delete=models.CASCADE)
+    document_type = models.CharField(max_length=12, choices=DOCUMENT_TYPE.choices)
+    file = models.CharField(max_length=3000, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
