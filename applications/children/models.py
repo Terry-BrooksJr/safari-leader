@@ -51,8 +51,8 @@ class Child(models.Model):
         return age
     
 class AuthorizedPickupProfile(models.Model): 
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    user= models.ForeignKey(User, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=3, choices=RELATIONSHIP.choices)
     is_authorized = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
@@ -97,9 +97,9 @@ class AuthorizedPickupProfile(models.Model):
                 return False
             
 class Allergy(models.Model):
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     allergen = models.CharField(max_length=50)
-    severity = models.CharField(choices=ALLERGEN_SEVERITY.choices)
+    severity = models.CharField(max_length=2, choices=ALLERGEN_SEVERITY.choices)
     instructions = models.TextField()
     is_active = models.BooleanField(default=True)
     
@@ -111,6 +111,7 @@ class Allergy(models.Model):
         self.save()
         
 class MedicalNote(models.Model):
+    child = models.ForeignKey(Child, on_delete=models.CASCADE, null=True, blank=True)
     note = models.TextField()
     is_active = models.BooleanField(default=True)
     
@@ -122,11 +123,9 @@ class MedicalNote(models.Model):
         self.save()
         
 class CustodyRestriction(models.Model):
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
-    notes = models.TextField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     restriction_type = models.CharField(max_length=10, choices=RESTRICTION_TYPE.choices)
-    notes = models.TextField()
+    notes = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     
     def toggle_active_status(self):
@@ -137,7 +136,7 @@ class CustodyRestriction(models.Model):
         self.save()
 
 class EmergencyContact(models.Model): 
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
     contact_number = models.CharField(max_length=12)
@@ -154,7 +153,7 @@ class EmergencyContact(models.Model):
         self.save()
         
 class GuardianProfile(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user= models.ForeignKey(User, on_delete=models.CASCADE)
     contact_number = models.CharField(max_length=12)
     is_primary_contact = models.BooleanField()
     created_at = models.DateField(auto_now=True)
@@ -167,8 +166,8 @@ class GuardianProfile(models.Model):
         self.save()
     
 class ChildGuardianRelationship(models.Model):
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
-    guardian_id = models.ForeignKey(GuardianProfile, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    guardian= models.ForeignKey(GuardianProfile, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=3, choices=RELATIONSHIP.choices)
     is_primary = models.BooleanField()
     has_custody_rights = models.BooleanField()

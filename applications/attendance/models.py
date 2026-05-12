@@ -19,7 +19,7 @@ class EVENT_TYPE(models.TextChoices):
     PM_CHECKOUT = 'CO-PM', _('Check-Out(PM)')
 
 class AttendanceRecord(models.Model): 
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     date = models.DateField()
     status = models.CharField(max_length=3, choices=RECORD_STATUS.choices, default=RECORD_STATUS.DRAFT)
     created = models.DateField(auto_now_add=True)
@@ -41,9 +41,9 @@ class AttendanceRecord(models.Model):
             return super().save(force_insert, force_update, using, update_fields)
 
 class CheckInOutEvent(models.Model): 
-    child_id = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     event_type = models.CharField(max_length=5, choices=EVENT_TYPE.choices)
     timestamp = models.DateTimeField(auto_now=True)
-    performed_by_id = models.ForeignKey(AuthorizedPickupProfile, on_delete=models.SET_NULL)
-    recorded_by_id = models.ForeignKey(StaffProfile, on_delete=models.SET_NULL)
+    performed_by= models.ForeignKey(AuthorizedPickupProfile, on_delete=models.SET_NULL, null=True)
+    recorded_by= models.ForeignKey(StaffProfile, on_delete=models.SET_NULL, null=True)
     notes = models.TextField(null=True, blank=True)

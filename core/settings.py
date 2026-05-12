@@ -74,7 +74,7 @@ MIDDLEWARE = [
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
-AUTH_USER_MODEL = "applications.accounts.User"
+AUTH_USER_MODEL = "accounts.User"
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
