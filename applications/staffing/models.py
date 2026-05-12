@@ -37,26 +37,26 @@ class StaffProfile(models.Model):
                 return False
 
 class StaffAssignment(ModelModifer, models.Model):
-    staff_id = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
-    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
-    program_id = models.ForeignKey(Program, on_delete=models.CASCADE)
+    staff= models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
+    site= models.ForeignKey(Site, on_delete=models.CASCADE)
+    room= models.ForeignKey(Room, on_delete=models.CASCADE)
+    program= models.ForeignKey(Program, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     
     
 class Shift(ModelModifer, models.Model):
-    staff_id = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
-    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
+    staff= models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
+    site= models.ForeignKey(Site, on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
     is_active = models.BooleanField(default=True)
 
 
 class RatioRequirement(ModelModifer, models.Model):
-    program_id = models.ForeignKey(Program, on_delete=models.CASCADE)
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
+    program= models.ForeignKey(Program, on_delete=models.CASCADE)
+    room= models.ForeignKey(Room, on_delete=models.CASCADE)
     min_age = models.IntegerField()
     max_age = models.IntegerField()
     staff_to_child_ratio = models.CharField(max_length=10)

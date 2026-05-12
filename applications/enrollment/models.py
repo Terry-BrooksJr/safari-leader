@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 days_of_week_template = {
     "sunday": False,
-    "monday":True, 
+    "monday":True,
+    "tuesday": True,
     "wednesday": True,
     "thursday": True,
     "friday":True,
@@ -19,17 +20,17 @@ class ENROLLMENT_STATUS(models.TextChoices):
     WITHDRAWN = 'W', _("Inactive - Withdrawn")
 
 class Enrollment(models.Model):
-    child_id = models.ForeignKey(Child,on_delete=models.CASCADE )
-    program_id = models.ForeignKey(Program, on_delete=models.CASCADE)
-    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child,on_delete=models.CASCADE )
+    program= models.ForeignKey(Program, on_delete=models.CASCADE)
+    site= models.ForeignKey(Site, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField(null=True,blank=True)
     status = models.CharField(max_length=5, choices=ENROLLMENT_STATUS.choices)
     
 class ChildSchedule(models.Model):
-    child_id = models.ForeignKey(Child,on_delete=models.CASCADE )
-    program_id = models.ForeignKey(Program, on_delete=models.CASCADE)
-    enrollment_id = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child,on_delete=models.CASCADE )
+    program= models.ForeignKey(Program, on_delete=models.CASCADE)
+    enrollment= models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     days_of_week = models.JSONField(default=days_of_week_template)
     is_active = models.BooleanField(default=True)
     start_time = models.TimeField()

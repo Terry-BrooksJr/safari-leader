@@ -22,7 +22,7 @@ class Site(ModelModifer, models.Model):
     is_active = models.BooleanField(default=True)
     
 class Room(ModelModifer, models.Model):
-    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site= models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=375, null=False, blank=False)
     capacity = models.IntegerField()
     age_group = models.CharField(max_length=3, choices=AGE_GROUP.choices)
@@ -43,7 +43,7 @@ class Room(ModelModifer, models.Model):
             raise ValueError(f"Invalid Age Group: Got {new_age_group}")
         
 class Program(ModelModifer,models.Model):
-    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site= models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=375, null=False, blank=False)
     program_type = models.CharField(max_length=14, choices=PROGRAM_TYPE.choices)
     is_active = models.BooleanField(default=True)

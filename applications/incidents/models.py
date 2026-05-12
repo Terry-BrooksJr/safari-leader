@@ -17,8 +17,8 @@ class SEVERITY(models.TextChoices):
     FATAL = 'F', _('Fatal')
     
 class IncidentReport(models.Model):
-    child_id = models.ForeignKey(Child,on_delete=models.CASCADE )
-    reported_by_id = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child,on_delete=models.CASCADE )
+    reported_by= models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
     incident_type = models.CharField(max_length=10, choices=INCIDENT_TYPE.choices) 
     description = models.TextField()
     occurred_on = models.DateField()
