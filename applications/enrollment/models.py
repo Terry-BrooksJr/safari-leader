@@ -20,6 +20,11 @@ class ENROLLMENT_STATUS(models.TextChoices):
     WITHDRAWN = 'W', _("Inactive - Withdrawn")
 
 class Enrollment(models.Model):
+    """
+    Represents a child's enrollment in a specific program at a site. 
+
+    Enrollments track the active period and current status of a child's participation.
+    """
     child= models.ForeignKey(Child,on_delete=models.CASCADE )
     program= models.ForeignKey(Program, on_delete=models.CASCADE)
     site= models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -28,6 +33,11 @@ class Enrollment(models.Model):
     status = models.CharField(max_length=5, choices=ENROLLMENT_STATUS.choices)
     
 class ChildSchedule(models.Model):
+    """
+    Represents a recurring weekly schedule for a child's participation in a program. 
+
+    Child schedules define active days and times for attendance, and can be toggled on or off as needed.
+    """
     child= models.ForeignKey(Child,on_delete=models.CASCADE )
     program= models.ForeignKey(Program, on_delete=models.CASCADE)
     enrollment= models.ForeignKey(Enrollment, on_delete=models.CASCADE)
@@ -37,8 +47,13 @@ class ChildSchedule(models.Model):
     end_time = models.TimeField()
     
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether the child's schedule is currently active. 
+
+        This method flips the active flag on the schedule and persists the change.
+
+        Returns:
+            bool: The updated active status after toggling.
+        """
+        self.is_active = not self.is_active
         self.save()

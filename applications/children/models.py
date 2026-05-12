@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from applications.accounts.models import User
-from fernet_fields import EncryptedIntegerField
+from encrypted_fields.fields import EncryptedIntegerField
 import secrets
 from arrow import now, get
 from django.conf import settings
@@ -53,6 +53,8 @@ class Child(models.Model):
 class AuthorizedPickupProfile(models.Model): 
     child= models.ForeignKey(Child, on_delete=models.CASCADE)
     user= models.ForeignKey(User, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    user= models.ForeignKey(User, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=3, choices=RELATIONSHIP.choices)
     is_authorized = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
@@ -98,6 +100,7 @@ class AuthorizedPickupProfile(models.Model):
             
 class Allergy(models.Model):
     child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     allergen = models.CharField(max_length=50)
     severity = models.CharField(max_length=2, choices=ALLERGEN_SEVERITY.choices)
     instructions = models.TextField()
@@ -111,7 +114,7 @@ class Allergy(models.Model):
         self.save()
         
 class MedicalNote(models.Model):
-    child = models.ForeignKey(Child, on_delete=models.CASCADE, null=True, blank=True)
+    child = models.ForeignKey(Child, on_delete=models.CASCADE)
     note = models.TextField()
     is_active = models.BooleanField(default=True)
     
@@ -124,7 +127,6 @@ class MedicalNote(models.Model):
         
 class CustodyRestriction(models.Model):
     child= models.ForeignKey(Child, on_delete=models.CASCADE)
-    restriction_type = models.CharField(max_length=10, choices=RESTRICTION_TYPE.choices)
     notes = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     
@@ -136,6 +138,7 @@ class CustodyRestriction(models.Model):
         self.save()
 
 class EmergencyContact(models.Model): 
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
     child= models.ForeignKey(Child, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
@@ -154,6 +157,7 @@ class EmergencyContact(models.Model):
         
 class GuardianProfile(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE)
+    user= models.ForeignKey(User, on_delete=models.CASCADE)
     contact_number = models.CharField(max_length=12)
     is_primary_contact = models.BooleanField()
     created_at = models.DateField(auto_now=True)
@@ -166,6 +170,8 @@ class GuardianProfile(models.Model):
         self.save()
     
 class ChildGuardianRelationship(models.Model):
+    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    guardian= models.ForeignKey(GuardianProfile, on_delete=models.CASCADE)
     child= models.ForeignKey(Child, on_delete=models.CASCADE)
     guardian= models.ForeignKey(GuardianProfile, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=3, choices=RELATIONSHIP.choices)

@@ -1,5 +1,5 @@
 from django.db import models
-from fernet_fields import EncryptedIntegerField
+from encrypted_fields.fields import EncryptedIntegerField
 import secrets
 from applications.accounts.models import User
 from applications.facilities.models import Site, Room, Program

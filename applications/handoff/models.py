@@ -17,8 +17,11 @@ class HANDOFF_VERIFICATION_METHODS(models.TextChoices):
 
 
 class HandoffEvent(models.Model): 
-   child= models.ForeignKey(Child,on_delete=models.CASCADE )
-   event_type = models.CharField(max_length=5, choices=HANDOFF_EVENT_TYPE.choices)
-   pickup_person= models.ForeignKey(AuthorizedPickupProfile, on_delete=models.CASCADE)
-   checked_by= models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
-   timestamp = models.DateTimeField(auto_now_add=True)
+    """
+    Represents a single handoff event between a child and an authorized pickup person.  This model records when a child is picked up or dropped off, who performed the handoff, and who verified it.
+    """
+    child= models.ForeignKey(Child,on_delete=models.CASCADE )
+    event_type = models.CharField(max_length=5, choices=HANDOFF_EVENT_TYPE.choices)
+    pickup_person= models.ForeignKey(AuthorizedPickupProfile, on_delete=models.CASCADE)
+    checked_by= models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)

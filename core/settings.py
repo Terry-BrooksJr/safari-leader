@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "storages",
     "address",
     "corsheaders",
-    "recaptcha", 
+    "captcha", 
     "whitenoise",
     "applications.accounts",
     "applications.attendance",
@@ -166,10 +166,10 @@ STORAGES: dict[str, str | dict[str, str]] = {
     }
 
 # SECTION - AWS settings
-AWS_ACCESS_KEY_ID = os.environ["SPACES_KEY"]
-AWS_SECRET_ACCESS_KEY = os.environ["SPACES_SECRET"]
-AWS_S3_REGION_NAME = os.environ["DIGITAL_OCEAN_S3_REGION_NAME"]
-AWS_STORAGE_BUCKET_NAME = os.environ["DIGITAL_OCEAN_SPACES_NAME"]
+AWS_ACCESS_KEY_ID = os.environ["AWS_SECRET_ACCESS_KEY"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+AWS_S3_REGION_NAME = os.environ["AWS_S3_REGION_NAME"]
+AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"]
 AWS_DEFAULT_ACL = "private"
 AWS_S3_CUSTOM_DOMAIN = os.environ["AWS_S3_CUSTOM_DOMAIN"]
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
