@@ -75,12 +75,15 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = "accounts.User"
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -158,6 +161,7 @@ RECAPTCHA_PRIVATE_KEY: str = os.environ["RECAPTCHA_PRIVATE_KEY"]
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STORAGES: dict[str, str | dict[str, str]] = {
         "default": {"BACKEND": "common.backends.storage_backends.PrivateMediaStorage"},
         "staticfiles": {
