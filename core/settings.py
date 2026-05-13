@@ -26,7 +26,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = list(os.environ["ALLOWED_HOSTS"])
+ALLOWED_HOSTS = ['localhost','safari-leader.com','127.0.0.1:8000']
 FERNET_KEYS = os.environ["FERNET_KEYS"].split(",")
 
 # Application definition
@@ -160,38 +160,35 @@ RECAPTCHA_PRIVATE_KEY: str = os.environ["RECAPTCHA_PRIVATE_KEY"]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STORAGES: dict[str, str | dict[str, str]] = {
-        "default": {"BACKEND": "common.backends.storage_backends.PrivateMediaStorage"},
-        "staticfiles": {
-            "BACKEND": "common.backends.storage_backends.StaticStorage",
-        },
-    }
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # SECTION - AWS settings
-AWS_ACCESS_KEY_ID = os.environ["AWS_SECRET_ACCESS_KEY"]
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
 AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
-AWS_S3_REGION_NAME = os.environ["AWS_S3_REGION_NAME"]
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME") or os.environ["AWS_DEFAULT_REGION"]
 AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"]
-AWS_DEFAULT_ACL = "private"
+AWS_DEFAULT_ACL = None
 AWS_S3_CUSTOM_DOMAIN = os.environ["AWS_S3_CUSTOM_DOMAIN"]
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_QUERYSTRING_AUTH = False
 AWS_QUERYSTRING_EXPIRE = 3600
 AWS_S3_FILE_OVERWRITE = True
-AWS_S3_ENDPOINT_URL = "https://nyc3.digitaloceanspaces.com"
+AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://nyc3.digitaloceanspaces.com")
 STATIC_LOCATION = "static/production"
 STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-WHITENOISE_MANIFEST_STRICT = False
+STORAGES: dict[str, dict[str, str]] = {
+    "default": {"BACKEND": "common.backends.storage_backends.PrivateMediaStorage"},
+    "staticfiles": {"BACKEND": "common.backends.storage_backends.StaticStorage"},
+}
 
 # Media
-PUBLIC_MEDIA_LOCATION = "media"
+PUBLIC_MEDIA_LOCATION = "media/public"
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
 
 # SECTION - S3 private media settings
-PRIVATE_MEDIA_LOCATION: str = "restricted/"
-MEDIA_DIRECTORY: str = "/restricted/compliance/"
+PRIVATE_MEDIA_LOCATION: str = "media/restricted"
+MEDIA_DIRECTORY: str = "media/restricted/compliance/"
 PRIVATE_FILE_STORAGE: str = "common.backends.storage_backends.PrivateMediaStorage"
-PRIVATE_MEDIA_URL: str = f"{os.environ['AWS_S3_CUSTOM_DOMAIN']}/{PRIVATE_MEDIA_LOCATION}"
+PRIVATE_MEDIA_URL: str = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PRIVATE_MEDIA_LOCATION}/"

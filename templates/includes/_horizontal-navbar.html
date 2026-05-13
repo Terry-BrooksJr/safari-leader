@@ -8,51 +8,66 @@
             <a href="#" class="nav-link horizontal-nav-left-menu"><i class="mdi mdi-format-list-bulleted"></i></a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="mdi mdi-bell mx-0"></i>
-              <span class="count bg-success">2</span>
+              <span class="count bg-success">{{ announcements|length }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <div class="preview-icon bg-success">
-                      <i class="mdi mdi-information mx-0"></i>
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Announcements</p>
+
+              {% for notification in announcements %}
+                <a class="dropdown-item preview-item" href="#">
+                  <div class="preview-thumbnail">
+                    {% if notification.type == "U" %}
+                      <div class="preview-icon bg-danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                      </div>
+                    {% elif notification.type == "C" %}
+                      <div class="preview-icon bg-success">
+                        <i class="fa-solid fa-shield-halved"></i>
+                      </div>
+                    {% elif notification.type == "HR" %}
+                      <div class="preview-icon bg-secondary">
+                        <i class="fa-solid fa-users"></i>
+                      </div>
+                    {% elif notification.type == "T" %}
+                      <div class="preview-icon bg-primary">
+                        <i class="fa-solid fa-microchip"></i>
+                      </div>
+                    {% elif notification.type == "O" %}
+                      <div class="preview-icon bg-info">
+                        <i class="fa-solid fa-circle-ellipsis"></i>
+                      </div>
+                    {% else %}
+                      <div class="preview-icon bg-primary">
+                        <i class="fa-solid fa-bell"></i>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">{{ notification.title }}</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">{{ notification.created_at|timesince }} ago</p>
+                  </div>
+                </a>
+              {% empty %}
+                <div class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-light text-muted">
+                      <i class="fa-solid fa-bell-slash"></i>
                     </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">No announcements</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">You're all caught up</p>
+                  </div>
                 </div>
-                <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                    <p class="font-weight-light small-text mb-0 text-muted">Just now</p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <div class="preview-icon bg-warning">
-                      <i class="mdi mdi-settings mx-0"></i>
-                    </div>
-                </div>
-                <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">Settings</h6>
-                    <p class="font-weight-light small-text mb-0 text-muted">Private message</p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <div class="preview-icon bg-info">
-                      <i class="mdi mdi-account-box mx-0"></i>
-                    </div>
-                </div>
-                <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                    <p class="font-weight-light small-text mb-0 text-muted">2 days ago</p>
-                </div>
-              </a>
+              {% endfor %}
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown">
+            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="mdi mdi-email mx-0"></i>
-              <span class="count bg-primary">4</span>
+              <span class="count bg-primary">{{ messages | length }} </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
               <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>

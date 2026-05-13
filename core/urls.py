@@ -16,13 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import TemplateView
-
+import applications.children.urls as CHILDREN_URLS
+import applications.accounts.urls as DASHBOARD_URLS
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('', TemplateView.as_view(template_name='index.html'), name='dashboard'),
+    path('dashboard/', include(DASHBOARD_URLS), name='dashboard'),
+    path('children/', include(CHILDREN_URLS))
 ]
