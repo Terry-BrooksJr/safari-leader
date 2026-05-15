@@ -26,7 +26,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','safari-leader.com','127.0.0.1:8000']
+ALLOWED_HOSTS = ['localhost','safari-leader.com','127.0.0.1']
 FERNET_KEYS = os.environ["FERNET_KEYS"].split(",")
 
 # Application definition
@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_prometheus.middleware.PrometheusAfterMiddleware",  # 16
@@ -75,9 +76,9 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = "accounts.User"
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/dashboard'
+LOGOUT_REDIRECT_URL = '/login'
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [

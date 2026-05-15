@@ -17,14 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 import applications.children.urls as CHILDREN_URLS
 import applications.accounts.urls as DASHBOARD_URLS
 urlpatterns = [
+    path('', RedirectView.as_view(url='/dashboard/', permanent=False)),
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
-    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('dashboard/', include(DASHBOARD_URLS), name='dashboard'),
     path('children/', include(CHILDREN_URLS))
+    
 ]

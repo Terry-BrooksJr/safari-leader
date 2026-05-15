@@ -8,14 +8,14 @@
             <a href="#" class="nav-link horizontal-nav-left-menu"><i class="mdi mdi-format-list-bulleted"></i></a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="mdi mdi-bell mx-0"></i>
-              <span class="count bg-success">{{ announcements|length }}</span>
+              <span class="count bg-success">{{ notifications|length }}</span>
             </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Announcements</p>
+            <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
 
-              {% for notification in announcements %}
+              {% for notification in notifications %}
                 <a class="dropdown-item preview-item" href="#">
                   <div class="preview-thumbnail">
                     {% if notification.type == "U" %}
@@ -45,7 +45,7 @@
                     {% endif %}
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">{{ notification.title }}</h6>
+                    <h6 class="preview-subject font-weight-normal">{{ notification.message|truncatewords:15 }}</h6>
                     <p class="font-weight-light small-text mb-0 text-muted">{{ notification.created_at|timesince }} ago</p>
                   </div>
                 </a>
@@ -57,47 +57,46 @@
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">No announcements</h6>
-                    <p class="font-weight-light small-text mb-0 text-muted">You're all caught up</p>
+                    <h6 class="preview-subject font-weight-normal">No Notifications</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">You're all caught up 🎊 </p>
                   </div>
                 </div>
               {% endfor %}
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="announcementDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="mdi mdi-email mx-0"></i>
-              <span class="count bg-primary">{{ messages | length }} </span>
+              <span class="count bg-primary">{{ announcements|length }}</span>
             </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="{% static 'images/faces/face4.jpg' %}" alt="image" class="profile-pic">
+            <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="announcementDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Announcements</p>
+
+              {% for announcement in announcements %}
+                <a class="dropdown-item preview-item" href="#">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-primary">
+                      <i class="mdi mdi-bullhorn mx-0"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content flex-grow">
+                    <h6 class="preview-subject ellipsis font-weight-normal">{{ announcement.title }}</h6>
+                    <p class="font-weight-light small-text text-muted mb-0">{{ announcement.message|truncatewords:15 }}</p>
+                  </div>
+                </a>
+              {% empty %}
+                <div class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-light text-muted">
+                      <i class="mdi mdi-bullhorn-outline mx-0"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content flex-grow">
+                    <h6 class="preview-subject ellipsis font-weight-normal">No Announcements</h6>
+                    <p class="font-weight-light small-text text-muted mb-0">Nothing to see here 🎉</p>
+                  </div>
                 </div>
-                <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal">David Grey</h6>
-                    <p class="font-weight-light small-text text-muted mb-0">The meeting is cancelled</p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="{% static 'images/faces/face2.jpg' %}" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal">Tim Cook</h6>
-                    <p class="font-weight-light small-text text-muted mb-0">New product launch</p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="{% static 'images/faces/face3.jpg' %}" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal">Johnson</h6>
-                    <p class="font-weight-light small-text text-muted mb-0">Upcoming board meeting</p>
-                </div>
-              </a>
+              {% endfor %}
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -115,18 +114,15 @@
           </li>
         </ul>
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="{% url 'dashboard' %}"><img src="{% static 'images/logo.svg' %}" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="{% url 'dashboard' %}"><img src="{% static 'images/logo-mini.svg' %}" alt="logo"/></a>
+            <a class="navbar-brand brand-logo" href="{% url 'dashboard' %}"><img src="{% static 'images/dashboard-brand-img.png' %}" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{% url 'dashboard' %}"><img src="{% static 'images/mini-dashboard-brand-img.png' %}" alt="logo"/></a>
         </div>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown d-lg-flex d-none">
-              <button type="button" class="btn btn-inverse-primary btn-sm">Product</button>
-            </li>
-            <li class="nav-item dropdown d-lg-flex d-none">
-              <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm" id="nreportDropdown" href="#" data-bs-toggle="dropdown">
+              <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm" id="nreportDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Reports
               </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="nreportDropdown">
+              <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="nreportDropdown">
                   <p class="mb-0 font-weight-medium float-left dropdown-header">Reports</p>
                   <a class="dropdown-item">
                     <i class="mdi mdi-file-pdf text-primary"></i>
@@ -142,24 +138,26 @@
               <button type="button" class="btn btn-inverse-primary btn-sm">Settings</button>
             </li>
             <li class="nav-item nav-profile dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <span class="nav-profile-name">{{ request.user.get_short_name|default:"User" }}</span>
+              <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="nav-profile-name">{{ request.user.first_name|default:"User1" }}</span>
                 <span class="online-status"></span>
-                <img src="{% static 'images/faces/face28.png' %}" alt="profile"/>
               </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <div class="dropdown-menu dropdown-menu-end navbar-dropdown" aria-labelledby="profileDropdown">
                   <a class="dropdown-item">
                     <i class="mdi mdi-settings text-primary"></i>
                     Settings
                   </a>
-                  <a class="dropdown-item" href="{% url 'admin:logout' %}">
-                    <i class="mdi mdi-logout text-primary"></i>
-                    Logout
-                  </a>
+                  <form method="post" action="{% url 'logout' %}" class="d-inline w-100">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item border-0 bg-transparent">
+                      <i class="mdi mdi-logout text-primary"></i>
+                      Logout
+                    </button>
+                  </form>
               </div>
             </li>
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="horizontal-menu-toggle">
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="horizontal-menu-toggle" aria-label="Toggle navigation">
           <span class="mdi mdi-menu"></span>
         </button>
       </div>
@@ -170,55 +168,55 @@
         <ul class="nav page-navigation">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'dashboard' %}">
-              <i class="mdi mdi-file-document-box menu-icon"></i>
+              <img src="{% static "images/icons/dashboard.png" %}" class="mdi mdi-file-document-box menu-icon">
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-account-multiple menu-icon"></i>
+              <img src="{% static "images/icons/children.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Children</span>
                 <i class="menu-arrow"></i>
               </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-account-card-details menu-icon"></i>
+              <img src="{% static "images/icons/enrollment.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Enrollment</span>
                 <i class="menu-arrow"></i>
               </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-calendar-check menu-icon"></i>
+              <img src="{% static "images/icons/attendance.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Attendance</span>
                 <i class="menu-arrow"></i>
               </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-account-group menu-icon"></i>
+              <img src="{% static "images/icons/staffing.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Staffing</span>
                 <i class="menu-arrow"></i>
               </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-alert-circle menu-icon"></i>
+              <img src="{% static "images/icons/incidents.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Incidents</span>
                 <i class="menu-arrow"></i>
               </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-file-document menu-icon"></i>
+              <img src="{% static "images/icons/documents.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Documents</span>
                 <i class="menu-arrow"></i>
               </a>
           </li>
           <li class="nav-item">
               <a href="#" class="nav-link">
-                <i class="mdi mdi-office-building menu-icon"></i>
+              <img src="{% static "images/icons/facilities.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Facilities</span>
                 <i class="menu-arrow"></i>
               </a>

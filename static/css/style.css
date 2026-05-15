@@ -23345,7 +23345,7 @@ dl li {
 
 .horizontal-menu .top-navbar .navbar-brand-wrapper .navbar-brand img {
   max-width: 100%;
-  height: 24px;
+  height: 124px;
   margin: auto;
   vertical-align: middle;
 }
@@ -24132,3 +24132,32 @@ dl li {
 }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+/* Safari Leader: compact single-row bottom navbar */
+.horizontal-menu .bottom-navbar .page-navigation {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.horizontal-menu .bottom-navbar .page-navigation > .nav-item {
+  flex: 1 0 auto;
+  text-align: center;
+}
+
+.horizontal-menu .bottom-navbar .page-navigation > .nav-item > .nav-link {
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.horizontal-menu .bottom-navbar .page-navigation > .nav-item > .nav-link img.menu-icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: inline-block;
+  margin: 0;
+}
