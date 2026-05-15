@@ -4,15 +4,16 @@ from applications.facilities.models import Program,Site
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
-days_of_week_template = {
-    "sunday": False,
-    "monday":True,
-    "tuesday": True,
-    "wednesday": True,
-    "thursday": True,
-    "friday":True,
-    "saturday":False
-}
+def days_of_week_template():
+    return {
+        "sunday": False,
+        "monday":True,
+        "tuesday": True,
+        "wednesday": True,
+        "thursday": True,
+        "friday":True,
+        "saturday":False
+    }
 class ENROLLMENT_STATUS(models.TextChoices):
     PENDING = 'P', _("Pending")
     ACTIVE = 'A', _("Active - Current")
