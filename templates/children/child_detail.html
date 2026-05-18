@@ -1,0 +1,558 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ child.first_name }} {{ child.last_name }} - Safari Leader{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <a href="{% url 'children-list' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="mdi mdi-arrow-left"></i> Back to Children
+    </a>
+  </div>
+</div>
+
+<!-- Child Profile Header -->
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title mb-1">{{ child.first_name }} {{ child.last_name }}</h3>
+            <p class="text-muted mb-0">Date of Birth: {{ child.date_of_birth }}</p>
+            <p class="text-muted mb-0">Age: {{ child.age }}</p>
+            <p class="text-muted mb-0">Enrolled: {{ child.created_at }}</p>
+          </div>
+          <div>
+            <span class="badge {% if child.status == 'A' %}badge-success{% elif child.status == 'E' %}badge-info{% elif child.status == 'S' %}badge-warning{% elif child.status == 'C' or child.status == 'X' %}badge-danger{% else %}badge-secondary{% endif %} p-2">
+              {{ child.get_status_display }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Guardian Relationships -->
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-account-group"></i> Guardians</h4>
+        {% if child.childguardianrelationship_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Relationship</th>
+                <th>Contact</th>
+                <th>Primary</th>
+                <th>Custody</th>
+                <th>Can Pickup</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rel in child.childguardianrelationship_set.all %}
+              <tr>
+                <td>{{ rel.guardian.user.first_name }} {{ rel.guardian.user.last_name }}</td>
+                <td>{{ rel.get_relationship_display }}</td>
+                <td>{{ rel.guardian.contact_number }}</td>
+                <td>
+                  {% if rel.is_primary %}<i class="mdi mdi-check-circle text-success"></i>
+                  {% else %}<i class="mdi mdi-close-circle text-muted"></i>{% endif %}
+                </td>
+                <td>
+                  {% if rel.has_custody_rights %}<i class="mdi mdi-check-circle text-success"></i>
+                  {% else %}<i class="mdi mdi-close-circle text-muted"></i>{% endif %}
+                </td>
+                <td>
+                  {% if rel.can_pickup %}<i class="mdi mdi-check-circle text-success"></i>
+                  {% else %}<i class="mdi mdi-close-circle text-muted"></i>{% endif %}
+                </td>
+                <td>
+                  {% if rel.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No guardians on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Authorized Pickups -->
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-car"></i> Authorized Pickups</h4>
+        {% if child.authorized_pickup.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Relationship</th>
+                <th>Authorized</th>
+                <th>Active</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pickup in child.authorized_pickup.all %}
+              <tr>
+                <td>{{ pickup.user.first_name }} {{ pickup.user.last_name }}</td>
+                <td>{{ pickup.get_relationship_display }}</td>
+                <td>
+                  {% if pickup.is_authorized %}<i class="mdi mdi-check-circle text-success"></i>
+                  {% else %}<i class="mdi mdi-close-circle text-danger"></i>{% endif %}
+                </td>
+                <td>
+                  {% if pickup.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+                <td>{{ pickup.verification_notes|default:"-" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No authorized pickups on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Emergency Contacts & Custody Restrictions -->
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-phone-alert"></i> Emergency Contacts</h4>
+        {% if child.emergency_contact.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Relationship</th>
+                <th>Authorized</th>
+                <th>Active</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for contact in child.emergency_contact.all %}
+              <tr>
+                <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                <td>{{ contact.contact_number }}</td>
+                <td>{{ contact.get_relationship_display }}</td>
+                <td>
+                  {% if contact.is_authorized %}<i class="mdi mdi-check-circle text-success"></i>
+                  {% else %}<i class="mdi mdi-close-circle text-danger"></i>{% endif %}
+                </td>
+                <td>
+                  {% if contact.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+                <td>{{ contact.verification_notes|default:"-" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No emergency contacts on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-shield-alert"></i> Custody Restrictions</h4>
+        {% if child.restrictions.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Notes</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for restriction in child.restrictions.all %}
+              <tr>
+                <td>{{ restriction.notes|default:"-" }}</td>
+                <td>
+                  {% if restriction.is_active %}<span class="badge badge-danger">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No custody restrictions on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Allergies & Medical Notes -->
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-alert-circle"></i> Allergies</h4>
+        {% if child.allergies.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Allergen</th>
+                <th>Severity</th>
+                <th>Instructions</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for allergy in child.allergies.all %}
+              <tr>
+                <td>{{ allergy.allergen }}</td>
+                <td>
+                  <span class="badge {% if allergy.severity == 'LT' or allergy.severity == 'F' %}badge-danger{% elif allergy.severity == 'S' %}badge-warning{% elif allergy.severity == 'MD' %}badge-info{% else %}badge-secondary{% endif %}">
+                    {{ allergy.get_severity_display }}
+                  </span>
+                </td>
+                <td>{{ allergy.instructions }}</td>
+                <td>
+                  {% if allergy.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No allergies on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-medical-bag"></i> Medical Notes</h4>
+        {% if child.medical_notes.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Note</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for note in child.medical_notes.all %}
+              <tr>
+                <td>{{ note.note }}</td>
+                <td>
+                  {% if note.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No medical notes on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Enrollments & Schedules -->
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-school"></i> Enrollments</h4>
+        {% if child.enrollment_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Site</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for enrollment in child.enrollment_set.all %}
+              <tr>
+                <td>{{ enrollment.program }}</td>
+                <td>{{ enrollment.site }}</td>
+                <td>{{ enrollment.start_date }}</td>
+                <td>{{ enrollment.end_date|default:"-" }}</td>
+                <td>{{ enrollment.get_status_display }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No enrollments on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-calendar-clock"></i> Schedules</h4>
+        {% if child.childschedule_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Days</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for schedule in child.childschedule_set.all %}
+              <tr>
+                <td>{{ schedule.program }}</td>
+                <td>{{ schedule.days_of_week }}</td>
+                <td>{{ schedule.start_time }}</td>
+                <td>{{ schedule.end_time }}</td>
+                <td>
+                  {% if schedule.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No schedules on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Attendance & Check-In/Out -->
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-clipboard-check"></i> Attendance Records</h4>
+        {% if child.attendancerecord_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Recorded</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in child.attendancerecord_set.all %}
+              <tr>
+                <td>{{ record.date }}</td>
+                <td>{{ record.get_status_display }}</td>
+                <td>{{ record.created }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No attendance records on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-login-variant"></i> Check-In/Out Events</h4>
+        {% if child.checkinoutevent_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Timestamp</th>
+                <th>Performed By</th>
+                <th>Recorded By</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in child.checkinoutevent_set.all %}
+              <tr>
+                <td>{{ event.get_event_type_display }}</td>
+                <td>{{ event.timestamp }}</td>
+                <td>{{ event.performed_by }}</td>
+                <td>{{ event.recorded_by }}</td>
+                <td>{{ event.notes|default:"-" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No check-in/out events on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Handoffs & Incidents -->
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-hand-right"></i> Handoff Events</h4>
+        {% if child.handoffevent_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Timestamp</th>
+                <th>Pickup Person</th>
+                <th>Checked By</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for handoff in child.handoffevent_set.all %}
+              <tr>
+                <td>{{ handoff.get_event_type_display }}</td>
+                <td>{{ handoff.timestamp }}</td>
+                <td>{{ handoff.pickup_person }}</td>
+                <td>{{ handoff.checked_by }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No handoff events on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-alert"></i> Incident Reports</h4>
+        {% if child.incidentreport_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Occurred</th>
+                <th>Reported By</th>
+                <th>Description</th>
+                <th>Resolved</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for incident in child.incidentreport_set.all %}
+              <tr>
+                <td>{{ incident.get_incident_type_display }}</td>
+                <td>{{ incident.get_severity_display }}</td>
+                <td>{{ incident.occurred_on }}</td>
+                <td>{{ incident.reported_by }}</td>
+                <td>{{ incident.description|truncatewords:20 }}</td>
+                <td>
+                  {% if incident.is_resolved %}<i class="mdi mdi-check-circle text-success"></i>
+                  {% else %}<i class="mdi mdi-clock text-warning"></i>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No incident reports on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Documents -->
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-file-document"></i> Documents</h4>
+        {% if child.documents.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Uploaded By</th>
+                <th>Date Created</th>
+                <th>File</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for document in child.documents.all %}
+              <tr>
+                <td>{{ document.get_document_type_display }}</td>
+                <td>{{ document.uploaded_by }}</td>
+                <td>{{ document.date_created }}</td>
+                <td><a href="{{ document.file.url }}">Download</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No documents on file.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

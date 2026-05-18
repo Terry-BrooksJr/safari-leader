@@ -35,15 +35,26 @@ class RESTRICTION_TYPE(models.TextChoices):
     COURT = 'CO', _('Court Order On File')
 
 class Child(models.Model):
+    """
+    Represents a child enrolled in the system and tracks their core profile details.
+    Provides basic demographic information used across related child records.
+    """
     first_name = models.CharField(max_length=325)
     last_name = models.CharField(max_length=325)
     date_of_birth = models.DateField()
     status = models.CharField(max_length=3, choices=STUDENT_STATUS.choices)
     created_at = models.DateField(auto_now_add=True)
     
+    def __str__(self) -> str:
+        return f"Child: {self.last_name}, {self.first_name} | ({self.age})"
+    
     @property
     def age(self) -> int:
-        child_dob = get(self.date_of_birth, 'YYYY-MM-DD')
+        """
+        Calculates the child's current age based on their date of birth.
+        Adjusts for whether the child has had their birthday yet this year.
+        """
+        child_dob = get(self.date_of_birth)
         today = now(settings.TIME_ZONE)
         age = today.year - child_dob.year
         if (today.month, today.day) < (child_dob.month, child_dob.day):
@@ -51,9 +62,7 @@ class Child(models.Model):
         return age
     
 class AuthorizedPickupProfile(models.Model): 
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
-    user= models.ForeignKey(User, on_delete=models.CASCADE)
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE, related_name="authorized_pickup")
     user= models.ForeignKey(User, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=3, choices=RELATIONSHIP.choices)
     is_authorized = models.BooleanField(default=True)
@@ -61,22 +70,27 @@ class AuthorizedPickupProfile(models.Model):
     pickup_pin = EncryptedIntegerField()
     verification_notes = models.TextField(null=True, blank=True)
     
+    def __str__(self) -> str:
+        return f"Pickup Agent: {self.user.last_login}, {self.user.first_name}"
+    
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether the authorized pickup profile is currently active.
+        Updates the active state so the profile can be enabled or disabled for future pickups.
+        """
+        self.is_active = not self.is_active
         self.save()
         
     def toggle_authorization_status(self):
-        if self.is_authorized:
-            self.is_authorized = False
-        else: 
-            self.is_authorized = True
+        """
+        Toggles whether the authorized pickup profile currently has pickup permission.
+        Updates the authorization flag so the profile can be allowed or blocked from picking up the child.
+        """
+        self.is_authorized = not self.is_authorized
         self.save()
         
     def is_verifed(self, provided_pin: str) -> bool:
-            """
+        """
             Verify a provided pickup PIN against the stored encrypted PIN.
 
             Args:
@@ -85,61 +99,68 @@ class AuthorizedPickupProfile(models.Model):
             Returns:
                 bool: True if the PIN matches, otherwise False.
             """
-            if provided_pin is None:
-                return False
-            if not self.is_authorized or not self.is_active:
-                return False
-            try:
-                stored_pin = str(self.pickup_pin).strip()
-                candidate_pin = str(provided_pin).strip()
+        if provided_pin is None:
+            return False
+        if not self.is_authorized or not self.is_active:
+            return False
+        try:
+            stored_pin = str(self.pickup_pin).strip()
+            candidate_pin = provided_pin.strip()
 
-                return secrets.compare_digest(stored_pin, candidate_pin)
+            return secrets.compare_digest(stored_pin, candidate_pin)
 
-            except (TypeError, ValueError):
-                return False
+        except (TypeError, ValueError):
+            return False
             
 class Allergy(models.Model):
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE, related_name="allergies")
     allergen = models.CharField(max_length=50)
     severity = models.CharField(max_length=2, choices=ALLERGEN_SEVERITY.choices)
     instructions = models.TextField()
     is_active = models.BooleanField(default=True)
     
+    def __str__(self) -> str:
+        return f"{self.get_severity_display()} {self.allergen}"
+    
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether this allergy record is currently marked as active.
+        Updates the active state so the allergy can be included or excluded from consideration.
+        """
+        self.is_active = not self.is_active
         self.save()
         
 class MedicalNote(models.Model):
-    child = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name="medical_notes")
     note = models.TextField()
     is_active = models.BooleanField(default=True)
+    date_created = models.DateTimeField(auto_created=True, default=now(settings.TIME_ZONE).datetime)
     
+    def __str__(self) -> str:
+        return f"Medical Note: {self.child.last_name}, {self.child.first_name} ({self.date_created})"
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether this medical note is currently marked as active.
+        Updates the active state so the note can be considered or ignored in the child's medical history.
+        """
+        self.is_active = not self.is_active
         self.save()
         
 class CustodyRestriction(models.Model):
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE, related_name="restrictions")
     notes = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether this custody restriction is currently marked as active.
+        Updates the active state so the note can be considered or ignored in the child's medical history.
+        """
+        self.is_active = not self.is_active
         self.save()
 
 class EmergencyContact(models.Model): 
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
+    child= models.ForeignKey(Child, on_delete=models.CASCADE, related_name="emergency_contact")
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
     contact_number = models.CharField(max_length=12)
@@ -149,29 +170,28 @@ class EmergencyContact(models.Model):
     verification_notes = models.TextField(null=True, blank=True)
     
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether this emergency contact is currently marked as active.
+        Updates the active state so the note can be considered or ignored in the child's medical history.
+        """
+        self.is_active = not self.is_active
         self.save()
         
 class GuardianProfile(models.Model):
-    user= models.ForeignKey(User, on_delete=models.CASCADE)
     user= models.ForeignKey(User, on_delete=models.CASCADE)
     contact_number = models.CharField(max_length=12)
     is_primary_contact = models.BooleanField()
     created_at = models.DateField(auto_now=True)
     
     def toggle_primary_contact_status(self):
-        if self.is_primary_contact:
-            self.is_primary_contact = False
-        else: 
-            self.is_primary_contact = True
+        """
+        Toggles whether this guardian profile is currently marked as the primary contact.
+        Updates the primary contact flag so the main communication point can be reassigned as needed.
+        """
+        self.is_primary_contact = not self.is_primary_contact
         self.save()
     
 class ChildGuardianRelationship(models.Model):
-    child= models.ForeignKey(Child, on_delete=models.CASCADE)
-    guardian= models.ForeignKey(GuardianProfile, on_delete=models.CASCADE)
     child= models.ForeignKey(Child, on_delete=models.CASCADE)
     guardian= models.ForeignKey(GuardianProfile, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=3, choices=RELATIONSHIP.choices)
@@ -181,29 +201,29 @@ class ChildGuardianRelationship(models.Model):
     is_active = models.BooleanField(default=True)
 
     def toggle_primary_status(self):
-        if self.is_primary:
-            self.is_primary = False
-        else: 
-            self.is_primary = True
+        """
+        Toggles whether this guardian is currently marked as the primary guardian for the child.
+        Updates the primary flag so the main point of contact can be reassigned as needed.
+        """
+        self.is_primary = not self.is_primary
         self.save()
         
     def toggle_active_status(self):
-        if self.is_active:
-            self.is_active = False
-        else: 
-            self.is_active = True
+        """
+        Toggles whether this guardian-child relationship is currently marked as active.
+        Updates the active state so the relationship can be considered or ignored in child management decisions.
+        """
+        self.is_active = not self.is_active
         self.save()
         
     def toggle_has_custody_rights_status(self):
-        if self.has_custody_rights:
-            self.has_custody_rights = False
-        else: 
-            self.has_custody_rights = True
+        """
+        Toggles whether this guardian currently has recorded custody rights for the child.
+        Updates the custody rights flag so legal decision-making authority can be granted or revoked.
+        """
+        self.has_custody_rights = not self.has_custody_rights
         self.save()
 
     def toggle_can_pickup_status(self):
-        if self.can_pickup:
-            self.can_pickup = False
-        else: 
-            self.can_pickup = True
+        self.can_pickup = not self.can_pickup
         self.save()

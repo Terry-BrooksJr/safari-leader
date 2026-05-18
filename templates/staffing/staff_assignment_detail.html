@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Staff Assignment - {{ assignment.staff.user.first_name }} {{ assignment.staff.user.last_name }} - Safari Leader{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <a href="{% url 'staff-assignment-list' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="mdi mdi-arrow-left"></i> Back to Assignments
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title mb-1"><i class="mdi mdi-map-marker"></i> Staff Assignment</h3>
+            <p class="text-muted mb-0">Staff: {{ assignment.staff.user.first_name }} {{ assignment.staff.user.last_name }}</p>
+            <p class="text-muted mb-0">Role: {{ assignment.staff.role_title }}</p>
+          </div>
+          <div>
+            {% if assignment.is_active %}
+              <span class="badge badge-success p-2">Active</span>
+            {% else %}
+              <span class="badge badge-secondary p-2">Inactive</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-office-building"></i> Location</h4>
+        <div class="mb-3">
+          <strong>Site:</strong>
+          <p class="text-muted mb-0">{{ assignment.site.name }}</p>
+        </div>
+        <div class="mb-3">
+          <strong>Room:</strong>
+          <p class="text-muted mb-0">{{ assignment.room.name }}</p>
+        </div>
+        <div class="mb-3">
+          <strong>Program:</strong>
+          <p class="text-muted mb-0">{{ assignment.program.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-calendar-range"></i> Duration</h4>
+        <div class="mb-3">
+          <strong>Start Date:</strong>
+          <p class="text-muted mb-0">{{ assignment.start_date }}</p>
+        </div>
+        <div class="mb-3">
+          <strong>End Date:</strong>
+          <p class="text-muted mb-0">{{ assignment.end_date|default:"Ongoing" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

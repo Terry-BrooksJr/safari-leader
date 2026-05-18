@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','safari-leader.com','127.0.0.1']
 FERNET_KEYS = os.environ["FERNET_KEYS"].split(",")
+SALT_KEY = FERNET_KEYS
 
 # Application definition
 

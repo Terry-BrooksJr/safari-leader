@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ site.name }} - Safari Leader{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <a href="{% url 'site-list' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="mdi mdi-arrow-left"></i> Back to Sites
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title mb-1"><i class="mdi mdi-office-building"></i> {{ site.name }}</h3>
+            <p class="text-muted mb-0">Address: {{ site.address1 }}</p>
+            {% if site.address2 %}
+            <p class="text-muted mb-0">Address 2: {{ site.address2 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            {% if site.is_active %}
+              <span class="badge badge-success p-2">Active</span>
+            {% else %}
+              <span class="badge badge-danger p-2">Inactive</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-door"></i> Rooms</h4>
+        {% if site.room_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Capacity</th>
+                <th>Age Group</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for room in site.room_set.all %}
+              <tr>
+                <td><a href="{% url 'room-detail' room.pk %}">{{ room.name }}</a></td>
+                <td>{{ room.capacity }}</td>
+                <td>{{ room.get_age_group_display }}</td>
+                <td>
+                  {% if room.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No rooms at this site.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-school"></i> Programs</h4>
+        {% if site.program_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for program in site.program_set.all %}
+              <tr>
+                <td><a href="{% url 'program-detail' program.pk %}">{{ program.name }}</a></td>
+                <td>{{ program.get_program_type_display }}</td>
+                <td>
+                  {% if program.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No programs at this site.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-account-tie"></i> Staff Assignments</h4>
+        {% if site.staffassignment_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Staff</th>
+                <th>Room</th>
+                <th>Program</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for assignment in site.staffassignment_set.all %}
+              <tr>
+                <td>{{ assignment.staff.user.first_name }} {{ assignment.staff.user.last_name }}</td>
+                <td>{{ assignment.room.name }}</td>
+                <td>{{ assignment.program.name }}</td>
+                <td>{{ assignment.start_date }}</td>
+                <td>{{ assignment.end_date|default:"-" }}</td>
+                <td>
+                  {% if assignment.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No staff assigned to this site.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

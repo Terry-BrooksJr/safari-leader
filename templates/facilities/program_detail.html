@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ program.name }} - Safari Leader{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <a href="{% url 'program-list' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="mdi mdi-arrow-left"></i> Back to Programs
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title mb-1"><i class="mdi mdi-school"></i> {{ program.name }}</h3>
+            <p class="text-muted mb-0">Site: {{ program.site.name }}</p>
+            <p class="text-muted mb-0">Type: {{ program.get_program_type_display }}</p>
+          </div>
+          <div>
+            {% if program.is_active %}
+              <span class="badge badge-success p-2">Active</span>
+            {% else %}
+              <span class="badge badge-danger p-2">Inactive</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-clipboard-list"></i> Enrollments</h4>
+        {% if program.enrollment_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Child</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for enrollment in program.enrollment_set.all %}
+              <tr>
+                <td>{{ enrollment.child.first_name }} {{ enrollment.child.last_name }}</td>
+                <td>{{ enrollment.start_date }}</td>
+                <td>{{ enrollment.end_date|default:"-" }}</td>
+                <td>
+                  <span class="badge {% if enrollment.status == 'A' %}badge-success{% elif enrollment.status == 'P' %}badge-warning{% elif enrollment.status == 'W' %}badge-danger{% else %}badge-secondary{% endif %}">
+                    {{ enrollment.get_status_display }}
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No enrollments for this program.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-account-tie"></i> Staff Assignments</h4>
+        {% if program.staffassignment_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Staff</th>
+                <th>Room</th>
+                <th>Start</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for assignment in program.staffassignment_set.all %}
+              <tr>
+                <td>{{ assignment.staff.user.first_name }} {{ assignment.staff.user.last_name }}</td>
+                <td>{{ assignment.room.name }}</td>
+                <td>{{ assignment.start_date }}</td>
+                <td>
+                  {% if assignment.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No staff assigned to this program.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-account-supervisor"></i> Ratio Requirements</h4>
+        {% if program.ratiorequirement_set.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Room</th>
+                <th>Ratio</th>
+                <th>Min Age</th>
+                <th>Max Age</th>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ratio in program.ratiorequirement_set.all %}
+              <tr>
+                <td>{{ ratio.room.name }}</td>
+                <td>{{ ratio.staff_to_child_ratio }}</td>
+                <td>{{ ratio.min_age }}</td>
+                <td>{{ ratio.max_age }}</td>
+                <td>
+                  {% if ratio.is_active %}<span class="badge badge-success">Active</span>
+                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No ratio requirements for this program.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

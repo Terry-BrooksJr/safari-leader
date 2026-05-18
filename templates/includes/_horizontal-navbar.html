@@ -20,27 +20,27 @@
                   <div class="preview-thumbnail">
                     {% if notification.type == "U" %}
                       <div class="preview-icon bg-danger">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <i class="fa-solid fa-triangle-exclamation mx-0"></i>
                       </div>
                     {% elif notification.type == "C" %}
                       <div class="preview-icon bg-success">
-                        <i class="fa-solid fa-shield-halved"></i>
+                        <i class="fa-solid fa-shield-halved mx-0"></i>
                       </div>
                     {% elif notification.type == "HR" %}
                       <div class="preview-icon bg-secondary">
-                        <i class="fa-solid fa-users"></i>
+                        <i class="fa-solid fa-users mx-0"></i>
                       </div>
                     {% elif notification.type == "T" %}
                       <div class="preview-icon bg-primary">
-                        <i class="fa-solid fa-microchip"></i>
+                        <i class="fa-solid fa-microchip mx-0"></i>
                       </div>
                     {% elif notification.type == "O" %}
                       <div class="preview-icon bg-info">
-                        <i class="fa-solid fa-circle-ellipsis"></i>
+                        <i class="fa-solid fa-circle-ellipsis mx-0"></i>
                       </div>
                     {% else %}
                       <div class="preview-icon bg-primary">
-                        <i class="fa-solid fa-bell"></i>
+                        <i class="fa-solid fa-bell mx-0"></i>
                       </div>
                     {% endif %}
                   </div>
@@ -173,7 +173,7 @@
             </a>
           </li>
           <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{% url 'children-list' %}" class="nav-link">
               <img src="{% static "images/icons/children.png" %}" class="mdi mdi-file-document-box menu-icon">
                 <span class="menu-title">Children</span>
                 <i class="menu-arrow"></i>

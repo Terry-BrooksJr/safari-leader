@@ -467,8 +467,50 @@ INSERT INTO children_child (id, first_name, last_name, date_of_birth, status, cr
   (27, 'Grace',    'Ramirez',  '2021-06-11', 'A', CURRENT_DATE),
   (28, 'Sebastian','Price',    '2019-12-05', 'S', CURRENT_DATE),
   (29, 'Luna',     'James',    '2023-07-30', 'E', CURRENT_DATE),
-  (30, 'Daniel',   'Watson',   '2020-09-13', 'A', CURRENT_DATE);
+  (30, 'Daniel',   'Watson',   '2020-09-13', 'A', CURRENT_DATE),
+(31, 'Aaliyah',   'Coleman',   '2021-01-14', 'A', CURRENT_DATE),
+  (32, 'Bryson',    'Mitchell',  '2020-08-09', 'A', CURRENT_DATE),
+  (33, 'Camila',    'Flores',    '2022-03-11', 'A', CURRENT_DATE),
+  (34, 'Damien',    'Reed',      '2019-12-01', 'S', CURRENT_DATE),
+  (35, 'Emerson',   'Bailey',    '2023-05-19', 'E', CURRENT_DATE),
+  (36, 'Finley',    'Cooper',    '2021-06-22', 'A', CURRENT_DATE),
+  (37, 'Gianna',    'Howard',    '2020-04-17', 'A', CURRENT_DATE),
+  (38, 'Hudson',    'Ward',      '2022-11-30', 'A', CURRENT_DATE),
+  (39, 'Ivy',       'Peterson',  '2021-02-08', 'A', CURRENT_DATE),
+  (40, 'Jasper',    'Powell',    '2019-10-14', 'S', CURRENT_DATE),
 
+  (41, 'Kennedy',   'Brooks',    '2023-01-05', 'E', CURRENT_DATE),
+  (42, 'Lincoln',   'Bell',      '2020-09-28', 'A', CURRENT_DATE),
+  (43, 'Madeline',  'Price',     '2021-07-12', 'A', CURRENT_DATE),
+  (44, 'Nathan',    'Barnes',    '2022-02-20', 'A', CURRENT_DATE),
+  (45, 'Olive',     'Murphy',    '2020-05-26', 'A', CURRENT_DATE),
+  (46, 'Paisley',   'Hughes',    '2021-12-15', 'A', CURRENT_DATE),
+  (47, 'Quentin',   'Simmons',   '2019-03-03', 'S', CURRENT_DATE),
+  (48, 'Riley',     'Foster',    '2022-08-18', 'A', CURRENT_DATE),
+  (49, 'Sawyer',    'Gonzalez',  '2023-06-09', 'E', CURRENT_DATE),
+  (50, 'Talia',     'Bryant',    '2021-10-31', 'A', CURRENT_DATE),
+
+  (51, 'Uriel',     'Diaz',      '2020-01-25', 'A', CURRENT_DATE),
+  (52, 'Valentina', 'Russell',   '2022-04-13', 'A', CURRENT_DATE),
+  (53, 'Weston',    'Griffin',   '2021-09-07', 'A', CURRENT_DATE),
+  (54, 'Xavier',    'Hayes',     '2019-11-21', 'S', CURRENT_DATE),
+  (55, 'Yasmin',    'Washington','2023-03-29', 'E', CURRENT_DATE),
+  (56, 'Zayne',     'Butler',    '2020-07-04', 'A', CURRENT_DATE),
+  (57, 'Alina',     'Perry',     '2022-12-24', 'A', CURRENT_DATE),
+  (58, 'Bennett',   'Long',      '2021-05-10', 'A', CURRENT_DATE),
+  (59, 'Celeste',   'Patterson', '2020-06-16', 'A', CURRENT_DATE),
+  (60, 'Declan',    'Henderson', '2019-08-27', 'S', CURRENT_DATE),
+
+  (61, 'Evelyn',    'Cole',      '2023-02-02', 'E', CURRENT_DATE),
+  (62, 'Felix',     'Jenkins',   '2021-11-19', 'A', CURRENT_DATE),
+  (63, 'Genevieve', 'Parker',    '2020-10-05', 'A', CURRENT_DATE),
+  (64, 'Holden',    'Perry',     '2022-01-08', 'A', CURRENT_DATE),
+  (65, 'Isla',      'Stewart',   '2021-03-23', 'A', CURRENT_DATE),
+  (66, 'Jonah',     'Ross',      '2019-04-30', 'S', CURRENT_DATE),
+  (67, 'Kaia',      'Morris',    '2023-07-17', 'E', CURRENT_DATE),
+  (68, 'Lennox',    'Nguyen',    '2020-02-12', 'A', CURRENT_DATE),
+  (69, 'Mila',      'Cook',      '2022-09-01', 'A', CURRENT_DATE),
+  (70, 'Nolan',     'Kelly',     '2021-08-03', 'A', CURRENT_DATE);
 SELECT setval('children_child_id_seq', (SELECT MAX(id) FROM children_child));
 
 -- ============================================================================
@@ -477,12 +519,12 @@ SELECT setval('children_child_id_seq', (SELECT MAX(id) FROM children_child));
 -- personal_pin values are placeholders; re-set via Django ORM for encryption.
 
 INSERT INTO staffing_staffprofile (id, user_id, hire_date, termination_date, personal_pin, role_title, is_active) VALUES
-  (1, 1, '2020-01-15', NULL,         'ENCRYPTED_PIN_PLACEHOLDER_1', 'System Administrator',  TRUE),
-  (2, 2, '2019-06-01', NULL,         'ENCRYPTED_PIN_PLACEHOLDER_2', 'Site Director',          TRUE),
-  (3, 3, '2021-08-20', NULL,         'ENCRYPTED_PIN_PLACEHOLDER_3', 'Lead Instructor',        TRUE),
-  (4, 4, '2022-01-10', NULL,         'ENCRYPTED_PIN_PLACEHOLDER_4', 'Instructor',             TRUE),
-  (5, 5, '2023-03-01', NULL,         'ENCRYPTED_PIN_PLACEHOLDER_5', 'Teacher''s Aide',        TRUE),
-  (6, 6, '2022-09-15', '2025-12-31', 'ENCRYPTED_PIN_PLACEHOLDER_6', 'Instructor',             FALSE);
+  (1, 1, '2020-01-15', NULL,         '1342', 'System Administrator',  TRUE),
+  (2, 2, '2019-06-01', NULL,         '1342', 'Site Director',          TRUE),
+  (3, 3, '2021-08-20', NULL,         '1342', 'Lead Instructor',        TRUE),
+  (4, 4, '2022-01-10', NULL,         '1342', 'Instructor',             TRUE),
+  (5, 5, '2023-03-01', NULL,         '1342', 'Teacher''s Aide',        TRUE),
+  (6, 6, '2022-09-15', '2025-12-31', '1342', 'Instructor',             FALSE);
 
 SELECT setval('staffing_staffprofile_id_seq', (SELECT MAX(id) FROM staffing_staffprofile));
 
@@ -524,13 +566,13 @@ SELECT setval('children_childguardianrelationship_id_seq', (SELECT MAX(id) FROM 
 -- pickup_pin values are placeholders; re-set via Django ORM for encryption.
 
 INSERT INTO children_authorizedpickupprofile (id, child_id, user_id, relationship, is_authorized, is_active, pickup_pin, verification_notes) VALUES
-  (1, 1,  7,  'P',  TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_A', NULL),
-  (2, 2,  8,  'P',  TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_B', NULL),
-  (3, 3,  9,  'P',  TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_C', NULL),
-  (4, 4,  7,  'P',  TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_D', NULL),
-  (5, 5,  10, 'GP', TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_E', 'Grandmother — verified via photo ID 2025-01-10'),
-  (6, 6,  11, 'P',  TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_F', NULL),
-  (7, 10, 12, 'AV', TRUE, TRUE, 'ENCRYPTED_PIN_PLACEHOLDER_G', 'Uncle — added per guardian request 2025-03-20');
+  (1, 1,  7,  'P',  TRUE, TRUE, '1234', NULL),
+  (2, 2,  8,  'P',  TRUE, TRUE, '5321', NULL),
+  (3, 3,  9,  'P',  TRUE, TRUE, '5321', NULL),
+  (4, 4,  7,  'P',  TRUE, TRUE, '5321', NULL),
+  (5, 5,  10, 'GP', TRUE, TRUE, '5321', 'Grandmother — verified via photo ID 2025-01-10'),
+  (6, 6,  11, 'P',  TRUE, TRUE, '5321', NULL),
+  (7, 10, 12, 'AV', TRUE, TRUE, '5321', 'Uncle — added per guardian request 2025-03-20');
 
 SELECT setval('children_authorizedpickupprofile_id_seq', (SELECT MAX(id) FROM children_authorizedpickupprofile));
 
@@ -552,11 +594,11 @@ SELECT setval('children_allergy_id_seq', (SELECT MAX(id) FROM children_allergy))
 -- 13. children_medicalnote
 -- ============================================================================
 
-INSERT INTO children_medicalnote (id, child_id, note, is_active) VALUES
-  (1, 1, 'Child has asthma. Rescue inhaler stored in main office. Use as needed during physical activity.', TRUE),
-  (2, 2, 'Child wears corrective lenses. Glasses should remain on during all activities except nap time.',  TRUE),
-  (3, 6, 'Child is on daily medication administered by guardian before drop-off. No on-site dosing.',       TRUE),
-  (4, 8, 'Recurring ear infections. Monitor for tugging at ears or complaints of pain.',                    FALSE);
+INSERT INTO children_medicalnote (id, child_id, note, is_active, date_created) VALUES
+  (1, 1, 'Child has asthma. Rescue inhaler stored in main office. Use as needed during physical activity.', TRUE, CURRENT_TIMESTAMP),
+  (2, 2, 'Child wears corrective lenses. Glasses should remain on during all activities except nap time.',  TRUE, CURRENT_TIMESTAMP),
+  (3, 6, 'Child is on daily medication administered by guardian before drop-off. No on-site dosing.',       TRUE, CURRENT_TIMESTAMP),
+  (4, 8, 'Recurring ear infections. Monitor for tugging at ears or complaints of pain.',                    FALSE, CURRENT_TIMESTAMP);
 
 SELECT setval('children_medicalnote_id_seq', (SELECT MAX(id) FROM children_medicalnote));
 
@@ -564,10 +606,10 @@ SELECT setval('children_medicalnote_id_seq', (SELECT MAX(id) FROM children_medic
 -- 14. children_custodyrestriction
 -- ============================================================================
 
-INSERT INTO children_custodyrestriction (id, child_id, restriction_type, notes, is_active) VALUES
-  (1, 8, 'CO',   'Court order on file dated 2024-11-15. Biological father (John Thomas) is NOT permitted to pick up or visit.', TRUE),
-  (2, 4, 'APO',  'Only individuals on the authorized pickup list may collect this child. No exceptions without director approval.', TRUE),
-  (3, 9, 'TEMP', 'Temporary suspension of pickup rights for user ID 12 pending investigation. Effective 2025-04-01.', FALSE);
+INSERT INTO children_custodyrestriction (id, child_id, notes, is_active) VALUES
+  (1, 8,  'Court order on file dated 2024-11-15. Biological father (John Thomas) is NOT permitted to pick up or visit.', TRUE),
+  (2, 4,  'Only individuals on the authorized pickup list may collect this child. No exceptions without director approval.', TRUE),
+  (3, 9, 'Temporary suspension of pickup rights for user ID 12 pending investigation. Effective 2025-04-01.', FALSE);
 
 SELECT setval('children_custodyrestriction_id_seq', (SELECT MAX(id) FROM children_custodyrestriction));
 

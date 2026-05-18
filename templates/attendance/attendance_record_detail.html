@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Attendance Record - {{ record.child }} - Safari Leader{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <a href="{% url 'attendance-record-list' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="mdi mdi-arrow-left"></i> Back to Attendance Records
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title mb-1"><i class="mdi mdi-clipboard-check"></i> Attendance Record</h3>
+            <p class="text-muted mb-0">Child: {{ record.child.first_name }} {{ record.child.last_name }}</p>
+            <p class="text-muted mb-0">Date: {{ record.date }}</p>
+            <p class="text-muted mb-0">Created: {{ record.created }}</p>
+          </div>
+          <div>
+            <span class="badge {% if record.status == 'D' %}badge-warning{% elif record.status == 'F' %}badge-success{% elif record.status == 'M' %}badge-info{% else %}badge-secondary{% endif %} p-2">
+              {{ record.get_status_display }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><i class="mdi mdi-login-variant"></i> Check-In/Out Events</h4>
+        {% if events %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Timestamp</th>
+                <th>Performed By</th>
+                <th>Recorded By</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in events %}
+              <tr>
+                <td>{{ event.get_event_type_display }}</td>
+                <td>{{ event.timestamp }}</td>
+                <td>{{ event.performed_by|default:"-" }}</td>
+                <td>{{ event.recorded_by|default:"-" }}</td>
+                <td>{{ event.notes|default:"-" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No check-in/out events for this record.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
