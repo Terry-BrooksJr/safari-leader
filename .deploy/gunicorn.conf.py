@@ -5,7 +5,7 @@
 # because threads do not survive fork.
 
 bind = "0.0.0.0:8000"
-workers = 4  # 2 × nCPUs; 4 workers × 4 threads = 16 concurrent per replica
+workers = 4  # 2 x nCPUs; 4 workers x 4 threads = 16 concurrent per replica
 worker_class = "gthread"
 threads = 4
 worker_tmp_dir = "/dev/shm"

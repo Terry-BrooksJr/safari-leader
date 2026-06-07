@@ -394,7 +394,7 @@
                 <td>{{ record.created }}</td>
               </tr>
               {% endfor %}
-              {% include "partials/pagination.html" with page_obj=posts page_param="attendancerecords" %}
+              {% include "partials/pagination.html" with page_obj=attendancerecords page_param="attendancerecords" %}
             </tbody>
           </table>
         </div>
@@ -431,7 +431,7 @@
                 <td>{{ event.notes|default:"-" }}</td>
               </tr>
               {% endfor %}
-              {% include "partials/pagination.html" with page_obj=posts page_param="checkinoutevents" %}
+              {% include "partials/pagination.html" with page_obj=checkinoutevents page_param="checkinoutevents" %}
             </tbody>
           </table>
         </div>
@@ -469,7 +469,7 @@
                 <td>{{ handoff.checked_by }}</td>
               </tr>
               {% endfor %}
-              {% include "partials/pagination.html" with page_obj=posts page_param="handoffevents" %}
+              {% include "partials/pagination.html" with page_obj=handoffevents page_param="handoffevents" %}
             </tbody>
           </table>
         </div>
@@ -511,7 +511,7 @@
                 </td>
               </tr>
               {% endfor %}
-              {% include "partials/pagination.html" with page_obj=posts page_param="incidentreports" %}
+              {% include "partials/pagination.html" with page_obj=incidentreports page_param="incidentreports" %}
             </tbody>
           </table>
         </div>

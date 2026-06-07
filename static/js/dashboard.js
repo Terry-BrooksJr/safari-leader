@@ -180,7 +180,7 @@
 					'#1A4D2E'
 				],
 				borderColor: [
-						"#444bee",
+						'#1A4D2E',
 
 				],
 				borderWidth: 1,

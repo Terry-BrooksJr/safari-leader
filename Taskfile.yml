@@ -26,13 +26,19 @@ tasks:
     internal: true
 
   run:dev:
-    desc: Starts the Django Application and background workers in a debug state
+    desc: Starts the Django development server
     dir: .
     cmds:
       - echo "Completing Pre-Start Environment Check For Development..."
+      - PYTHONPATH="${PYTHONPATH}" .venv/bin/python3 run/manage.py runserver 127.0.0.1:{{or .CLI_ARGS 8000}}
+    interactive: false
+    silent: false
+
+  run:gunicorn-dev:
+    desc: Starts a single-worker Gunicorn server for local Gunicorn-specific testing
+    dir: .
+    cmds:
       - PYTHONPATH="${PYTHONPATH}" .venv/bin/python3 -m gunicorn -w 1 --timeout 120 --worker-class=sync core.wsgi:application --bind 127.0.0.1:{{or .CLI_ARGS 8000}} --reload
-    # NOTE: `source .envrc` removed — no-op in a non-interactive subshell.
-    # NOTE: `-t 1` (connect timeout) removed — it conflicted with --timeout 120.
     interactive: false
     silent: false
 
@@ -125,7 +131,7 @@ tasks:
       - task: db_sync
 
       - echo 'Starting server...'
-      - DJANGO_CONFIGURATION=Production .venv/bin/python3 -m gunicorn --workers=2 --threads=2 core.wsgi:application --bind 0.0.0.0:{{or .CLI_ARGS 8080}}
+      - DJANGO_CONFIGURATION=Production .venv/bin/python3 -m gunicorn --config .deploy/gunicorn.conf.py --bind 0.0.0.0:{{or .CLI_ARGS 8080}}
 
   schema-check:
     dir: "{{.TASKFILE_DIR}}"

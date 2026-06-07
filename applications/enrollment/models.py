@@ -33,7 +33,7 @@ class Enrollment(models.Model):
     end_date = models.DateField(null=True,blank=True)
     status = models.CharField(max_length=5, choices=ENROLLMENT_STATUS.choices)
     def __str__(self) -> str:
-        return f"{self.child.last_name},{self.child.first_name} ({self.program: self.start_date-self.end_date}) "
+        return f"{self.child.last_name}, {self.child.first_name} ({self.program}: {self.start_date} - {self.end_date})"
 class ChildSchedule(models.Model):
     """
     Represents a recurring weekly schedule for a child's participation in a program. 

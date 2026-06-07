@@ -19,7 +19,7 @@
         <div class="d-flex justify-content-between align-items-start">
           <div>
             <h3 class="card-title mb-1"><i class="mdi mdi-bullhorn"></i> {{ announcement.title }}</h3>
-            <p class="text-muted mb-0">Created By: {{ announcement.created_by.user.first_name }} {{ announcement.created_by.user.last_name }}</p>
+            <p class="text-muted mb-0">Created By: {% if announcement.created_by %}{{ announcement.created_by.user.first_name }} {{ announcement.created_by.user.last_name }}{% else %}System{% endif %}</p>
             <p class="text-muted mb-0">Created: {{ announcement.created_at }}</p>
             <p class="text-muted mb-0">Last Updated: {{ announcement.updated_at }}</p>
           </div>

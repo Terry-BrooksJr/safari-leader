@@ -1,7 +1,6 @@
 from typing import Any
 
 from django.db.models.query import QuerySet
-from django.shortcuts import render
 from applications.children.models import Child
 from django.views.generic import ListView, DetailView
 from django.core.paginator import Paginator
@@ -12,8 +11,8 @@ def paginate_queryset(request, queryset, page_param, per_page):
 
 class ChildrenList(ListView):
     template_name = 'children/children_list.html'
-    queryset = Child.objects.all()
-    extra_context = {"children":Child.objects.all().order_by("last_name")}
+    queryset = Child.objects.all().order_by("last_name")
+    context_object_name = "children"
     paginate_by = 25
 
     

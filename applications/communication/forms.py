@@ -8,38 +8,31 @@ from django.utils.translation import gettext_lazy as _
 from .models import Announcement, Notification
 
 class AnnouncementForm(ModelForm):
-    pass
-
     class Meta:
         """Meta definition for AnnouncementForm."""
 
         model = Announcement
-        exclude = ["created_by"]
+        fields = ["title", "message", "sites"]
         labels = {}
-            
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_action = reverse("create-annoucement")
+        self.helper.form_action = reverse("create-announcement")
         self.helper.form_id = "announcement"
         self.helper.form_method = "post"
-        self.helper.layout = Layout()
-        
+
 class NotificationForm(ModelForm):
-    pass
-
-
     class Meta:
         """Meta definition for NotificationForm."""
 
         model = Notification
-        exclude = ["created_by", "updated_at"]
+        fields = ["user", "type", "message", "is_read"]
         labels = {}
-            
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_action = reverse("create-notifications")
         self.helper.form_id = "notification"
         self.helper.form_method = "post"
-        self.helper.layout = Layout()

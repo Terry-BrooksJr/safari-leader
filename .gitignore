@@ -74,6 +74,7 @@ celerybeat.pid
 
 # Node (vendor template tooling)
 node_modules/
+static/node_modules
 package-lock.json
 
 # macOS

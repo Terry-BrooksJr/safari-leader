@@ -99,6 +99,17 @@
             80% { transform: translate(-10px, 15px) rotate(-12deg); }
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            .floater,
+            .hero-animals span,
+            .hero-badge .pulse-dot {
+                animation: none !important;
+                transform: none !important;
+                transition: none !important;
+                will-change: auto !important;
+            }
+        }
+
         /* ── Hero section ── */
         .hero {
             position: relative;
@@ -682,7 +693,7 @@
 <div class="gold-bar"></div>
 
 <footer>
-    &copy; 2025 Terry A. Brooks, Jr. &middot;
+    &copy; <script>document.write(new Date().getFullYear())</script> Terry A. Brooks, Jr. &middot;
     <a href="https://github.com/Terry-BrooksJr/safari-leader" target="_blank" rel="noopener">GitHub</a> &middot;
     Safari Leader &mdash; Childcare Management
 </footer>

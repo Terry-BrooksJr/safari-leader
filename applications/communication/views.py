@@ -1,15 +1,22 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Announcement, Notification
 
-class AnnoucementsList(ListView):
-    pass
+class AnnouncementsList(ListView):
+    model = Announcement
+    template_name = "communication/announcement_list.html"
+    paginate_by = 25
 
 class NotificationsList(ListView):
-    pass
+    model = Notification
+    template_name = "communication/notification_list.html"
+    paginate_by = 25
 
-class AnnoucementDetails(DetailView):
-    pass
+class AnnouncementDetails(DetailView):
+    model = Announcement
+    template_name = "communication/announcement_detail.html"
+    context_object_name = "announcement"
 
 class NotificationDetails(DetailView):
-    pass
+    model = Notification
+    template_name = "communication/notification_detail.html"
+    context_object_name = "notification"

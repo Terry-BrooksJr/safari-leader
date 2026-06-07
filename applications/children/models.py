@@ -5,6 +5,7 @@ from encrypted_fields.fields import EncryptedIntegerField
 import secrets
 from arrow import now, get
 from django.conf import settings
+from django.utils import timezone
 
 class STUDENT_STATUS(models.TextChoices):
     ENROLLED = 'E', _('Enrolled')
@@ -71,7 +72,7 @@ class AuthorizedPickupProfile(models.Model):
     verification_notes = models.TextField(null=True, blank=True)
     
     def __str__(self) -> str:
-        return f"Pickup Agent: {self.user.last_login}, {self.user.first_name}"
+        return f"Pickup Agent: {self.user.last_name}, {self.user.first_name}"
     
     def toggle_active_status(self):
         """
@@ -134,7 +135,7 @@ class MedicalNote(models.Model):
     child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name="medical_notes")
     note = models.TextField()
     is_active = models.BooleanField(default=True)
-    date_created = models.DateTimeField(auto_created=True, default=now(settings.TIME_ZONE).datetime)
+    date_created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self) -> str:
         return f"Medical Note: {self.child.last_name}, {self.child.first_name} ({self.date_created})"

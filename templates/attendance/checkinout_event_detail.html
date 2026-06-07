@@ -26,7 +26,7 @@
             <div class="mb-3">
               <strong>Event Type:</strong>
               <p class="mb-0">
-                <span class="badge {% if 'CI' in event.event_type %}badge-success{% else %}badge-info{% endif %} p-2">
+                <span class="badge {% if event.event_type == 'CI' %}badge-success{% else %}badge-info{% endif %} p-2">
                   {{ event.get_event_type_display }}
                 </span>
               </p>
