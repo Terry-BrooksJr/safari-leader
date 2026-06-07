@@ -1,0 +1,19 @@
+{% load querystring %}
+
+{% if page_obj.has_other_pages %}
+<nav class="pagination">
+  {% if page_obj.has_previous %}
+    <a href="?{% querystring_replace page_param 1 %}">First</a>
+    <a href="?{% querystring_replace page_param page_obj.previous_page_number %}">Prev</a>
+  {% endif %}
+
+  <span>
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </span>
+
+  {% if page_obj.has_next %}
+    <a href="?{% querystring_replace page_param page_obj.next_page_number %}">Next</a>
+    <a href="?{% querystring_replace page_param page_obj.paginator.num_pages %}">Last</a>
+  {% endif %}
+</nav>
+{% endif %}

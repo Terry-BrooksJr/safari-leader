@@ -41,6 +41,7 @@ poetry.toml
 env/
 venv/
 ENV/
+.envrc
 
 # Testing / Coverage
 htmlcov/

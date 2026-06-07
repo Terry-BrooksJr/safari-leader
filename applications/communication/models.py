@@ -46,3 +46,12 @@ class Notification(models.Model):
     
     def __str__(self):
         return f"{self.user.id} - {self.type} ({self.created_at})"
+    
+    def mark_read(self):
+        self.is_read = True
+        self.save()
+        
+    def mark_unread(self):
+        self.is_read = False
+        self.save()
+        

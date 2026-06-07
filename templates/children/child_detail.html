@@ -376,7 +376,7 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title"><i class="mdi mdi-clipboard-check"></i> Attendance Records</h4>
-        {% if child.attendancerecord_set.all %}
+        {% if attendancerecords %}
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
@@ -387,13 +387,14 @@
               </tr>
             </thead>
             <tbody>
-              {% for record in child.attendancerecord_set.all %}
+              {% for record in attendancerecords %}
               <tr>
                 <td>{{ record.date }}</td>
                 <td>{{ record.get_status_display }}</td>
                 <td>{{ record.created }}</td>
               </tr>
               {% endfor %}
+              {% include "partials/pagination.html" with page_obj=posts page_param="attendancerecords" %}
             </tbody>
           </table>
         </div>
@@ -408,7 +409,7 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title"><i class="mdi mdi-login-variant"></i> Check-In/Out Events</h4>
-        {% if child.checkinoutevent_set.all %}
+        {% if checkinoutevents %}
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
@@ -421,7 +422,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for event in child.checkinoutevent_set.all %}
+              {% for event in checkinoutevents %}
               <tr>
                 <td>{{ event.get_event_type_display }}</td>
                 <td>{{ event.timestamp }}</td>
@@ -430,6 +431,7 @@
                 <td>{{ event.notes|default:"-" }}</td>
               </tr>
               {% endfor %}
+              {% include "partials/pagination.html" with page_obj=posts page_param="checkinoutevents" %}
             </tbody>
           </table>
         </div>
@@ -447,7 +449,7 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title"><i class="mdi mdi-hand-right"></i> Handoff Events</h4>
-        {% if child.handoffevent_set.all %}
+        {% if handoffevents %}
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
@@ -459,7 +461,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for handoff in child.handoffevent_set.all %}
+              {% for handoff in handoffevents %}
               <tr>
                 <td>{{ handoff.get_event_type_display }}</td>
                 <td>{{ handoff.timestamp }}</td>
@@ -467,6 +469,7 @@
                 <td>{{ handoff.checked_by }}</td>
               </tr>
               {% endfor %}
+              {% include "partials/pagination.html" with page_obj=posts page_param="handoffevents" %}
             </tbody>
           </table>
         </div>
@@ -481,7 +484,7 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title"><i class="mdi mdi-alert"></i> Incident Reports</h4>
-        {% if child.incidentreport_set.all %}
+        {% if incidentreports %}
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
@@ -495,7 +498,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for incident in child.incidentreport_set.all %}
+              {% for incident in incidentreports %}
               <tr>
                 <td>{{ incident.get_incident_type_display }}</td>
                 <td>{{ incident.get_severity_display }}</td>
@@ -508,6 +511,7 @@
                 </td>
               </tr>
               {% endfor %}
+              {% include "partials/pagination.html" with page_obj=posts page_param="incidentreports" %}
             </tbody>
           </table>
         </div>

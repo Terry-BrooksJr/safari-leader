@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Leader — The Animals Are Loose!</title>
+    <meta name="description" content="Safari Leader is a comprehensive childcare management platform currently under active development. A portfolio project by Terry A. Brooks, Jr.">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --sl-blue-dark: #0d3b66;
+            --sl-blue-mid: #1565c0;
+            --sl-blue-light: #42a5f5;
+            --sl-gold: #d4a847;
+            --sl-gold-light: #f0d68a;
+            --sl-bg-dark: #0a1f1a;
+            --sl-bg-light: #f0f4f8;
+            --sl-text: #1a2332;
+            --sl-text-muted: #5a6a7e;
+            --sl-white: #ffffff;
+            --sl-danger: #c0392b;
+            --radius: 16px;
+            --shadow: 0 4px 20px rgba(13, 59, 102, 0.1);
+            --shadow-lg: 0 12px 40px rgba(13, 59, 102, 0.18);
+        }
+
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--sl-bg-light);
+            color: var(--sl-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+        }
+
+        /* ── Gold accent bar ── */
+        .gold-bar {
+            height: 5px;
+            background: linear-gradient(90deg, var(--sl-gold), var(--sl-gold-light), var(--sl-gold));
+        }
+
+        /* ── Floating escaped animals ── */
+        .escaped-animals {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floater {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.12;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        .floater:nth-child(1) { top: 8%; left: 5%; animation: wander1 18s infinite; font-size: 3rem; }
+        .floater:nth-child(2) { top: 15%; right: 8%; animation: wander2 22s infinite; font-size: 2.8rem; }
+        .floater:nth-child(3) { top: 40%; left: 3%; animation: wander3 20s infinite; }
+        .floater:nth-child(4) { top: 55%; right: 5%; animation: wander1 25s infinite reverse; font-size: 2rem; }
+        .floater:nth-child(5) { top: 75%; left: 10%; animation: wander2 19s infinite; font-size: 3.5rem; }
+        .floater:nth-child(6) { top: 85%; right: 12%; animation: wander3 23s infinite reverse; }
+        .floater:nth-child(7) { top: 30%; right: 2%; animation: wander1 16s infinite; font-size: 2.2rem; }
+        .floater:nth-child(8) { top: 65%; left: 7%; animation: wander2 21s infinite reverse; font-size: 2rem; }
+
+        @keyframes wander1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -20px) rotate(8deg); }
+            50% { transform: translate(-15px, 15px) rotate(-5deg); }
+            75% { transform: translate(20px, 25px) rotate(12deg); }
+        }
+
+        @keyframes wander2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scaleX(1); }
+            33% { transform: translate(-25px, 20px) rotate(-10deg) scaleX(-1); }
+            66% { transform: translate(20px, -15px) rotate(6deg) scaleX(1); }
+        }
+
+        @keyframes wander3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(15px, 25px) rotate(15deg); }
+            40% { transform: translate(-20px, -10px) rotate(-8deg); }
+            60% { transform: translate(25px, -20px) rotate(10deg); }
+            80% { transform: translate(-10px, 15px) rotate(-12deg); }
+        }
+
+        /* ── Hero section ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, var(--sl-blue-dark) 0%, var(--sl-blue-mid) 50%, var(--sl-blue-light) 100%);
+            padding: 4rem 1.5rem 5rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            color: var(--sl-gold-light);
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            border: 1px solid rgba(240, 214, 138, 0.25);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--sl-gold-light);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .hero-animals {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.25rem;
+            position: relative;
+        }
+
+        .hero-animals span {
+            display: inline-block;
+        }
+
+        .hero-animals span:nth-child(1) { animation: escape-left 3s ease-in-out infinite; }
+        .hero-animals span:nth-child(2) { animation: escape-up 2.5s ease-in-out infinite 0.3s; }
+        .hero-animals span:nth-child(3) { animation: escape-right 3.2s ease-in-out infinite 0.6s; }
+        .hero-animals span:nth-child(4) { animation: escape-left 2.8s ease-in-out infinite 0.9s; }
+        .hero-animals span:nth-child(5) { animation: escape-up 3.5s ease-in-out infinite 0.2s; }
+
+        @keyframes escape-left {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-12px, -6px) rotate(-15deg); }
+        }
+
+        @keyframes escape-up {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-14px) rotate(10deg); }
+        }
+
+        @keyframes escape-right {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(12px, -8px) rotate(12deg); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            color: var(--sl-white);
+            line-height: 1.15;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--sl-gold);
+        }
+
+        .hero .tagline {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-weight: 500;
+            color: var(--sl-gold-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ── Wavy divider ── */
+        .wave-divider {
+            position: relative;
+            z-index: 1;
+            margin-top: -2px;
+        }
+
+        .wave-divider svg {
+            display: block;
+            width: 100%;
+            height: 60px;
+        }
+
+        /* ── Content wrapper ── */
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* ── Section headings ── */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--sl-blue-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .section-header p {
+            font-size: 0.95rem;
+            color: var(--sl-text-muted);
+        }
+
+        /* ── Animal feature cards ── */
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+        }
+
+        .animal-card {
+            background: var(--sl-white);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(13, 59, 102, 0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--sl-blue-mid), var(--sl-blue-light));
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .animal-card:hover::before {
+            opacity: 1;
+        }
+
+        .animal-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .animal-emoji {
+            font-size: 2.25rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .animal-card-header h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--sl-blue-dark);
+            line-height: 1.3;
+        }
+
+        .animal-card-header .pun {
+            display: block;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--sl-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 0.15rem;
+        }
+
+        .animal-card p {
+            font-size: 0.875rem;
+            line-height: 1.65;
+            color: var(--sl-text-muted);
+        }
+
+        /* ── Tech Stack ── */
+        .tech-section {
+            margin-bottom: 3.5rem;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.65rem;
+        }
+
+        .tech-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--sl-white);
+            border: 1.5px solid rgba(13, 59, 102, 0.1);
+            border-radius: 100px;
+            padding: 0.45rem 1rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--sl-blue-dark);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+
+        .tech-pill:hover {
+            border-color: var(--sl-blue-mid);
+            background: rgba(21, 101, 192, 0.04);
+            transform: translateY(-1px);
+        }
+
+        .tech-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .tech-dot.framework { background: var(--sl-blue-dark); }
+        .tech-dot.database { background: #336791; }
+        .tech-dot.infra { background: #e76f51; }
+        .tech-dot.security { background: #8e44ad; }
+        .tech-dot.frontend { background: var(--sl-blue-light); }
+
+        /* ── CTA buttons ── */
+        .cta-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            background: linear-gradient(135deg, var(--sl-blue-dark), var(--sl-blue-mid));
+            color: var(--sl-white);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 0.9rem 2.25rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(13, 59, 102, 0.3);
+        }
+
+        .btn-github:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(13, 59, 102, 0.4);
+        }
+
+        .btn-github svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        /* ── Disclaimer ── */
+        .disclaimer {
+            max-width: 640px;
+            margin: 0 auto 2.5rem;
+            text-align: center;
+            background: var(--sl-white);
+            border: 1px solid rgba(212, 168, 71, 0.3);
+            border-left: 5px solid var(--sl-gold);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.75rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .disclaimer h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--sl-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.4rem;
+        }
+
+        .disclaimer p {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: var(--sl-text-muted);
+        }
+
+        .disclaimer strong {
+            color: var(--sl-blue-dark);
+        }
+
+        /* ── Footer ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--sl-text-muted);
+            font-family: 'Nunito', sans-serif;
+        }
+
+        footer a {
+            color: var(--sl-blue-mid);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .hero {
+                padding: 2.5rem 1.25rem 3.5rem;
+            }
+
+            .hero-animals {
+                font-size: 2.5rem;
+            }
+
+            .animals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 0 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="gold-bar"></div>
+
+<!-- Escaped animals floating in background -->
+<div class="escaped-animals">
+    <span class="floater">&#x1F981;</span>
+    <span class="floater">&#x1F992;</span>
+    <span class="floater">&#x1F418;</span>
+    <span class="floater">&#x1F99B;</span>
+    <span class="floater">&#x1F98D;</span>
+    <span class="floater">&#x1F99C;</span>
+    <span class="floater">&#x1F40D;</span>
+    <span class="floater">&#x1F993;</span>
+</div>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        Roaming Free &mdash; Active Development
+    </div>
+
+    <div class="hero-animals">
+        <span>&#x1F981;</span>
+        <span>&#x1F418;</span>
+        <span>&#x1F992;</span>
+        <span>&#x1F99B;</span>
+        <span>&#x1F98D;</span>
+    </div>
+
+    <h1>Someone Left the <em>Gate</em> Open!</h1>
+    <p class="tagline">Our animals are on the loose while we build their habitat.</p>
+    <p>
+        Safari Leader is a childcare management platform currently under
+        active development. The demo isn't quite ready yet &mdash; but the herd
+        is being rounded up. Check back soon or track our progress on GitHub.
+    </p>
+</header>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C360,50 1080,50 1440,0 L1440,60 L0,60 Z" fill="#f0f4f8"/>
+    </svg>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+
+    <!-- Animal Feature Cards -->
+    <section>
+        <div class="section-header">
+            <h2>Escaped Features on the Loose</h2>
+            <p>We're rounding up these modules one by one</p>
+        </div>
+
+        <div class="animals-grid">
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F981;</span>
+                    <div>
+                        <h3>Enrollment Management</h3>
+                        <span class="pun">The pride of the platform</span>
+                    </div>
+                </div>
+                <p>Streamlined enrollment workflows from application intake through acceptance, with document tracking and status dashboards.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F418;</span>
+                    <div>
+                        <h3>Attendance Tracking</h3>
+                        <span class="pun">An elephant never forgets a check-in</span>
+                    </div>
+                </div>
+                <p>Real-time check-in and check-out with timestamped records, daily headcounts, and absence pattern reporting.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F992;</span>
+                    <div>
+                        <h3>Student Handoff</h3>
+                        <span class="pun">Sticking our necks out for safety</span>
+                    </div>
+                </div>
+                <p>Secure child pickup and drop-off workflows with authorized guardian verification and handoff event logging.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F99C;</span>
+                    <div>
+                        <h3>Parent Communication</h3>
+                        <span class="pun">Polly wants to keep parents posted</span>
+                    </div>
+                </div>
+                <p>Centralized messaging between staff and parents with threaded conversations and notification preferences.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F993;</span>
+                    <div>
+                        <h3>Staff Scheduling</h3>
+                        <span class="pun">Earning their stripes, shift by shift</span>
+                    </div>
+                </div>
+                <p>Shift management, staff-to-room assignments, and scheduling tools to maintain required staff-to-child ratios.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F99B;</span>
+                    <div>
+                        <h3>Facility &amp; Room Management</h3>
+                        <span class="pun">Charging ahead with room for everyone</span>
+                    </div>
+                </div>
+                <p>Multi-site support with room capacity tracking, program assignments, and facility resource configuration.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F98D;</span>
+                    <div>
+                        <h3>Document Vault</h3>
+                        <span class="pun">Guarding files with silverback strength</span>
+                    </div>
+                </div>
+                <p>Secure, encrypted storage for compliance documents, immunization records, and sensitive files with access controls.</p>
+            </div>
+
+            <div class="animal-card">
+                <div class="animal-card-header">
+                    <span class="animal-emoji">&#x1F40A;</span>
+                    <div>
+                        <h3>Incident Reporting</h3>
+                        <span class="pun">Snappy reports, no teeth involved</span>
+                    </div>
+                </div>
+                <p>Structured incident and accident report filing with severity classification, follow-up tracking, and audit trails.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="tech-section">
+        <div class="section-header">
+            <h2>What's Inside the Habitat</h2>
+            <p>Production-grade tooling under the hood</p>
+        </div>
+
+        <div class="tech-grid">
+            <span class="tech-pill"><span class="tech-dot framework"></span>Django 6</span>
+            <span class="tech-pill"><span class="tech-dot framework"></span>Python 3.12+</span>
+            <span class="tech-pill"><span class="tech-dot database"></span>PostgreSQL</span>
+            <span class="tech-pill"><span class="tech-dot database"></span>Redis Caching</span>
+            <span class="tech-pill"><span class="tech-dot infra"></span>DigitalOcean Spaces (S3)</span>
+            <span class="tech-pill"><span class="tech-dot infra"></span>WhiteNoise</span>
+            <span class="tech-pill"><span class="tech-dot infra"></span>Prometheus Metrics</span>
+            <span class="tech-pill"><span class="tech-dot security"></span>Argon2 Password Hashing</span>
+            <span class="tech-pill"><span class="tech-dot security"></span>Fernet Field Encryption</span>
+            <span class="tech-pill"><span class="tech-dot security"></span>pgcrypto</span>
+            <span class="tech-pill"><span class="tech-dot frontend"></span>Bootstrap 5</span>
+            <span class="tech-pill"><span class="tech-dot frontend"></span>Crispy Forms</span>
+            <span class="tech-pill"><span class="tech-dot infra"></span>Traefik Reverse Proxy</span>
+            <span class="tech-pill"><span class="tech-dot framework"></span>Poetry</span>
+        </div>
+    </section>
+
+    <!-- GitHub CTA -->
+    <section class="cta-section">
+        <a href="https://github.com/Terry-BrooksJr/safari-leader" class="btn-github" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            Track the Roundup on GitHub
+        </a>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="disclaimer">
+        <h4>Portfolio Project &mdash; Not a Real Zoo</h4>
+        <p>
+            Safari Leader is a portfolio demonstration project by
+            <strong>Terry A. Brooks, Jr.</strong> and is not intended for production use
+            with real childcare data. It showcases full-stack software engineering practices
+            including encrypted data handling, role-based access control, and operational
+            monitoring. No actual animals were let loose in the making of this platform.
+        </p>
+    </section>
+
+</div>
+
+<div class="gold-bar"></div>
+
+<footer>
+    &copy; 2025 Terry A. Brooks, Jr. &middot;
+    <a href="https://github.com/Terry-BrooksJr/safari-leader" target="_blank" rel="noopener">GitHub</a> &middot;
+    Safari Leader &mdash; Childcare Management
+</footer>
+
+</body>
+</html>

@@ -13,7 +13,8 @@ class StaffProfile(models.Model):
     personal_pin = EncryptedIntegerField()
     role_title = models.CharField(max_length=200)
     is_active = models.BooleanField(default=True)
-    
+    def __str__(self) -> str:
+        return f"{self.user.last_name}, {self.user.first_name} ({self.role_title})"
     def verify_pin(self, provided_pin: str) -> bool:
             """
             Verify a provided pickup PIN against the stored encrypted PIN.
