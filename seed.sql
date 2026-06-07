@@ -566,13 +566,13 @@ SELECT setval('children_childguardianrelationship_id_seq', (SELECT MAX(id) FROM 
 -- pickup_pin values are placeholders; re-set via Django ORM for encryption.
 
 INSERT INTO children_authorizedpickupprofile (id, child_id, user_id, relationship, is_authorized, is_active, pickup_pin, verification_notes) VALUES
-  (1, 1,  7,  'P',  TRUE, TRUE, '1234', NULL),
-  (2, 2,  8,  'P',  TRUE, TRUE, '5321', NULL),
-  (3, 3,  9,  'P',  TRUE, TRUE, '5321', NULL),
-  (4, 4,  7,  'P',  TRUE, TRUE, '5321', NULL),
-  (5, 5,  10, 'GP', TRUE, TRUE, '5321', 'Grandmother — verified via photo ID 2025-01-10'),
-  (6, 6,  11, 'P',  TRUE, TRUE, '5321', NULL),
-  (7, 10, 12, 'AV', TRUE, TRUE, '5321', 'Uncle — added per guardian request 2025-03-20');
+  (1, 1,  7,  'P',  TRUE, TRUE, 0, NULL),
+  (2, 2,  8,  'P',  TRUE, TRUE, 0, NULL),
+  (3, 3,  9,  'P',  TRUE, TRUE, 0, NULL),
+  (4, 4,  7,  'P',  TRUE, TRUE, 0, NULL),
+  (5, 5,  10, 'GP', TRUE, TRUE, 0, 'Grandmother — verified via photo ID 2025-01-10'),
+  (6, 6,  11, 'P',  TRUE, TRUE, 0, NULL),
+  (7, 10, 12, 'AV', TRUE, TRUE, 0, 'Uncle — added per guardian request 2025-03-20');
 
 SELECT setval('children_authorizedpickupprofile_id_seq', (SELECT MAX(id) FROM children_authorizedpickupprofile));
 
