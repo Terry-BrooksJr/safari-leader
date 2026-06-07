@@ -103,8 +103,6 @@ tasks:
   run:test:
     dir: .
     desc: Run all tests with pytest-cov and generate cobertura.xml (primary CI task)
-    env:
-      DJANGO_CONFIGURATION: Testing
     cmds:
       - PYTHONPATH="${PYTHONPATH}" .venv/bin/coverage erase
       - >-
@@ -117,7 +115,6 @@ tasks:
     requires:
       vars:
         - DOPPLER_TOKEN
-        - PATH_TO_DB_ROOT_CERT
   run:prod:
     dir: .
     silent: false
