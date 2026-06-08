@@ -1,0 +1,121 @@
+name: CI Pipeline
+on:
+  push:
+  pull_request:
+    branches: [main, develop]
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python Environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          install-task: 'true'
+          doppler-token: ${{ secrets.DOPPLER_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run linters
+        run: task lint:fix
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd "pg_isready -U root -d test_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python Environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          install-task: 'true'
+          doppler-token: ${{ secrets.DOPPLER_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Doppler CLI
+        run: |
+          curl -Ls https://cli.doppler.com/install.sh | sudo sh
+          doppler --version
+
+      - name: Run tests with coverage (Doppler)
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+          DOPPLER_PROJECT: ${{ vars.DOPPLER_PROJECT }}
+          DOPPLER_CONFIG: ${{ vars.DOPPLER_CONFIG }}
+        run: |
+          doppler run --project "$DOPPLER_PROJECT" --config "$DOPPLER_CONFIG" --token "$DOPPLER_TOKEN" -- \
+            task test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./cobertura.xml
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python Environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Run Safety CLI to check for vulnerabilities
+        continue-on-error: true
+        uses: pyupio/safety-action@v1
+        with:
+          api-key: ${{ secrets.SAFETY_API_KEY }}
+
+      - name: Run Bandit Report
+        run: |
+          .venv/bin/pip install --quiet bandit
+          echo "Running static security analysis..."
+          .venv/bin/bandit -r . -f json -o bandit-report.json || true
+
+      - name: Upload security scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-results
+          path: bandit-report.json
+
+  build-status:
+    if: always()
+    needs: [lint, test, security-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check build status
+        run: |
+          if [[ "${{ needs.lint.result }}" == "success" &&
+                "${{ needs.test.result }}" == "success" &&
+                "${{ needs.security-scan.result }}" == "success" ]]; then
+            echo "✅ All checks passed!"
+            exit 0
+          else
+            echo "❌ Some checks failed:"
+            echo "Lint: ${{ needs.lint.result }}"
+            echo "Test: ${{ needs.test.result }}"
+            echo "Security: ${{ needs.security-scan.result }}"
+            exit 1
+          fi

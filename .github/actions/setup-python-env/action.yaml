@@ -1,0 +1,66 @@
+---
+name: 'Setup Python Environment'
+description: 'Setup Python, Poetry, and virtual environment with caching'
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: true
+  cache-suffix:
+    description: 'Additional cache key suffix (unused, kept for back-compat)'
+    required: false
+    default: ''
+  install-task:
+    description: 'Whether to install Task CLI'
+    required: false
+    default: 'false'
+  doppler-token:
+    description: 'Doppler token for environment variables'
+    required: false
+  github-token:
+    description: 'GitHub token for Task installation'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Poetry
+      shell: bash
+      run: curl -sSL https://install.python-poetry.org | python3 -
+
+    - name: Add Poetry to PATH
+      shell: bash
+      run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        # 'poetry' cache caches the Poetry download cache (~/.cache/pypoetry),
+        # not .venv — safe to restore across runners.
+        cache: 'poetry'
+
+    - name: Create virtual environment and install dependencies
+      shell: bash
+      run: |
+        python -m venv .venv
+        .venv/bin/pip install --quiet --upgrade pip
+        .venv/bin/pip install --quiet poetry
+        .venv/bin/poetry install --with test,dev
+
+    - name: Install Doppler CLI
+      if: inputs.doppler-token != ''
+      uses: dopplerhq/cli-action@v2
+
+    - name: Fetch environment variables
+      if: inputs.doppler-token != ''
+      uses: dopplerhq/secrets-fetch-action@v1.1.3
+      with:
+        doppler-token: ${{ inputs.doppler-token }}
+        inject-env-vars: true
+
+    - name: Install Task
+      if: inputs.install-task == 'true'
+      uses: arduino/setup-task@v2
+      with:
+        version: 3.x
+        repo-token: ${{ inputs.github-token }}

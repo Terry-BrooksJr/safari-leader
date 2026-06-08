@@ -72,7 +72,7 @@ class AuthorizedPickupProfile(models.Model):
     verification_notes = models.TextField(null=True, blank=True)
     
     def __str__(self) -> str:
-        return f"Pickup Agent: {self.user.last_name}, {self.user.first_name}"
+        return f"{self.user.last_name}, {self.user.first_name} ({self.get_relationship_display()})"
     
     def toggle_active_status(self):
         """

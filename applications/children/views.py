@@ -1,10 +1,7 @@
-from typing import Any
-
-from django.db.models.query import QuerySet
 from applications.children.models import Child
 from django.views.generic import ListView, DetailView
 from django.core.paginator import Paginator
-# Create your views here.
+
 def paginate_queryset(request, queryset, page_param, per_page):
     paginator = Paginator(queryset, per_page)
     return paginator.get_page(request.GET.get(page_param))
@@ -21,8 +18,10 @@ class ChildDetailView(DetailView):
     context_object_name = "child"
     queryset = Child.objects.prefetch_related(
         "authorized_pickup",       # Authorized pickups
+        "authorized_pickup__user",  # + User on each authorized pickup
         "childguardianrelationship_set",      # Guardian links
         "childguardianrelationship_set__guardian",  # + the GuardianProfile
+        "childguardianrelationship_set__guardian__user",  # + User on each GuardianProfile
         "allergies",                        # Allergies
         "medical_notes",                    # Medical notes
         "restrictions",             # Custody restrictions
@@ -46,14 +45,14 @@ class ChildDetailView(DetailView):
             self.request,
             child.attendancerecord_set.all().order_by("-created"),
             "attendancerecords_page",
-            10,
+            5,
         )
 
         context["checkinoutevents"] = paginate_queryset(
             self.request,
             child.checkinoutevent_set.all().order_by("-timestamp"),
             "checkinoutevents_page",
-            10,
+            5,
         )
 
         context["incidentreports"] = paginate_queryset(
@@ -67,7 +66,7 @@ class ChildDetailView(DetailView):
             self.request,
             child.handoffevent_set.all().order_by("-timestamp"),
             "handoffevents_page",
-            20,
+            5,
         )
 
         return context

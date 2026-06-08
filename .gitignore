@@ -106,3 +106,4 @@ __pypackages__/
 .pdm.toml
 static/images/icons/e4579a2ce603e3506ed28444b1e06619a185142d2c6d936ff5b2cda810df04cb.png
 seed.sql
+.claude
