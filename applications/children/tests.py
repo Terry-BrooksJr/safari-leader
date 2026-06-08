@@ -14,14 +14,16 @@ class AuthorizedPickupProfileStrTest(SimpleTestCase):
         mock_profile = Mock()
         mock_profile.user.last_name = "Doe"
         mock_profile.user.first_name = "Jane"
+        mock_profile.get_relationship_display.return_value = "Parent"
         result = AuthorizedPickupProfile.__str__(mock_profile)
-        self.assertEqual(result, "Pickup Agent: Doe, Jane")
+        self.assertEqual(result, "Doe, Jane (Parent)")
 
     def test_str_does_not_include_datetime(self):
         """Regression: previously used last_login which is a datetime."""
         mock_profile = Mock()
         mock_profile.user.last_name = "Smith"
         mock_profile.user.first_name = "Bob"
+        mock_profile.get_relationship_display.return_value = "Guardian"
         result = AuthorizedPickupProfile.__str__(mock_profile)
         self.assertNotIn("None", result)
         self.assertNotIn("datetime", result)
