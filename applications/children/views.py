@@ -32,11 +32,7 @@ class ChildDetailView(DetailView):
         "enrollment_set__program",            # + Program on each enrollment
         "enrollment_set__site",               # + Site on each enrollment
         "childschedule_set",                  # Schedules
-        "attendancerecord_set",              # Attendance
-        "checkinoutevent_set",               # Check-in/out
-        "handoffevent_set",                  # Handoffs
         "documents",                          # Documents (has related_name)
-        "incidentreport_set",               # Incidents
     ).all()
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

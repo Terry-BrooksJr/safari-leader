@@ -266,7 +266,6 @@ tasks:
     requires:
       vars:
         - DOPPLER_TOKEN
-        - PATH_TO_DB_ROOT_CERT
 
   coverage:upload:
     desc: Upload coverage report to Codacy (requires CODACY_PROJECT_TOKEN env var)
