@@ -1,11 +1,13 @@
+import secrets
+
+from arrow import get, now
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from applications.accounts.models import User
 from encrypted_fields.fields import EncryptedIntegerField
-import secrets
-from arrow import now, get
-from django.conf import settings
-from django.utils import timezone
+
+from applications.accounts.models import User
+
 
 class STUDENT_STATUS(models.TextChoices):
     ENROLLED = 'E', _('Enrolled')

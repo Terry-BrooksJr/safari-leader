@@ -1,118 +1,126 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block title %}{{ staff.user.first_name }} {{ staff.user.last_name }} - Staff Profile - Safari Leader{% endblock %}
-
 {% block content %}
-<div class="row">
-  <div class="col-12 mb-4">
-    <a href="{% url 'staff-profile-list' %}" class="btn btn-outline-secondary btn-sm">
-      <i class="mdi mdi-arrow-left"></i> Back to Staff
-    </a>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12 grid-margin">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <h3 class="card-title mb-1"><i class="mdi mdi-account-tie"></i> {{ staff.user.first_name }} {{ staff.user.last_name }}</h3>
-            <p class="text-muted mb-0">Role Title: {{ staff.role_title }}</p>
-            <p class="text-muted mb-0">Hire Date: {{ staff.hire_date }}</p>
-            <p class="text-muted mb-0">Termination Date: {{ staff.termination_date|default:"N/A" }}</p>
-          </div>
-          <div>
-            {% if staff.is_active %}
-              <span class="badge badge-success p-2">Active</span>
-            {% else %}
-              <span class="badge badge-danger p-2">Inactive</span>
-            {% endif %}
-          </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'staff-profile-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Staff
+            </a>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-lg-6 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title"><i class="mdi mdi-map-marker"></i> Assignments</h4>
-        {% if staff.staffassignment_set.all %}
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Site</th>
-                <th>Room</th>
-                <th>Program</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Active</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for assignment in staff.staffassignment_set.all %}
-              <tr>
-                <td>{{ assignment.site.name }}</td>
-                <td>{{ assignment.room.name }}</td>
-                <td>{{ assignment.program.name }}</td>
-                <td>{{ assignment.start_date }}</td>
-                <td>{{ assignment.end_date|default:"-" }}</td>
-                <td>
-                  {% if assignment.is_active %}<span class="badge badge-success">Active</span>
-                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-account-tie"></i> {{ staff.user.first_name }} {{ staff.user.last_name }}
+                            </h3>
+                            <p class="text-muted mb-0">Role Title: {{ staff.role_title }}</p>
+                            <p class="text-muted mb-0">Hire Date: {{ staff.hire_date }}</p>
+                            <p class="text-muted mb-0">Termination Date: {{ staff.termination_date|default:"N/A" }}</p>
+                        </div>
+                        <div>
+                            {% if staff.is_active %}
+                                <span class="badge badge-success p-2">Active</span>
+                            {% else %}
+                                <span class="badge badge-danger p-2">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% else %}
-        <p class="text-muted">No assignments on file.</p>
-        {% endif %}
-      </div>
     </div>
-  </div>
-
-  <div class="col-lg-6 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title"><i class="mdi mdi-clock-outline"></i> Shifts</h4>
-        {% if staff.shift_set.all %}
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Site</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Active</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for shift in staff.shift_set.all %}
-              <tr>
-                <td>{{ shift.site.name }}</td>
-                <td>{{ shift.start_time }}</td>
-                <td>{{ shift.end_time }}</td>
-                <td>
-                  {% if shift.is_active %}<span class="badge badge-success">Active</span>
-                  {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+    <div class="row">
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-map-marker"></i> Assignments
+                    </h4>
+                    {% if staff.staffassignment_set.all %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Site</th>
+                                        <th>Room</th>
+                                        <th>Program</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for assignment in staff.staffassignment_set.all %}
+                                        <tr>
+                                            <td>{{ assignment.site.name }}</td>
+                                            <td>{{ assignment.room.name }}</td>
+                                            <td>{{ assignment.program.name }}</td>
+                                            <td>{{ assignment.start_date }}</td>
+                                            <td>{{ assignment.end_date|default:"-" }}</td>
+                                            <td>
+                                                {% if assignment.is_active %}
+                                                    <span class="badge badge-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge badge-secondary">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No assignments on file.</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        {% else %}
-        <p class="text-muted">No shifts on file.</p>
-        {% endif %}
-      </div>
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-clock-outline"></i> Shifts
+                    </h4>
+                    {% if staff.shift_set.all %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Site</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for shift in staff.shift_set.all %}
+                                        <tr>
+                                            <td>{{ shift.site.name }}</td>
+                                            <td>{{ shift.start_time }}</td>
+                                            <td>{{ shift.end_time }}</td>
+                                            <td>
+                                                {% if shift.is_active %}
+                                                    <span class="badge badge-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge badge-secondary">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No shifts on file.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock content %}

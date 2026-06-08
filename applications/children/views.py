@@ -1,6 +1,8 @@
-from applications.children.models import Child
-from django.views.generic import ListView, DetailView
 from django.core.paginator import Paginator
+from django.views.generic import DetailView, ListView
+
+from applications.children.models import Child
+
 
 def paginate_queryset(request, queryset, page_param, per_page):
     paginator = Paginator(queryset, per_page)

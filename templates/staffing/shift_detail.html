@@ -1,40 +1,42 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block title %}Shift - {{ shift.staff.user.first_name }} {{ shift.staff.user.last_name }} - Safari Leader{% endblock %}
-
+{% block title %}
+    Shift - {{ shift.staff.user.first_name }} {{ shift.staff.user.last_name }} - Safari Leader
+{% endblock %}
 {% block content %}
-<div class="row">
-  <div class="col-12 mb-4">
-    <a href="{% url 'shift-list' %}" class="btn btn-outline-secondary btn-sm">
-      <i class="mdi mdi-arrow-left"></i> Back to Shifts
-    </a>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12 grid-margin">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <h3 class="card-title mb-1"><i class="mdi mdi-clock-outline"></i> Shift Details</h3>
-            <p class="text-muted mb-0">Staff: {{ shift.staff.user.first_name }} {{ shift.staff.user.last_name }}</p>
-            <p class="text-muted mb-0">Role: {{ shift.staff.role_title }}</p>
-            <p class="text-muted mb-0">Site: {{ shift.site.name }}</p>
-            <p class="text-muted mb-0">Start Time: {{ shift.start_time }}</p>
-            <p class="text-muted mb-0">End Time: {{ shift.end_time }}</p>
-          </div>
-          <div>
-            {% if shift.is_active %}
-              <span class="badge badge-success p-2">Active</span>
-            {% else %}
-              <span class="badge badge-secondary p-2">Inactive</span>
-            {% endif %}
-          </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'shift-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Shifts
+            </a>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-clock-outline"></i> Shift Details
+                            </h3>
+                            <p class="text-muted mb-0">Staff: {{ shift.staff.user.first_name }} {{ shift.staff.user.last_name }}</p>
+                            <p class="text-muted mb-0">Role: {{ shift.staff.role_title }}</p>
+                            <p class="text-muted mb-0">Site: {{ shift.site.name }}</p>
+                            <p class="text-muted mb-0">Start Time: {{ shift.start_time }}</p>
+                            <p class="text-muted mb-0">End Time: {{ shift.end_time }}</p>
+                        </div>
+                        <div>
+                            {% if shift.is_active %}
+                                <span class="badge badge-success p-2">Active</span>
+                            {% else %}
+                                <span class="badge badge-secondary p-2">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

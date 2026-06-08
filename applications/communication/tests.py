@@ -1,17 +1,14 @@
 from datetime import datetime
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from django.test import SimpleTestCase
 
 from applications.communication.forms import AnnouncementForm, NotificationForm
 from applications.communication.models import Announcement, Notification
-from applications.communication.views import (
-    AnnouncementDetails,
-    AnnouncementsList,
-    NotificationDetails,
-    NotificationsList,
-)
-
+from applications.communication.views import (AnnouncementDetails,
+                                              AnnouncementsList,
+                                              NotificationDetails,
+                                              NotificationsList)
 
 # ─── Model Tests ───────────────────────────────────────────────────────────────
 

@@ -1,7 +1,8 @@
 from django.db import models
-from applications.staffing.models import StaffProfile
-from applications.facilities.models import Site
 from django.utils.translation import gettext_lazy as _
+
+from applications.facilities.models import Site
+from applications.staffing.models import StaffProfile
 
 
 class NOTIFICATION_TYPE(models.TextChoices):

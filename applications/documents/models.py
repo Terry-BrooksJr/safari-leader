@@ -1,7 +1,9 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 from applications.accounts.models import User
 from applications.children.models import Child
-from django.utils.translation import gettext_lazy as _
+
 
 class DOCUMENT_TYPE(models.TextChoices):
     GENERAL = 'G', _("General")

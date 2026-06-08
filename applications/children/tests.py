@@ -1,13 +1,9 @@
-from datetime import date, datetime
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from django.test import SimpleTestCase
 
-from applications.children.models import (
-    AuthorizedPickupProfile,
-    Child,
-    MedicalNote,
-)
+from applications.children.models import (AuthorizedPickupProfile, Child,
+                                          MedicalNote)
 from applications.children.views import ChildrenList
 
 

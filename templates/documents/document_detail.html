@@ -1,60 +1,60 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block title %}Document - {{ document.get_document_type_display }} - Safari Leader{% endblock %}
-
 {% block content %}
-<div class="row">
-  <div class="col-12 mb-4">
-    <a href="{% url 'document-list' %}" class="btn btn-outline-secondary btn-sm">
-      <i class="mdi mdi-arrow-left"></i> Back to Documents
-    </a>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12 grid-margin">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="card-title mb-3"><i class="mdi mdi-file-document"></i> Document Details</h3>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="mb-3">
-              <strong>Child:</strong>
-              <p class="text-muted mb-0">{{ document.child.first_name }} {{ document.child.last_name }}</p>
-            </div>
-            <div class="mb-3">
-              <strong>Document Type:</strong>
-              <p class="mb-0">
-                <span class="badge {% if document.document_type == 'L' %}badge-warning{% elif document.document_type == 'M' %}badge-danger{% elif document.document_type == 'F' %}badge-info{% elif document.document_type == 'I' %}badge-dark{% else %}badge-secondary{% endif %} p-2">
-                  {{ document.get_document_type_display }}
-                </span>
-              </p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <strong>Uploaded By:</strong>
-              <p class="text-muted mb-0">{{ document.uploaded_by.first_name }} {{ document.uploaded_by.last_name }}</p>
-            </div>
-            <div class="mb-3">
-              <strong>Date Created:</strong>
-              <p class="text-muted mb-0">{{ document.date_created }}</p>
-            </div>
-            {% if document.file %}
-            <div class="mb-3">
-              <strong>File:</strong>
-              <p class="mb-0">
-                <a href="{{ document.file.url }}" class="btn btn-outline-primary btn-sm">
-                  <i class="mdi mdi-download"></i> Download File
-                </a>
-              </p>
-            </div>
-            {% endif %}
-          </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'document-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Documents
+            </a>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">
+                        <i class="mdi mdi-file-document"></i> Document Details
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong>Child:</strong>
+                                <p class="text-muted mb-0">{{ document.child.first_name }} {{ document.child.last_name }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Document Type:</strong>
+                                <p class="mb-0">
+                                    <span class="badge {% if document.document_type == 'L' %}badge-warning{% elif document.document_type == 'M' %}badge-danger{% elif document.document_type == 'F' %}badge-info{% elif document.document_type == 'I' %}badge-dark{% else %}badge-secondary{% endif %} p-2">
+                                        {{ document.get_document_type_display }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong>Uploaded By:</strong>
+                                <p class="text-muted mb-0">{{ document.uploaded_by.first_name }} {{ document.uploaded_by.last_name }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Date Created:</strong>
+                                <p class="text-muted mb-0">{{ document.date_created }}</p>
+                            </div>
+                            {% if document.file %}
+                                <div class="mb-3">
+                                    <strong>File:</strong>
+                                    <p class="mb-0">
+                                        <a href="{{ document.file.url }}" class="btn btn-outline-primary btn-sm">
+                                            <i class="mdi mdi-download"></i> Download File
+                                        </a>
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

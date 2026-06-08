@@ -1,7 +1,9 @@
 from django.db import models
-from applications.children.models import Child
-from applications.facilities.models import Program,Site
 from django.utils.translation import gettext_lazy as _
+
+from applications.children.models import Child
+from applications.facilities.models import Program, Site
+
 
 # Create your models here.
 def days_of_week_template():

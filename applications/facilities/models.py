@@ -1,7 +1,9 @@
-from django.db import models
 from address.models import AddressField
+from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from common.helpers import ModelModifer
+
 
 class AGE_GROUP(models.TextChoices):
     INFANT = 'INF', _('Infant: 0 - 18 Months')

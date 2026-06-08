@@ -1,8 +1,10 @@
+import secrets
+
 from django.db import models
 from encrypted_fields.fields import EncryptedIntegerField
-import secrets
+
 from applications.accounts.models import User
-from applications.facilities.models import Site, Room, Program
+from applications.facilities.models import Program, Room, Site
 from common.helpers import ModelModifer
 
 

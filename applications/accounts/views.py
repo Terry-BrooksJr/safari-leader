@@ -1,6 +1,7 @@
-from django.shortcuts import render
 from django.views.generic import TemplateView
-from applications.communication.models import Notification, Announcement
+
+from applications.communication.models import Announcement, Notification
+
 # Create your views here.
 
 
