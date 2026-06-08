@@ -43,9 +43,9 @@ runs:
       shell: bash
       run: |
         python -m venv .venv
-        .venv/bin/pip install --quiet --upgrade pip
-        .venv/bin/pip install --quiet poetry
-        .venv/bin/poetry install --with test,dev
+        .venv/bin/pip install --no-root --quiet --upgrade pip 
+        .venv/bin/pip install --no-root --quiet poetry
+        .venv/bin/poetry install --no-root --with test,dev
 
     - name: Install Doppler CLI
       if: inputs.doppler-token != ''
