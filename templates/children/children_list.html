@@ -12,71 +12,61 @@
                             <div class="card-body">
                                 <h4 class="card-title">
                                     Children Roster <strong>({{ page_obj.paginator.count }})</strong>
+                                    Children Roster <strong>({{ page_obj.paginator.count }})</strong>
                                 </h4>
                                 <div class="table-responsive">
-<ul class="nav nav-tabs">
-
-    <li class="nav-item">
-
-        <a class="nav-link" href="?">All</a>
-
-    </li>
-
-    <li class="nav-item">
-
-        <a class="nav-link" href="?status=active">Active</a>
-
-    </li>
-
-    <li class="nav-item">
-
-        <a class="nav-link" href="?status=inactive">Inactive</a>
-
-    </li>
-
-</ul>
-
-                                        <table class="table table-hover">
-                                            <thead>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?">All</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?status=active">Active</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?status=inactive">Inactive</a>
+                                        </li>
+                                    </ul>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Last Name</th>
+                                                <th>First Name</th>
+                                                <th>Date of Birth</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for child in children %}
                                                 <tr>
-                                                    <th>Last Name</th>
-                                                    <th>First Name</th>
-                                                    <th>Date of Birth</th>
-                                                    <th></th>
+                                                    <td>{{ child.last_name }}</td>
+                                                    <td>{{ child.first_name }}</td>
+                                                    <td>{{ child.date_of_birth }}</td>
+                                                    <td>
+                                                        <a href="{% url 'child-detail' child.pk %}">
+                                                            <button type="button" class="btn btn-outline-primary">Details</button>
+                                                        </a>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for child in children %}
-                                                        <tr>
-                                                           <td>{{ child.last_name }}</td>
-                                                            <td>{{ child.first_name }}</td>
-                                                            <td>{{ child.date_of_birth }}</td>
-                                                            <td>
-                                                                <a href="{% url 'child-detail' child.pk %}">
-                                                                    <button type="button" class="btn btn-outline-primary">Details</button>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                {% empty %}
-                                                    <tr>
-                                                        <td colspan="4" class="text-center">No children found.</td>
-                                                    </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            {% empty %}
+                                                <tr>
+                                                    <td colspan="4" class="text-center">No children found.</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div class="pagination mx-0">
                                     <div class="mx-auto">
-                                    {% if page_obj.has_previous %}
-                                        <a class="px-3" href="?page=1"><i class="fa-solid fa-backward-fast" style="color: rgb(32, 143, 21);"></i></a>
-                                        <a class="px-3" href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-backward" style="color: rgb(32, 143, 21);"></i></a>
-                                    {% endif %}
-                                    <span class="current">Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong></span>
-                                    {% if page_obj.has_next %}
-                                        <a class="px-3" href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-forward" style="color: rgb(32, 143, 21);"></i></a>
-                                        <a  class="px-3" href="?page={{ page_obj.paginator.num_pages }}"><i class="fa-solid fa-forward-fast" style="color: rgb(32, 143, 21);"></i></a>
-                                    {% endif %}
-                                </div>
+                                        {% if page_obj.has_previous %}
+                                            <a class="px-3" href="?page=1"><i class="fa-solid fa-backward-fast" style="color: rgb(32, 143, 21);"></i></a>
+                                            <a class="px-3" href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-backward" style="color: rgb(32, 143, 21);"></i></a>
+                                        {% endif %}
+                                        <span class="current">Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong></span>
+                                        {% if page_obj.has_next %}
+                                            <a class="px-3" href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-forward" style="color: rgb(32, 143, 21);"></i></a>
+                                            <a class="px-3" href="?page={{ page_obj.paginator.num_pages }}"><i class="fa-solid fa-forward-fast" style="color: rgb(32, 143, 21);"></i></a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
