@@ -1,15 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Sign In - Safari Leader</title>
-  <link rel="stylesheet" href="{% static 'vendors/mdi/css/materialdesignicons.min.css' %}">
-  <link rel="stylesheet" href="{% static 'vendors/base/vendor.bundle.base.css' %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
-  <style>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Sign In - Safari Leader</title>
+        <link rel="stylesheet"
+              href="{% static 'vendors/mdi/css/materialdesignicons.min.css' %}">
+        <link rel="stylesheet"
+              href="{% static 'vendors/base/vendor.bundle.base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+        <style>
     :root {
       --sl-blue-dark: #0d3b66;
       --sl-blue-mid: #1565c0;
@@ -257,107 +260,87 @@
         padding: 2rem 1.5rem;
       }
     }
-  </style>
-</head>
-<body>
-  <div class="login-wrapper">
-    <div class="brand-panel">
-      <img src="{% static 'images/brand-image.png' %}" alt="Safari Leader" class="brand-icon">
-      <p class="brand-tagline">
-        Streamline your childcare operations with attendance tracking, enrollment management, and seamless communication — all in one place.
-      </p>
-    </div>
-
-    <div class="form-panel">
-      <div class="login-card">
-        <div class="mobile-brand">
-          <img src="{% static 'images/brand-icon.png' %}" alt="Safari Leader">
-          <h4>Safari Leader</h4>
-        </div>
-
-        <h3>Welcome back</h3>
-        <p class="subtitle">Sign in to your account to continue</p>
-
-        {% if form.non_field_errors %}
-        <div class="alert alert-danger alert-login">
-          {% for error in form.non_field_errors %}
-          <p class="mb-0">{{ error }}</p>
-          {% endfor %}
-        </div>
-        {% endif %}
-
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-login">
-          {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-
-        <form method="post" novalidate>
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ next }}">
-
-          <div class="form-label-group">
-            <label for="id_username">Username</label>
-            <div class="input-wrapper">
-              <i class="mdi mdi-account-outline"></i>
-              <input
-                type="text"
-                name="username"
-                id="id_username"
-                class="form-control {% if form.username.errors %}is-invalid{% endif %}"
-                placeholder="Enter your username"
-                value="{{ form.username.value|default:'' }}"
-                autocomplete="username"
-                autofocus
-                required
-              >
+        </style>
+    </head>
+    <body>
+        <div class="login-wrapper">
+            <div class="brand-panel">
+                <img src="{% static 'images/brand-image.png' %}"
+                     alt="Safari Leader"
+                     class="brand-icon">
+                <p class="brand-tagline">
+                    Streamline your childcare operations with attendance tracking, enrollment management, and seamless communication — all in one place.
+                </p>
             </div>
-            {% if form.username.errors %}
-            <div class="text-danger mt-1" style="font-size: 0.8125rem;">{{ form.username.errors.0 }}</div>
-            {% endif %}
-          </div>
-
-          <div class="form-label-group">
-            <label for="id_password">Password</label>
-            <div class="input-wrapper">
-              <i class="mdi mdi-lock-outline"></i>
-              <input
-                type="password"
-                name="password"
-                id="id_password"
-                class="form-control {% if form.password.errors %}is-invalid{% endif %}"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                required
-              >
+            <div class="form-panel">
+                <div class="login-card">
+                    <div class="mobile-brand">
+                        <img src="{% static 'images/brand-icon.png' %}" alt="Safari Leader">
+                        <h4>Safari Leader</h4>
+                    </div>
+                    <h3>Welcome back</h3>
+                    <p class="subtitle">Sign in to your account to continue</p>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-login">
+                            {% for error in form.non_field_errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if messages %}
+                        {% for message in messages %}<div class="alert alert-{{ message.tags }} alert-login">{{ message }}</div>{% endfor %}
+                    {% endif %}
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        <div class="form-label-group">
+                            <label for="id_username">Username</label>
+                            <div class="input-wrapper">
+                                <i class="mdi mdi-account-outline"></i>
+                                <input type="text"
+                                       name="username"
+                                       id="id_username"
+                                       class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                                       placeholder="Enter your username"
+                                       value="{{ form.username.value|default:'' }}"
+                                       autocomplete="username"
+                                       autofocus
+                                       required>
+                            </div>
+                            {% if form.username.errors %}
+                                <div class="text-danger mt-1" style="font-size: 0.8125rem;">{{ form.username.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-label-group">
+                            <label for="id_password">Password</label>
+                            <div class="input-wrapper">
+                                <i class="mdi mdi-lock-outline"></i>
+                                <input type="password"
+                                       name="password"
+                                       id="id_password"
+                                       class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                                       placeholder="Enter your password"
+                                       autocomplete="current-password"
+                                       required>
+                            </div>
+                            {% if form.password.errors %}
+                                <div class="text-danger mt-1" style="font-size: 0.8125rem;">{{ form.password.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="login-options">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="rememberMe"
+                                       name="remember">
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                            </div>
+                            <a href="{% url 'password_reset' %}">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn-login">Sign In</button>
+                    </form>
+                    <div class="login-footer">&copy; {% now "Y" %} Safari Leader &middot; Childcare Management</div>
+                </div>
             </div>
-            {% if form.password.errors %}
-            <div class="text-danger mt-1" style="font-size: 0.8125rem;">{{ form.password.errors.0 }}</div>
-            {% endif %}
-          </div>
-
-          <div class="login-options">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="rememberMe" name="remember">
-              <label class="form-check-label" for="rememberMe">Remember me</label>
-            </div>
-            <a href="{% url 'password_reset' %}">Forgot password?</a>
-          </div>
-
-          <button type="submit" class="btn-login">
-            Sign In
-          </button>
-        </form>
-
-        <div class="login-footer">
-          &copy; {% now "Y" %} Safari Leader &middot; Childcare Management
         </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="{% static 'vendors/base/vendor.bundle.base.js' %}"></script>
-</body>
+        <script src="{% static 'vendors/base/vendor.bundle.base.js' %}"></script>
+    </body>
 </html>

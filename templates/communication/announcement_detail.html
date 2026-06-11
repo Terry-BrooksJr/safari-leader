@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ announcement.title }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'announcement-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Announcements
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-bullhorn"></i> {{ announcement.title }}
+                            </h3>
+                            <p class="text-muted mb-0">
+                                Created By:
+                                {% if announcement.created_by %}
+                                    {{ announcement.created_by.user.first_name }} {{ announcement.created_by.user.last_name }}
+                                {% else %}
+                                    System
+                                {% endif %}
+                            </p>
+                            <p class="text-muted mb-0">Created: {{ announcement.created_at }}</p>
+                            <p class="text-muted mb-0">Last Updated: {{ announcement.updated_at }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-message-text"></i> Message
+                    </h4>
+                    <p>{{ announcement.message }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-office-building"></i> Target Sites
+                    </h4>
+                    {% if announcement.sites.all %}
+                        <ul class="list-group">
+                            {% for site in announcement.sites.all %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ site.name }}
+                                    {% if site.is_active %}
+                                        <span class="badge badge-success">Active</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">Inactive</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">All sites (no specific targets).</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

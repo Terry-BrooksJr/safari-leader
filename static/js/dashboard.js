@@ -7,18 +7,18 @@
 				label: 'Best Sellers',
 				data: [22, 28, 18, 20, 12],
 				backgroundColor: [
-						'#8169f2',
-						'#6a4df5',
-						'#4f2def',
-						'#2b0bc5',
-						'#180183',
+						'#2E8B6E',
+						'#1A4D2E',
+						'#4CAF50',
+						'#E8A838',
+						'#0D2818',
 				],
 				borderColor: [
-						'#8169f2',
-						'#6a4df5',
-						'#4f2def',
-						'#2b0bc5',
-						'#180183',
+						'#2E8B6E',
+						'#1A4D2E',
+						'#4CAF50',
+						'#E8A838',
+						'#0D2818',
 				],
 				borderWidth: 2,
 				fill: false
@@ -54,7 +54,7 @@
 			},
 			tooltips: {
 				show: false,
-				backgroundColor: 'rgba(31, 59, 179, 1)',
+				backgroundColor: 'rgba(26, 77, 46, 0.95)',
 			},
 			plugins: {
 			datalabels: {
@@ -79,18 +79,18 @@
 			datasets: [{
 				data: [20, 15, 20, 35, 10],
 				backgroundColor: [
-					'#ee5b5b',
-					'#fcd53b',
-					'#0bdbb8',
-					'#464dee',
-					'#0ad7f7'
+					'#E87B35',
+					'#E8A838',
+					'#4CAF50',
+					'#1A4D2E',
+					'#4DB6AC'
 				],
 				borderColor: [
-					'#ee5b5b',
-					'#fcd53b',
-					'#0bdbb8',
-					'#464dee',
-					'#0ad7f7'
+					'#E87B35',
+					'#E8A838',
+					'#4CAF50',
+					'#1A4D2E',
+					'#4DB6AC'
 				],
 			}],
 			// These labels appear in the legend and in the tooltips when hovering different arcs
@@ -135,11 +135,11 @@
 				label: 'Instagram (40%)',
 				data: [60],
 				backgroundColor: [
-					'#ee5b5b'
+					'#E87B35'
 
 				],
 				borderColor: [
-					'#ee5b5b'
+					'#E87B35'
 				],
 				borderWidth: 1,
 				fill: false
@@ -149,10 +149,10 @@
 				data: [25],
 
 				backgroundColor: [
-					'#fcd53b'
+					'#E8A838'
 				],
 				borderColor: [
-					'#fcd53b',
+					'#E8A838',
 
 				],
 				borderWidth: 1,
@@ -163,10 +163,10 @@
 				data: [10],
 
 				backgroundColor: [
-					'#0bdbb8'
+					'#4CAF50'
 				],
 				borderColor: [
-					'#0bdbb8',
+					'#4CAF50',
 
 				],
 				borderWidth: 1,
@@ -177,10 +177,10 @@
 				data: [15],
 
 				backgroundColor: [
-					'#444bee'
+					'#1A4D2E'
 				],
 				borderColor: [
-						"#444bee",
+						'#1A4D2E',
 
 				],
 				borderWidth: 1,
@@ -235,10 +235,10 @@
 				label: 'Margin',
 				data: [45, 45, 70, 70, 50, 50, 70, 60, 65, 60, 55, 55],
 				backgroundColor: [
-						'#0ddbb9',
+						'#4CAF50',
 				],
 				borderColor: [
-						'#0ddbb9'
+						'#4CAF50'
 				],
 				borderWidth: 2,
 				fill: false,
@@ -248,7 +248,7 @@
 				borderDash: [3, 4],
 				data: [35, 35, 60, 60, 40, 40, 60, 50, 55, 50, 45, 45],
 				borderColor: [
-						'#464dee',
+						'#1A4D2E',
 				],
 				borderWidth: 2,
 				fill: false,
@@ -258,7 +258,7 @@
 				label: 'Cost',
 				data: [25, 25, 50, 50, 30, 30, 50, 40, 45, 40, 35, 35],
 				borderColor: [
-						'#ee5b5b',
+						'#E87B35',
 				],
 				borderWidth: 2,
 				fill: false,
@@ -312,7 +312,7 @@
 				}
 			},
 			tooltips: {
-				backgroundColor: 'rgba(2, 171, 254, 1)',
+				backgroundColor: 'rgba(26, 77, 46, 0.95)',
 			},
 			plugins: {
 				datalabels: {
@@ -339,10 +339,10 @@
 				label: 'Margin',
 				data: [45, 45, 70, 70, 50, 50, 70, 60, 65, 60, 55, 55],
 				backgroundColor: [
-						'#0ddbb9',
+						'#4CAF50',
 				],
 				borderColor: [
-						'#0ddbb9'
+						'#4CAF50'
 				],
 				borderWidth: 2,
 				fill: false,
@@ -352,7 +352,7 @@
 				borderDash: [3, 4],
 				data: [35, 35, 60, 60, 40, 40, 60, 50, 55, 50, 45, 45],
 				borderColor: [
-						'#464dee',
+						'#1A4D2E',
 				],
 				borderWidth: 2,
 				fill: false,
@@ -362,7 +362,7 @@
 				label: 'Cost',
 				data: [25, 25, 50, 50, 30, 30, 50, 40, 45, 40, 35, 35],
 				borderColor: [
-						'#ee5b5b',
+						'#E87B35',
 				],
 				borderWidth: 2,
 				fill: false,
@@ -416,7 +416,7 @@
 				}
 			},
 			tooltips: {
-				backgroundColor: 'rgba(2, 171, 254, 1)',
+				backgroundColor: 'rgba(26, 77, 46, 0.95)',
 			},
 			plugins: {
 				datalabels: {
@@ -442,10 +442,10 @@
 						label: 'Margin',
 						data: [45, 45, 70, 70, 50, 50, 70, 60, 65, 60, 55, 55],
 						backgroundColor: [
-							'#0ddbb9',
+							'#4CAF50',
 						],
 						borderColor: [
-							'#0ddbb9'
+							'#4CAF50'
 						],
 						borderWidth: 2,
 						fill: false,
@@ -455,7 +455,7 @@
 						borderDash: [3, 4],
 						data: [35, 35, 60, 60, 40, 40, 60, 50, 55, 50, 45, 45],
 						borderColor: [
-								'#464dee',
+								'#1A4D2E',
 						],
 						borderWidth: 2,
 						fill: false,
@@ -465,7 +465,7 @@
 						label: 'Cost',
 						data: [25, 25, 50, 50, 30, 30, 50, 40, 45, 40, 35, 35],
 						borderColor: [
-								'#ee5b5b',
+								'#E87B35',
 						],
 						borderWidth: 2,
 						fill: false,
@@ -519,7 +519,7 @@
 				}
 			},
 			tooltips: {
-				backgroundColor: 'rgba(2, 171, 254, 1)',
+				backgroundColor: 'rgba(26, 77, 46, 0.95)',
 			},
 			plugins: {
 				datalabels: {
@@ -544,10 +544,10 @@
 				label: 'Margin',
 				data: [45, 45, 70, 70, 50, 50, 70, 60, 65, 60, 55, 55],
 				backgroundColor: [
-						'#0ddbb9',
+						'#4CAF50',
 				],
 				borderColor: [
-						'#0ddbb9'
+						'#4CAF50'
 				],
 				borderWidth: 2,
 				fill: false,
@@ -557,7 +557,7 @@
 				borderDash: [3, 4],
 				data: [35, 35, 60, 60, 40, 40, 60, 50, 55, 50, 45, 45],
 				borderColor: [
-						'#464dee',
+						'#1A4D2E',
 				],
 				borderWidth: 2,
 				fill: false,
@@ -567,7 +567,7 @@
 				label: 'Cost',
 				data: [25, 25, 50, 50, 30, 30, 50, 40, 45, 40, 35, 35],
 				borderColor: [
-						'#ee5b5b',
+						'#E87B35',
 				],
 				borderWidth: 2,
 				fill: false,
@@ -622,7 +622,7 @@
 					}
 			},
 			tooltips: {
-					backgroundColor: 'rgba(2, 171, 254, 1)',
+					backgroundColor: 'rgba(26, 77, 46, 0.95)',
 			},
 			plugins: {
 				datalabels: {
@@ -650,10 +650,10 @@
 				label: 'Cost',
 				data: [15, 25, 20, 18, 24, 20, 16, 20],
 				backgroundColor: [
-						'rgba(238, 91, 91, .9)',
+						'rgba(232, 123, 53, .9)',
 				],
 				borderColor: [
-						'#ee5b5b',
+						'#E87B35',
 				],
 				borderWidth: 2,
 				fill: true,
@@ -663,10 +663,10 @@
 				label: 'Product',
 				data: [20, 30, 25, 23, 29, 25, 21, 25],
 				backgroundColor: [
-						'rgba(70, 77, 238, 1)',
+						'rgba(26, 77, 46, 1)',
 				],
 				borderColor: [
-						'#464dee',
+						'#1A4D2E',
 				],
 				borderWidth: 2,
 				fill: true,
@@ -676,10 +676,10 @@
 				label: 'Margin',
 				data: [25, 35, 30, 28, 33, 30, 26, 30],
 				backgroundColor: [
-						'rgba(81, 225, 195, .9)',
+						'rgba(76, 175, 80, .9)',
 				],
 				borderColor: [
-						'#51e1c3'
+						'#4CAF50'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -701,7 +701,7 @@
 					gridLines: {
 						drawBorder: false,
 						display: true,
-						color: "#f2f2f2",
+						color: "#D4E5D4",
 						borderDash: [8, 4],
 					},
 					ticks: {
@@ -736,7 +736,7 @@
 		}
 		if ($('#circleProgress1').length) {
 			var bar = new ProgressBar.Circle(circleProgress1, {
-				color: '#0aadfe',
+				color: '#2E8B6E',
 				strokeWidth: 10,
 				trailWidth: 10,
 				easing: 'easeInOut',
@@ -747,7 +747,7 @@
 		}
 		if ($('#circleProgress2').length) {
 			var bar = new ProgressBar.Circle(circleProgress2, {
-				color: '#fa424a',
+				color: '#E8A838',
 				strokeWidth: 10,
 				trailWidth: 10,
 				easing: 'easeInOut',
@@ -763,10 +763,10 @@
 				label: 'Margin',
 				data: [35, 37, 34, 36, 32],
 				backgroundColor: [
-						'#f7f7f7',
+						'#E8F5E9',
 				],
 				borderColor: [
-						'#dcdcdc'
+						'#A8D5BA'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -811,10 +811,10 @@
 				label: 'Margin',
 				data: [37, 36, 37, 35, 36],
 				backgroundColor: [
-						'#f7f7f7',
+						'#E8F5E9',
 				],
 				borderColor: [
-						'#dcdcdc'
+						'#A8D5BA'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -860,10 +860,10 @@
 				label: 'Margin',
 				data: [35, 37, 34, 36, 32],
 				backgroundColor: [
-						'#f7f7f7',
+						'#E8F5E9',
 				],
 				borderColor: [
-						'#dcdcdc'
+						'#A8D5BA'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -909,10 +909,10 @@
 				label: 'Margin',
 				data: [38, 39, 37, 40, 36],
 					backgroundColor: [
-							'#f7f7f7',
+							'#E8F5E9',
 					],
 				borderColor: [
-						'#dcdcdc'
+						'#A8D5BA'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -957,10 +957,10 @@
 				label: 'Margin',
 				data: [35, 37, 34, 36, 32],
 				backgroundColor: [
-						'#f7f7f7',
+						'#E8F5E9',
 				],
 				borderColor: [
-						'#dcdcdc'
+						'#A8D5BA'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -1006,10 +1006,10 @@
 				label: 'Margin',
 				data: [38, 35, 36, 38, 34],
 				backgroundColor: [
-						'#f7f7f7',
+						'#E8F5E9',
 				],
 				borderColor: [
-						'#dcdcdc'
+						'#A8D5BA'
 				],
 				borderWidth: 2,
 				fill: true,
@@ -1054,10 +1054,10 @@
 				label: 'New Tickets',
 				data: [640, 750, 500, 400, 1200, 650, 550, 450, 400],
 				backgroundColor: [
-					'#464dee', '#464dee', '#464dee', '#464dee', '#464dee', '#464dee', '#464dee', '#464dee', '#464dee', 
+					'#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', 
 				],
 				borderColor: [
-					'#464dee', '#464dee', '#464dee', '#464dee',  '#464dee', '#464dee', '#464dee', '#464dee', '#464dee', 
+					'#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E',  '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', '#1A4D2E', 
 				],
 				borderWidth: 1,
 				fill: false
@@ -1066,10 +1066,10 @@
 					label: 'Open Tickets',
 					data: [800, 550, 700, 600, 1100, 650, 550, 650, 850],					
 					backgroundColor: [
-						'#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', 
+						'#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', 
 					],
 					borderColor: [
-						'#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', '#d8d8d8', 
+						'#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', '#A8D5BA', 
 					],
 					borderWidth: 1,
 					fill: false
@@ -1098,7 +1098,7 @@
 					gridLines: {
 						drawBorder: false,
 						display: true,
-						color: "#f0f3f6",
+						color: "#D4E5D4",
 						borderDash: [8, 4],
 					},
 					ticks: {
@@ -1154,13 +1154,13 @@
 			hideMinMax: true,
 			symbol: 'K',
 			label: 'You have done 57.6% more ordes today',
-			valueFontColor: "#001737",
-			labelFontColor: "#001737",
+			valueFontColor: "#0D2818",
+			labelFontColor: "#0D2818",
 			gaugeWidthScale: 0.3,
 			counter: true,
 			relativeGaugeSize: true,
-			gaugeColor: "#f0f0f0",
-			levelColors: [ "#fcd53b" ]
+			gaugeColor: "#E8F5E9",
+			levelColors: [ "#E8A838" ]
 		});
 		$("#productorder-gage").append('<div class="product-order"><div class="icon-inside-circle"><i class="mdi mdi-basket"></i></div></div>');
 

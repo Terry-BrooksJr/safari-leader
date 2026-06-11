@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Incident Report #{{ incident.pk }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'incident-report-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Incident Reports
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-alert"></i> Incident Report #{{ incident.pk }}
+                            </h3>
+                            <p class="text-muted mb-0">Child: {{ incident.child.first_name }} {{ incident.child.last_name }}</p>
+                            <p class="text-muted mb-0">
+                                Reported By: {{ incident.reported_by.user.first_name }} {{ incident.reported_by.user.last_name }}
+                            </p>
+                            <p class="text-muted mb-0">Created: {{ incident.created_at }}</p>
+                        </div>
+                        <div>
+                            {% if incident.is_resolved %}
+                                <span class="badge badge-success p-2"><i class="mdi mdi-check-circle"></i> Resolved</span>
+                            {% else %}
+                                <span class="badge badge-warning p-2"><i class="mdi mdi-clock"></i> Open</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-information"></i> Incident Details
+                    </h4>
+                    <div class="mb-3">
+                        <strong>Type:</strong>
+                        <p class="mb-0">
+                            <span class="badge badge-info p-2">{{ incident.get_incident_type_display }}</span>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Severity:</strong>
+                        <p class="mb-0">
+                            <span class="badge {% if incident.severity == 'LT' or incident.severity == 'F' %}badge-danger{% elif incident.severity == 'S' %}badge-warning{% elif incident.severity == 'MD' %}badge-info{% else %}badge-secondary{% endif %} p-2">
+                                {{ incident.get_severity_display }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Occurred On:</strong>
+                        <p class="text-muted mb-0">{{ incident.occurred_on }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Occurred At:</strong>
+                        <p class="text-muted mb-0">{{ incident.occured_at }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-text"></i> Description
+                    </h4>
+                    <p>{{ incident.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

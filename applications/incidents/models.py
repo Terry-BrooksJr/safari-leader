@@ -1,7 +1,9 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 from applications.children.models import Child
 from applications.staffing.models import StaffProfile
-from django.utils.translation import gettext_lazy as _
+
 
 class INCIDENT_TYPE(models.TextChoices):
     SAFETY = 'S', _("Safety")

@@ -1,7 +1,9 @@
 from django.db import models
-from applications.children.models import Child
-from applications.facilities.models import Program,Site
 from django.utils.translation import gettext_lazy as _
+
+from applications.children.models import Child
+from applications.facilities.models import Program, Site
+
 
 # Create your models here.
 def days_of_week_template():
@@ -32,7 +34,8 @@ class Enrollment(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True,blank=True)
     status = models.CharField(max_length=5, choices=ENROLLMENT_STATUS.choices)
-    
+    def __str__(self) -> str:
+        return f"{self.child.last_name}, {self.child.first_name} ({self.program}: {self.start_date} - {self.end_date})"
 class ChildSchedule(models.Model):
     """
     Represents a recurring weekly schedule for a child's participation in a program. 

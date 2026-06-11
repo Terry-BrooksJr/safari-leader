@@ -1,7 +1,9 @@
-from django.db import models
 from address.models import AddressField
+from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from common.helpers import ModelModifer
+
 
 class AGE_GROUP(models.TextChoices):
     INFANT = 'INF', _('Infant: 0 - 18 Months')
@@ -25,7 +27,8 @@ class Site(ModelModifer, models.Model):
     address1 = AddressField()
     address2 = AddressField(related_name='+', blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    
+    def __str__(self) -> str:
+        return f"{self.name}"
 class Room(ModelModifer, models.Model):
     """
     Represents an individual room within a site where children are assigned. 
@@ -37,7 +40,9 @@ class Room(ModelModifer, models.Model):
     capacity = models.IntegerField()
     age_group = models.CharField(max_length=3, choices=AGE_GROUP.choices)
     is_active = models.BooleanField(default=True)
-
+    def __str__(self) -> str:
+        return f"{self.name} ({self.site}:{self.capacity})"
+    
     def update_capacity(self, new_capacity:int):
         """Updates the room's capacity to a new integer value. 
 
@@ -80,7 +85,8 @@ class Program(ModelModifer,models.Model):
     name = models.CharField(max_length=375, null=False, blank=False)
     program_type = models.CharField(max_length=14, choices=PROGRAM_TYPE.choices)
     is_active = models.BooleanField(default=True)
-    
+    def __str__(self) -> str:
+        return f"{self.name} ({self.get_program_type_display()}: {self.site})"
     def update_program_type(self, new_program_type):
         """
         Updates the program's type classification. 

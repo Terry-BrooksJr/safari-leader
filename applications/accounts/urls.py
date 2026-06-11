@@ -1,4 +1,5 @@
 from django.urls import path
+
 from applications.accounts.views import Dashboard
 
 urlpatterns = [

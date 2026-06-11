@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Ratio Requirement - {{ ratio.program.name }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'ratio-requirement-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Ratio Requirements
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-account-supervisor"></i> Ratio Requirement
+                            </h3>
+                            <p class="text-muted mb-0">Program: {{ ratio.program.name }}</p>
+                            <p class="text-muted mb-0">Room: {{ ratio.room.name }}</p>
+                        </div>
+                        <div>
+                            {% if ratio.is_active %}
+                                <span class="badge badge-success p-2">Active</span>
+                            {% else %}
+                                <span class="badge badge-secondary p-2">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Staff-to-Child Ratio</h4>
+                    <h2 class="mb-0">{{ ratio.staff_to_child_ratio }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Minimum Age</h4>
+                    <h2 class="mb-0">{{ ratio.min_age }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Maximum Age</h4>
+                    <h2 class="mb-0">{{ ratio.max_age }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,7 +1,8 @@
 from django.db import models
-from applications.staffing.models import StaffProfile
-from applications.facilities.models import Site
 from django.utils.translation import gettext_lazy as _
+
+from applications.facilities.models import Site
+from applications.staffing.models import StaffProfile
 
 
 class NOTIFICATION_TYPE(models.TextChoices):
@@ -45,4 +46,14 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.user.id} - {self.type} ({self.created_at})"
+        username = self.user.get_username() if self.user_id else "unknown_user"
+        return f"{username} - {self.type} ({self.created_at})"
+
+    def mark_read(self):
+        self.is_read = True
+        self.save(update_fields=["is_read"])
+
+    def mark_unread(self):
+        self.is_read = False
+        self.save(update_fields=["is_read"])
+        

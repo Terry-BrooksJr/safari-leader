@@ -1,9 +1,9 @@
-from typing import Iterable
 
 from django.db import models
-from applications.children.models import Child, AuthorizedPickupProfile
-from applications.staffing.models import StaffProfile
 from django.utils.translation import gettext_lazy as _
+
+from applications.children.models import AuthorizedPickupProfile, Child
+from applications.staffing.models import StaffProfile
 
 
 class RECORD_STATUS(models.TextChoices):

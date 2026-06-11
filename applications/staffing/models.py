@@ -1,8 +1,10 @@
+import secrets
+
 from django.db import models
 from encrypted_fields.fields import EncryptedIntegerField
-import secrets
+
 from applications.accounts.models import User
-from applications.facilities.models import Site, Room, Program
+from applications.facilities.models import Program, Room, Site
 from common.helpers import ModelModifer
 
 
@@ -13,7 +15,8 @@ class StaffProfile(models.Model):
     personal_pin = EncryptedIntegerField()
     role_title = models.CharField(max_length=200)
     is_active = models.BooleanField(default=True)
-    
+    def __str__(self) -> str:
+        return f"{self.user.last_name}, {self.user.first_name} ({self.role_title})"
     def verify_pin(self, provided_pin: str) -> bool:
             """
             Verify a provided pickup PIN against the stored encrypted PIN.

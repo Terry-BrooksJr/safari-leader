@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Check-In/Out Event - {{ event.child }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'checkinout-event-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Events
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">
+                        <i class="mdi mdi-login-variant"></i> Check-In/Out Event
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong>Child:</strong>
+                                <p class="text-muted mb-0">{{ event.child.first_name }} {{ event.child.last_name }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Event Type:</strong>
+                                <p class="mb-0">
+                                    <span class="badge {% if event.event_type == 'CI' %}badge-success{% else %}badge-info{% endif %} p-2">
+                                        {{ event.get_event_type_display }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Timestamp:</strong>
+                                <p class="text-muted mb-0">{{ event.timestamp }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong>Performed By:</strong>
+                                <p class="text-muted mb-0">{{ event.performed_by|default:"N/A" }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Recorded By:</strong>
+                                <p class="text-muted mb-0">{{ event.recorded_by|default:"N/A" }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Notes:</strong>
+                                <p class="text-muted mb-0">{{ event.notes|default:"No notes provided." }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
