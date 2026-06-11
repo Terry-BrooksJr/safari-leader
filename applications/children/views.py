@@ -10,10 +10,18 @@ def paginate_queryset(request, queryset, page_param, per_page):
 
 class ChildrenList(ListView):
     template_name = 'children/children_list.html'
-    queryset = Child.objects.all().order_by("last_name")
     context_object_name = "children"
     paginate_by = 25
 
+
+    def get_queryset(self):
+        queryset = Child.objects.all()
+        status = self.request.GET.get("status")
+        if status == "active":
+            queryset = queryset.filter(status__in=["A", "E"])
+        elif status == "inactive":
+            queryset = queryset.filter(status__in=["X", "S", "T"])
+        return queryset.order_by("last_name")
     
 class ChildDetailView(DetailView):
     template_name = "children/child_detail.html"
