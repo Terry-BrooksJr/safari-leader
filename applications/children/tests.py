@@ -57,8 +57,9 @@ class ChildrenListViewConfigTest(SimpleTestCase):
     """Verify ChildrenList view is properly configured after PR changes."""
 
     def test_queryset_ordered_by_last_name(self):
-        sql = str(ChildrenList.queryset.query)
-        self.assertIn("last_name", sql)
+        import inspect
+        source = inspect.getsource(ChildrenList.get_queryset)
+        self.assertIn('order_by("last_name")', source)
 
     def test_context_object_name_is_children(self):
         self.assertEqual(ChildrenList.context_object_name, "children")
