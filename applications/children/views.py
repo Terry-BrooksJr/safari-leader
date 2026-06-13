@@ -1,7 +1,11 @@
+
 from django.core.paginator import Paginator
 from django.views.generic import DetailView, ListView
 
-from applications.children.models import Child
+from applications.children.models import (Allergy, AuthorizedPickupProfile,
+                                          Child, CustodyRestriction,
+                                          EmergencyContact, GuardianProfile,
+                                          MedicalNote)
 
 
 def paginate_queryset(request, queryset, page_param, per_page):
@@ -76,3 +80,42 @@ class ChildDetailView(DetailView):
         )
 
         return context
+
+
+class AuthorizedPickupDetailView(DetailView):
+    template_name = "children/authorized_pickup_detail.html"
+    context_object_name = "pickup"
+    queryset = AuthorizedPickupProfile.objects.select_related("child", "user")
+
+
+class GuardianDetailView(DetailView):
+    template_name = "children/guardian_detail.html"
+    context_object_name = "guardian"
+    queryset = GuardianProfile.objects.select_related("user").prefetch_related(
+        "childguardianrelationship_set",
+        "childguardianrelationship_set__child",
+    )
+
+
+class EmergencyContactDetailView(DetailView):
+    template_name = "children/emergency_contact_detail.html"
+    context_object_name = "contact"
+    queryset = EmergencyContact.objects.select_related("child")
+
+
+class CustodyRestrictionDetailView(DetailView):
+    template_name = "children/custody_restriction_detail.html"
+    context_object_name = "restriction"
+    queryset = CustodyRestriction.objects.select_related("child")
+
+
+class AllergyDetailView(DetailView):
+    template_name = "children/allergy_detail.html"
+    context_object_name = "allergy"
+    queryset = Allergy.objects.select_related("child")
+
+
+class MedicalNoteDetailView(DetailView):
+    template_name = "children/medical_note_detail.html"
+    context_object_name = "note"
+    queryset = MedicalNote.objects.select_related("child")

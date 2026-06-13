@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Medical Note - {{ note.child.first_name }} {{ note.child.last_name }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'child-detail' note.child.pk %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to {{ note.child.first_name }} {{ note.child.last_name }}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-medical-bag"></i> Medical Note
+                            </h3>
+                            <p class="text-muted mb-0">Child: {{ note.child.first_name }} {{ note.child.last_name }}</p>
+                            <p class="text-muted mb-0">Created: {{ note.date_created }}</p>
+                        </div>
+                        <div>
+                            {% if note.is_active %}
+                                <span class="badge badge-success p-2">Active</span>
+                            {% else %}
+                                <span class="badge badge-secondary p-2">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-note-text"></i> Note
+                    </h4>
+                    <p>{{ note.note }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

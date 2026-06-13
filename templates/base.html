@@ -20,7 +20,15 @@
       <div class="container-fluid page-body-wrapper">
         <div class="main-panel">
           <div class="content-wrapper">
-            {% block content %}{% endblock %}
+            {% block content %}
+            {% for notification in notifications %}
+  <p>{{ notification.message }}</p>
+{% endfor %}
+
+{% for announcement in announcements %}
+  <h3>{{ announcement.title }}</h3>
+{% endfor %}
+            {% endblock %}
           </div>
           {% include "includes/_footer.html" %}
         </div>

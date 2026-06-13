@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Emergency Contact - {{ contact.first_name }} {{ contact.last_name }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'child-detail' contact.child.pk %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to {{ contact.child.first_name }} {{ contact.child.last_name }}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                                <i class="mdi mdi-phone-alert"></i> Emergency Contact
+                            </h3>
+                            <p class="text-muted mb-0">{{ contact.first_name }} {{ contact.last_name }}</p>
+                            <p class="text-muted mb-0">Relationship: {{ contact.get_relationship_display }}</p>
+                            <p class="text-muted mb-0">Child: {{ contact.child.first_name }} {{ contact.child.last_name }}</p>
+                        </div>
+                        <div>
+                            {% if contact.is_active %}
+                                <span class="badge badge-success p-2">Active</span>
+                            {% else %}
+                                <span class="badge badge-secondary p-2">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-information-outline"></i> Contact Details
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bolder">Phone Number</td>
+                                    <td>{{ contact.contact_number }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bolder">Relationship</td>
+                                    <td>{{ contact.get_relationship_display }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bolder">Authorized</td>
+                                    <td>
+                                        {% if contact.is_authorized %}
+                                            <i class="mdi mdi-check-circle text-success"></i> Yes
+                                        {% else %}
+                                            <i class="mdi mdi-close-circle text-danger"></i> No
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bolder">Active</td>
+                                    <td>
+                                        {% if contact.is_active %}
+                                            <i class="mdi mdi-check-circle text-success"></i> Yes
+                                        {% else %}
+                                            <i class="mdi mdi-close-circle text-danger"></i> No
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-note-text"></i> Verification Notes
+                    </h4>
+                    <p>{{ contact.verification_notes|default:"No verification notes on file." }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
