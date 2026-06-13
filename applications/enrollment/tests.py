@@ -19,7 +19,9 @@ class EnrollmentStrTest(SimpleTestCase):
         return mock_enrollment
 
     def test_str_with_both_dates(self):
-        mock = self._make_mock("Smith", "John", "Preschool", date(2024, 1, 15), date(2024, 6, 30))
+        mock = self._make_mock(
+            "Smith", "John", "Preschool", date(2024, 1, 15), date(2024, 6, 30)
+        )
         result = Enrollment.__str__(mock)
         self.assertEqual(result, "Smith, John (Preschool: 2024-01-15 - 2024-06-30)")
 
@@ -29,7 +31,9 @@ class EnrollmentStrTest(SimpleTestCase):
         self.assertEqual(result, "Doe, Jane (Afterschool: 2024-09-01 - None)")
 
     def test_str_contains_child_name(self):
-        mock = self._make_mock("Brooks", "Terry", "Headstart", date(2024, 3, 1), date(2025, 3, 1))
+        mock = self._make_mock(
+            "Brooks", "Terry", "Headstart", date(2024, 3, 1), date(2025, 3, 1)
+        )
         result = Enrollment.__str__(mock)
         self.assertIn("Brooks, Terry", result)
         self.assertIn("Headstart", result)
@@ -43,6 +47,8 @@ class EnrollmentStrTest(SimpleTestCase):
         self.assertIn(" - ", result)
 
     def test_str_separates_name_with_comma_space(self):
-        mock = self._make_mock("Last", "First", "Prog", date(2024, 1, 1), date(2024, 2, 1))
+        mock = self._make_mock(
+            "Last", "First", "Prog", date(2024, 1, 1), date(2024, 2, 1)
+        )
         result = Enrollment.__str__(mock)
         self.assertTrue(result.startswith("Last, First"))

@@ -6,13 +6,14 @@ from applications.staffing.models import StaffProfile
 
 
 class NOTIFICATION_TYPE(models.TextChoices):
-    REG = 'R', _("Regular")
-    URGENT = 'U', _("Urgent")
-    COMPLIANCE = 'C', _("Compliance")
-    HR = 'HR', _("Human Resources")
-    TECH = 'T', _("Technical")
-    OTHER = 'O', _("Other")
-    
+    REG = "R", _("Regular")
+    URGENT = "U", _("Urgent")
+    COMPLIANCE = "C", _("Compliance")
+    HR = "HR", _("Human Resources")
+    TECH = "T", _("Technical")
+    OTHER = "O", _("Other")
+
+
 class Announcement(models.Model):
     title = models.CharField(max_length=120)
     message = models.TextField()
@@ -33,7 +34,8 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+
 class Notification(models.Model):
     user = models.ForeignKey(
         "accounts.User",
@@ -44,7 +46,7 @@ class Notification(models.Model):
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         username = self.user.get_username() if self.user_id else "unknown_user"
         return f"{username} - {self.type} ({self.created_at})"
@@ -56,4 +58,3 @@ class Notification(models.Model):
     def mark_unread(self):
         self.is_read = False
         self.save(update_fields=["is_read"])
-        

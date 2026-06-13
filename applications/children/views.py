@@ -1,22 +1,26 @@
-
 from django.core.paginator import Paginator
 from django.views.generic import DetailView, ListView
 
-from applications.children.models import (Allergy, AuthorizedPickupProfile,
-                                          Child, CustodyRestriction,
-                                          EmergencyContact, GuardianProfile,
-                                          MedicalNote)
+from applications.children.models import (
+    Allergy,
+    AuthorizedPickupProfile,
+    Child,
+    CustodyRestriction,
+    EmergencyContact,
+    GuardianProfile,
+    MedicalNote,
+)
 
 
 def paginate_queryset(request, queryset, page_param, per_page):
     paginator = Paginator(queryset, per_page)
     return paginator.get_page(request.GET.get(page_param))
 
+
 class ChildrenList(ListView):
-    template_name = 'children/children_list.html'
+    template_name = "children/children_list.html"
     context_object_name = "children"
     paginate_by = 25
-
 
     def get_queryset(self):
         queryset = Child.objects.all()
@@ -26,26 +30,28 @@ class ChildrenList(ListView):
         elif status == "inactive":
             queryset = queryset.filter(status__in=["X", "S", "T"])
         return queryset.order_by("last_name")
-    
+
+
 class ChildDetailView(DetailView):
     template_name = "children/child_detail.html"
     context_object_name = "child"
     queryset = Child.objects.prefetch_related(
-        "authorized_pickup",       # Authorized pickups
+        "authorized_pickup",  # Authorized pickups
         "authorized_pickup__user",  # + User on each authorized pickup
-        "childguardianrelationship_set",      # Guardian links
+        "childguardianrelationship_set",  # Guardian links
         "childguardianrelationship_set__guardian",  # + the GuardianProfile
         "childguardianrelationship_set__guardian__user",  # + User on each GuardianProfile
-        "allergies",                        # Allergies
-        "medical_notes",                    # Medical notes
-        "restrictions",             # Custody restrictions
-        "emergency_contact",              # Emergency contacts
-        "enrollment_set",                     # Enrollments
-        "enrollment_set__program",            # + Program on each enrollment
-        "enrollment_set__site",               # + Site on each enrollment
-        "childschedule_set",                  # Schedules
-        "documents",                          # Documents (has related_name)
+        "allergies",  # Allergies
+        "medical_notes",  # Medical notes
+        "restrictions",  # Custody restrictions
+        "emergency_contact",  # Emergency contacts
+        "enrollment_set",  # Enrollments
+        "enrollment_set__program",  # + Program on each enrollment
+        "enrollment_set__site",  # + Site on each enrollment
+        "childschedule_set",  # Schedules
+        "documents",  # Documents (has related_name)
     ).all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

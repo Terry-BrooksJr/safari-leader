@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
@@ -23,12 +24,19 @@ import applications.accounts.urls as DASHBOARD_URLS
 import applications.children.urls as CHILDREN_URLS
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/dashboard/', permanent=False)),
-    path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('accounts/password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('dashboard/', include(DASHBOARD_URLS), name='dashboard'),
-    path('children/', include(CHILDREN_URLS))
-    
+    path("", RedirectView.as_view(url="/dashboard/", permanent=False)),
+    path("admin/", admin.site.urls),
+    path(
+        "login/",
+        auth_views.LoginView.as_view(template_name="accounts/login.html"),
+        name="login",
+    ),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(
+        "accounts/password-reset/",
+        auth_views.PasswordResetView.as_view(),
+        name="password_reset",
+    ),
+    path("dashboard/", include(DASHBOARD_URLS), name="dashboard"),
+    path("children/", include(CHILDREN_URLS)),
 ]

@@ -20,6 +20,7 @@ class AnnouncementForm(ModelForm):
         self.helper.form_id = "announcement"
         self.helper.form_method = "post"
 
+
 class NotificationForm(ModelForm):
     class Meta:
         """Meta definition for NotificationForm."""

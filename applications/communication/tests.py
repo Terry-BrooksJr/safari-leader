@@ -5,10 +5,12 @@ from django.test import SimpleTestCase
 
 from applications.communication.forms import AnnouncementForm, NotificationForm
 from applications.communication.models import Announcement, Notification
-from applications.communication.views import (AnnouncementDetails,
-                                              AnnouncementsList,
-                                              NotificationDetails,
-                                              NotificationsList)
+from applications.communication.views import (
+    AnnouncementDetails,
+    AnnouncementsList,
+    NotificationDetails,
+    NotificationsList,
+)
 
 # ─── Model Tests ───────────────────────────────────────────────────────────────
 
@@ -93,9 +95,7 @@ class AnnouncementFormMetaTest(SimpleTestCase):
     """Verify AnnouncementForm uses explicit fields (not exclude)."""
 
     def test_fields_are_explicit(self):
-        self.assertEqual(
-            AnnouncementForm.Meta.fields, ["title", "message", "sites"]
-        )
+        self.assertEqual(AnnouncementForm.Meta.fields, ["title", "message", "sites"])
 
     def test_no_exclude_attribute(self):
         self.assertFalse(hasattr(AnnouncementForm.Meta, "exclude"))

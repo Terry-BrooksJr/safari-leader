@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class EnrollmentConfig(AppConfig):
-    name = 'applications.enrollment'
+    name = "applications.enrollment"

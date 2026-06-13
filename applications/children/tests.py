@@ -2,8 +2,7 @@ from unittest.mock import Mock
 
 from django.test import SimpleTestCase
 
-from applications.children.models import (AuthorizedPickupProfile, Child,
-                                          MedicalNote)
+from applications.children.models import AuthorizedPickupProfile, Child, MedicalNote
 from applications.children.views import ChildrenList
 
 
@@ -58,6 +57,7 @@ class ChildrenListViewConfigTest(SimpleTestCase):
 
     def test_queryset_ordered_by_last_name(self):
         import inspect
+
         source = inspect.getsource(ChildrenList.get_queryset)
         self.assertIn('order_by("last_name")', source)
 

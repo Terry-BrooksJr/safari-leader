@@ -55,10 +55,23 @@ class StaticStorage(S3Boto3Storage):
     default_acl = "public-read"
 
     def __init__(self, *args, **kwargs):
-        required_settings = ["AWS_ACCESS_KEY_ID", "AWS_S3_ENDPOINT_URL", "AWS_SECRET_ACCESS_KEY", "AWS_STORAGE_BUCKET_NAME", "AWS_S3_REGION_NAME"]
+        required_settings = [
+            "AWS_ACCESS_KEY_ID",
+            "AWS_S3_ENDPOINT_URL",
+            "AWS_SECRET_ACCESS_KEY",
+            "AWS_STORAGE_BUCKET_NAME",
+            "AWS_S3_REGION_NAME",
+        ]
 
-        if missing_settings := [setting for setting in required_settings if not hasattr(settings, setting) or not getattr(settings, setting)]:
-            raise ImproperlyConfigured(f"The following required S3 settings are missing or empty: " f"{', '.join(missing_settings)}")
+        if missing_settings := [
+            setting
+            for setting in required_settings
+            if not hasattr(settings, setting) or not getattr(settings, setting)
+        ]:
+            raise ImproperlyConfigured(
+                f"The following required S3 settings are missing or empty: "
+                f"{', '.join(missing_settings)}"
+            )
 
         super().__init__(*args, **kwargs)
 
