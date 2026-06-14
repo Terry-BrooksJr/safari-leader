@@ -3,6 +3,10 @@
 {% block title %}{{ child.first_name }} {{ child.last_name }} - Safari Leader{% endblock %}
 {% block extra_css %}
     <style>
+
+    #student-name{
+        font-size:3.0rem !important;
+    }
     .detail-link{
     text-decoration: none;
     color: black;
@@ -64,7 +68,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h1 class="card-title mb-1">{{ child.first_name }} {{ child.last_name }}</h1>
+                        <p id="student-name" class="display-6 card-title mb-1">{{ child.first_name }} {{ child.last_name }}</p>
                             <p class="text-muted mb-0">Date of Birth: {{ child.date_of_birth }}</p>
                             <p class="text-muted mb-0">Age: {{ child.age }}</p>
                             <p class="text-muted mb-0">Enrolled: {{ child.created_at }}</p>
@@ -113,7 +117,7 @@
                                         <tr>
                                             <td>
                                                 <strong><a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-   href="{% url 'guardian-detail' rel.guardian.pk %}">{{ rel.guardian.user.first_name }} {{ rel.guardian.user.last_name }}</strong>
+   href="{% url 'guardian-detail' rel.guardian.pk %}">{{ rel.guardian.user.first_name }} {{ rel.guardian.user.last_name }}</strong></a>
                                             </td>
                                             <td>{{ rel.get_relationship_display }}</td>
                                             <td>{{ rel.guardian.contact_number }}</td>
@@ -124,7 +128,6 @@
                                                     <i class="mdi mdi-close-circle text-muted"></i>
                                                 {% endif %}
                                             </td>
-                                        </a>
                                         <td>
                                             {% if rel.has_custody_rights %}
                                                 <i class="mdi mdi-check-circle text-success"></i>
@@ -189,7 +192,7 @@
                                     <tr>
                                         <td>
                                             <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                               href="{% url 'authorized-pickup-detail' pickup.user.pk %}">{{ pickup.user.first_name }} {{ pickup.user.last_name }}
+                                               href="{% url 'authorized-pickup-detail' pickup.pk %}">{{ pickup.user.first_name }} {{ pickup.user.last_name }}
                                             </td>
                                             <td>{{ pickup.get_relationship_display }}</td>
                                             <td>
@@ -364,7 +367,7 @@
                                             <tr>
                                                 <td>
                                                     <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                                       href="{% url 'allergy-detail' allergy.pk %}">{{ allergy.allergen }}
+                                                href="{% url 'allergy-detail' allergy.pk %}">{{ allergy.allergen }}</a>
                                                     </td>
                                                     <td>
                                                         <span class="badge {% if allergy.severity == 'LT' or allergy.severity == 'F' %}badge-danger{% elif allergy.severity == 'S' %}badge-warning{% elif allergy.severity == 'MD' %}badge-info{% else %}badge-secondary{% endif %}">
@@ -446,7 +449,7 @@
                                 <h4 class="card-title">
                                     <i class="mdi mdi-school"></i> Enrollments
                                 </h4>
-                                {% if child.enrollment_set.all %}
+                                {% if child.enrollments.all %}
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
@@ -459,13 +462,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for enrollment in child.enrollment_set.all %}
+                                                {% for enrollment in child.enrollments.all %}
                                                     <tr>
                                                         <td>
                                                             <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                         href="{% url 'enrollment-detail' enrollment.pk %}">{{ enrollment.program }}</a>
                                                             </td>
-                                                            <td>{{ enrollment.site }}</td>
+                                                            <td>{{ enrollment.program.site }}</td>
                                                             <td>{{ enrollment.start_date }}</td>
                                                             <td>{{ enrollment.end_date|default:"-" }}</td>
                                                             <td>{{ enrollment.get_status_display }}</td>
@@ -502,7 +505,7 @@
                                                     {% for schedule in child.childschedule_set.all %}
                                                         <tr>
                                                             <td>{{ schedule.program }}</td>
-                                                            <td>{{ schedule.days_of_week }}</td>
+                                                            <td>{% include "components/weekday_pills.html" with days=schedule.days_of_week %}</td>
                                                             <td>{{ schedule.start_time }}</td>
                                                             <td>{{ schedule.end_time }}</td>
                                                             <td>

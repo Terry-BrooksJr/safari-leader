@@ -52,6 +52,12 @@ class Child(models.Model):
     date_of_birth = models.DateField()
     status = models.CharField(max_length=3, choices=STUDENT_STATUS.choices)
     created_at = models.DateField(auto_now_add=True)
+    programs = models.ManyToManyField(
+        "facilities.Program",
+        through="enrollment.Enrollment",
+        related_name="children",
+        blank=True,
+    )
 
     def __str__(self) -> str:
         return f"Child: {self.last_name}, {self.first_name} | ({self.age})"

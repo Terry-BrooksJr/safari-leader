@@ -45,9 +45,9 @@ class ChildDetailView(DetailView):
         "medical_notes",  # Medical notes
         "restrictions",  # Custody restrictions
         "emergency_contact",  # Emergency contacts
-        "enrollment_set",  # Enrollments
-        "enrollment_set__program",  # + Program on each enrollment
-        "enrollment_set__site",  # + Site on each enrollment
+        "enrollments",  # Enrollments
+        "enrollments__program",  # + Program on each enrollment
+        "enrollments__program__site",  # + Site through program
         "childschedule_set",  # Schedules
         "documents",  # Documents (has related_name)
     ).all()

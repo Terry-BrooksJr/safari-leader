@@ -36,6 +36,35 @@ class Announcement(models.Model):
         return self.title
 
 
+class Message(models.Model):
+    recipient = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="recipient",
+    )
+    sender = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.SET_NULL,
+        related_name="sender", null=True, blank=True
+    )
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        username = self.recipient.get_username() if self.recipient else "unknown_user"
+        return f"{username} - ({self.created_at})"
+
+    def mark_read(self):
+        self.is_read = True
+        self.save(update_fields=["is_read"])
+
+    def mark_unread(self):
+        self.is_read = False
+        self.save(update_fields=["is_read"])
+
+
+
 class Notification(models.Model):
     user = models.ForeignKey(
         "accounts.User",

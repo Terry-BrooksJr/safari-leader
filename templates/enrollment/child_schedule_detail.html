@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load schedule_extras %}
 {% block title %}Schedule - {{ schedule.child }} - Safari Leader{% endblock %}
 {% block content %}
     <div class="row">
@@ -52,11 +53,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for day, active in schedule.days_of_week.items %}
+                                {% for day in schedule.days_of_week|weekday_pills %}
                                     <tr>
-                                        <td>{{ day|title }}</td>
+                                        <td>{{ day.name }}</td>
                                         <td>
-                                            {% if active %}
+                                            {% if day.active %}
                                                 <i class="mdi mdi-check-circle text-success"></i> Yes
                                             {% else %}
                                                 <i class="mdi mdi-close-circle text-muted"></i> No

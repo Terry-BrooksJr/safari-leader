@@ -11,7 +11,7 @@ class DOCUMENT_TYPE(models.TextChoices):
     LEGAL = "L", _("Legal")
     INTERNAL = "I", _("Internal")
     OTHER = "O", _("Other")
-    MEDICIAL = "M", _("Medicial")
+    MEDICAL = "M", _("Medical")
 
 
 class Document(models.Model):

@@ -28,7 +28,7 @@
             </h3>
             <p class="text-muted mb-0">Child: {{ enrollment.child.first_name }} {{ enrollment.child.last_name }}</p>
             <p class="text-muted mb-0">Program: {{ enrollment.program.name }}</p>
-            <p class="text-muted mb-0">Site: {{ enrollment.site.name }}</p>
+            <p class="text-muted mb-0">Site: {{ enrollment.program.site.name }}</p>
             <p class="text-muted mb-0">Start Date: {{ enrollment.start_date }}</p>
             <p class="text-muted mb-0">End Date: {{ enrollment.end_date|default:"Ongoing" }}</p>
           </div>
@@ -65,11 +65,7 @@
                                     {% for schedule in enrollment.childschedule_set.all %}
                                         <tr>
                                             <td>{{ schedule.program.name }}</td>
-                                            <td>
-                                                {% for day, active in schedule.days_of_week.items %}
-                                                    {% if active %}<span class="badge badge-primary">{{ day|title }}</span>{% endif %}
-                                                {% endfor %}
-                                            </td>
+                                            <td>{% include "components/weekday_pills.html" with days=schedule.days_of_week %}</td>
                                             <td>{{ schedule.start_time }}</td>
                                             <td>{{ schedule.end_time }}</td>
                                             <td>
