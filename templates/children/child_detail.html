@@ -417,7 +417,7 @@
                                                 <tr>
                                                     <td>
                                                         <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                                           href="{% url 'medical-note-detail' note.pk %}">{{ note.note }}
+                                                    href="{% url 'medical-note-detail' note.pk %}">{{ note.note }}</a>>
                                                         </td>
                                                         <td>
                                                             {% if note.is_active %}
@@ -463,7 +463,7 @@
                                                     <tr>
                                                         <td>
                                                             <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                                               href="">{{ enrollment.program }}
+                                                        href="{% url 'enrollment-detail' enrollment.pk %}">{{ enrollment.program }}</a>
                                                             </td>
                                                             <td>{{ enrollment.site }}</td>
                                                             <td>{{ enrollment.start_date }}</td>
