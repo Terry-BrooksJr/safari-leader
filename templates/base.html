@@ -28,7 +28,11 @@
 {% for announcement in announcements %}
   <h3>{{ announcement.title }}</h3>
 {% endfor %}
-            {% endblock %}
+
+{% for message in messages %}
+  <h3>{{ message.message }}</h3>
+{% endfor %}
+            {% endblock content %}
           </div>
           {% include "includes/_footer.html" %}
         </div>

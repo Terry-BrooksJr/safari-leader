@@ -19,12 +19,42 @@ class EVENT_TYPE(models.TextChoices):
 
 
 class AttendanceRecord(models.Model):
+    """A child's attendance for a single day.
+
+    Acts as the parent collection for that day's check-in/out events and
+    handoff events, reachable via ``record.check_in_out_events`` and
+    ``record.handoff_events``.
+    """
+
     child = models.ForeignKey(Child, on_delete=models.CASCADE)
     date = models.DateField()
     status = models.CharField(
         max_length=3, choices=RECORD_STATUS.choices, default=RECORD_STATUS.DRAFT
     )
     created = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["child", "date"],
+                name="one_attendance_record_per_child_per_day",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return (
+            f"{self.child.last_name}, {self.child.first_name} — "
+            f"{self.date} ({self.get_status_display()})"
+        )
+
+    @property
+    def timeline(self):
+        """All events for the day (check-in/out + handoff), oldest first."""
+        events = list(self.check_in_out_events.all()) + list(
+            self.handoff_events.all()
+        )
+        return sorted(events, key=lambda event: event.timestamp)
 
     def finalize_record(self):
         type(self).objects.filter(pk=self.pk).update(status=RECORD_STATUS.FINAL)
@@ -40,7 +70,11 @@ class AttendanceRecord(models.Model):
 
 
 class CheckInOutEvent(models.Model):
-    child = models.ForeignKey(Child, on_delete=models.CASCADE)
+    attendance_record = models.ForeignKey(
+        AttendanceRecord,
+        on_delete=models.CASCADE,
+        related_name="check_in_out_events",
+    )
     event_type = models.CharField(max_length=5, choices=EVENT_TYPE.choices)
     timestamp = models.DateTimeField(auto_now=True)
     performed_by = models.ForeignKey(
@@ -48,3 +82,11 @@ class CheckInOutEvent(models.Model):
     )
     recorded_by = models.ForeignKey(StaffProfile, on_delete=models.SET_NULL, null=True)
     notes = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["timestamp"]
+
+    @property
+    def child(self):
+        """The child this event belongs to, via its attendance record."""
+        return self.attendance_record.child

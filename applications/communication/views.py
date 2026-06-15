@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView
 
-from .models import Announcement, Notification
+from .models import Announcement, Notification, Message
 
 
 class AnnouncementsList(ListView):
@@ -25,3 +25,8 @@ class NotificationDetails(DetailView):
     model = Notification
     template_name = "communication/notification_detail.html"
     context_object_name = "notification"
+
+class MessageDetails(DetailView):
+    model = Message
+    template_name = "communication/message_detail.html"
+    context_object_name = "message"

@@ -52,8 +52,9 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        username = self.recipient.get_username() if self.recipient else "unknown_user"
-        return f"{username} - ({self.created_at})"
+        recipient = self.recipient.get_reciever_username() if self.recipient is not None else "unknown_user"
+        sender = self.sender.get_sender_username() if self.recipient is not None else "unknown_user"
+        return f"{sender} -> {recipient} at ({self.created_at})"
 
     def mark_read(self):
         self.is_read = True
@@ -62,14 +63,19 @@ class Message(models.Model):
     def mark_unread(self):
         self.is_read = False
         self.save(update_fields=["is_read"])
-
+    
+    def get_reciever_username(self) -> str:
+        return self.recipient.username if self.recipient is not None else "Deleted User"
+    
+    def get_sender_username(self) -> str:
+        return self.sender.username if self.sender is not None else "Deleted User"
 
 
 class Notification(models.Model):
     user = models.ForeignKey(
         "accounts.User",
-        on_delete=models.CASCADE,
-        related_name="notifications",
+        on_delete=models.SET_NULL,
+        related_name="notifications", null=True,
     )
     type = models.CharField(max_length=25, choices=NOTIFICATION_TYPE.choices)
     message = models.TextField()
@@ -77,7 +83,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        username = self.user.get_username() if self.user_id else "unknown_user"
+        username = self.user.get_username() if self.user is not None else "Deleted User"
         return f"{username} - {self.type} ({self.created_at})"
 
     def mark_read(self):
@@ -87,3 +93,6 @@ class Notification(models.Model):
     def mark_unread(self):
         self.is_read = False
         self.save(update_fields=["is_read"])
+
+    def get_username(self) -> str:
+        return self.user.username if self.user is not None else "Deleted User"

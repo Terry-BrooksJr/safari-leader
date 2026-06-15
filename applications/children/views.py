@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.views.generic import DetailView, ListView
 
+from applications.attendance.models import CheckInOutEvent
 from applications.children.models import (
     Allergy,
     AuthorizedPickupProfile,
@@ -10,6 +11,7 @@ from applications.children.models import (
     GuardianProfile,
     MedicalNote,
 )
+from applications.handoff.models import HandoffEvent
 
 
 def paginate_queryset(request, queryset, page_param, per_page):
@@ -66,7 +68,9 @@ class ChildDetailView(DetailView):
 
         context["checkinoutevents"] = paginate_queryset(
             self.request,
-            child.checkinoutevent_set.all().order_by("-timestamp"),
+            CheckInOutEvent.objects.filter(attendance_record__child=child)
+            .select_related("performed_by", "recorded_by")
+            .order_by("-timestamp"),
             "checkinoutevents_page",
             5,
         )
@@ -80,7 +84,9 @@ class ChildDetailView(DetailView):
 
         context["handoffevents"] = paginate_queryset(
             self.request,
-            child.handoffevent_set.all().order_by("-timestamp"),
+            HandoffEvent.objects.filter(attendance_record__child=child)
+            .select_related("pickup_person", "checked_by")
+            .order_by("-timestamp"),
             "handoffevents_page",
             5,
         )

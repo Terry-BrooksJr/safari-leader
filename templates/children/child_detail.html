@@ -548,7 +548,7 @@
                                                 <tbody>
                                                     {% for record in attendancerecords %}
                                                         <tr>
-                                                            <td>{{ record.date }}</td>
+                                                            <td><a class="detail-link" href="{% url 'attendance-record-detail' record.pk %}">{{ record.date }}</a></td>
                                                             <td>{{ record.get_status_display }}</td>
                                                             <td>{{ record.created }}</td>
                                                         </tr>
@@ -584,7 +584,7 @@
                                                 <tbody>
                                                     {% for event in checkinoutevents %}
                                                         <tr>
-                                                            <td>{{ event.get_event_type_display }}</td>
+                                                            <td><a class="detail-link" href="{% url 'checkinout-event-detail' event.pk %}">{{ event.get_event_type_display }}</a></td>
                                                             <td>{{ event.timestamp }}</td>
                                                             <td>{{ event.performed_by }}</td>
                                                             <td>{{ event.recorded_by }}</td>

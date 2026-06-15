@@ -1,10 +1,9 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from applications.children.models import AuthorizedPickupProfile, Child
+from applications.attendance.models import AttendanceRecord
+from applications.children.models import AuthorizedPickupProfile
 from applications.staffing.models import StaffProfile
-
-# Create your models here.
 
 
 class HANDOFF_EVENT_TYPE(models.TextChoices):
@@ -21,11 +20,23 @@ class HANDOFF_VERIFICATION_METHODS(models.TextChoices):
 
 class HandoffEvent(models.Model):
     """
-    Represents a single handoff event between a child and an authorized pickup person.  This model records when a child is picked up or dropped off, who performed the handoff, and who verified it.
+    Represents a single handoff event between a child and an authorized pickup person.  This model records when a child is picked up or dropped off, who performed the handoff, and who verified it.  Each handoff belongs to the child's attendance record for that day.
     """
 
-    child = models.ForeignKey(Child, on_delete=models.CASCADE)
+    attendance_record = models.ForeignKey(
+        AttendanceRecord,
+        on_delete=models.CASCADE,
+        related_name="handoff_events",
+    )
     event_type = models.CharField(max_length=5, choices=HANDOFF_EVENT_TYPE.choices)
     pickup_person = models.ForeignKey(AuthorizedPickupProfile, on_delete=models.CASCADE)
     checked_by = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["timestamp"]
+
+    @property
+    def child(self):
+        """The child this handoff belongs to, via its attendance record."""
+        return self.attendance_record.child

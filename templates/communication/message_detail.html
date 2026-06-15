@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ message.title }} - Safari Leader{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{% url 'message-list' %}"
+               class="btn btn-outline-secondary btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to Messages
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="card-title mb-1">
+                            </h3>
+                            <p class="text-muted mb-0">
+                                Recipient:
+                                {% if message.recipient %}
+                                    {{ message.recipient.user.first_name }} {{ message.recipient.user.last_name }}
+                                {% else %}
+                                    System
+                                {% endif %}
+                            </p>
+                            <p class="text-muted mb-0">
+                                Sender:
+                                {% if message.sender %}
+                                    {{ message.sender.user.first_name }} {{ message.sender.user.last_name }}
+                                {% else %}
+                                    System
+                                {% endif %}
+                            </p>
+                            <p class="text-muted mb-0">Created: {{ message.created_at }}</p>
+                            <p class="text-muted mb-0">Last Updated: {{ message.updated_at }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-message-text"></i> Message
+                    </h4>
+                    <p>{{ message.message }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

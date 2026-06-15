@@ -306,13 +306,13 @@ attendance = Table(
 )
 checkinout = Table(
     "attendance_checkinoutevent",
-    ["id", "child_id", "event_type", "timestamp", "performed_by_id",
+    ["id", "attendance_record_id", "event_type", "timestamp", "performed_by_id",
      "recorded_by_id", "notes"],
 )
 handoff = Table(
     "handoff_handoffevent",
-    ["id", "child_id", "event_type", "pickup_person_id", "checked_by_id",
-     "timestamp"],
+    ["id", "attendance_record_id", "event_type", "pickup_person_id",
+     "checked_by_id", "timestamp"],
 )
 documents = Table(
     "documents_document",
@@ -623,6 +623,7 @@ for cid, first, last, dob, status in CHILDREN:
 
     event_days = sch_days[-2:]  # detailed CI/CO + handoff for the last 2 days
 
+    att_by_day = {}  # day -> attendance_record id, so events can link to it
     for d in sch_days:
         ATT_ID += 1
         # Most days finalized; the most recent active day may still be a draft.
@@ -630,8 +631,10 @@ for cid, first, last, dob, status in CHILDREN:
         if status == "A" and d == sch_days[-1] and d >= TODAY - timedelta(days=2):
             rec_status = "D"
         attendance.add(ATT_ID, cid, d.isoformat(), rec_status, d.isoformat())
+        att_by_day[d] = ATT_ID
 
     for d in event_days:
+        att_id = att_by_day[d]  # events belong to that day's attendance record
         recorder_am = rng.choice(staff_pool)
         recorder_pm = rng.choice(staff_pool)
         in_h, in_m = 7, rng.choice([15, 30, 45, 50])
@@ -639,23 +642,23 @@ for cid, first, last, dob, status in CHILDREN:
 
         CIO_ID += 1
         checkinout.add(
-            CIO_ID, cid, "CI-AM", ts(d, in_h, in_m), pickup_id, recorder_am,
+            CIO_ID, att_id, "CI-AM", ts(d, in_h, in_m), pickup_id, recorder_am,
             None,
         )
         CIO_ID += 1
         late = out_h >= 17
         checkinout.add(
-            CIO_ID, cid, "CO-PM", ts(d, out_h, out_m), pickup_id, recorder_pm,
+            CIO_ID, att_id, "CO-PM", ts(d, out_h, out_m), pickup_id, recorder_pm,
             "Late pickup — guardian called ahead." if late else None,
         )
 
         HANDOFF_ID += 1
         handoff.add(
-            HANDOFF_ID, cid, "DO-AM", pickup_id, recorder_am, ts(d, in_h, in_m),
+            HANDOFF_ID, att_id, "DO-AM", pickup_id, recorder_am, ts(d, in_h, in_m),
         )
         HANDOFF_ID += 1
         handoff.add(
-            HANDOFF_ID, cid, "PU-PM", pickup_id, recorder_pm, ts(d, out_h, out_m),
+            HANDOFF_ID, att_id, "PU-PM", pickup_id, recorder_pm, ts(d, out_h, out_m),
         )
 
 
