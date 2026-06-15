@@ -39,7 +39,7 @@ class Announcement(models.Model):
 class Message(models.Model):
     recipient = models.ForeignKey(
         "accounts.User",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="recipient",
     )
     sender = models.ForeignKey(
@@ -83,7 +83,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        username = self.user.get_username() if self.user is not None else "Deleted User"
+        username = self.user.get_username() if self.user_id else "Deleted User"
         return f"{username} - {self.type} ({self.created_at})"
 
     def mark_read(self):

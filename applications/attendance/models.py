@@ -63,10 +63,10 @@ class AttendanceRecord(models.Model):
         self, *, force_insert=False, force_update=False, using=None, update_fields=None
     ) -> None:
         if self.status == RECORD_STATUS.DRAFT:
-            return super().save(force_insert, force_update, using, update_fields)
+            return super().save()
         elif self.status == RECORD_STATUS.FINAL:
             type(self).objects.filter(pk=self.pk).update(status=RECORD_STATUS.MODIFIED)
-            return super().save(force_insert, force_update, using, update_fields)
+            return super().save()
 
 
 class CheckInOutEvent(models.Model):

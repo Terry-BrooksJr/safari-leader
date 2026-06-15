@@ -44,7 +44,7 @@ class NotificationStrTest(SimpleTestCase):
         mock_notif.type = "U"
         mock_notif.created_at = datetime(2024, 6, 15)
         result = Notification.__str__(mock_notif)
-        self.assertIn("unknown_user", result)
+        self.assertIn("Deleted User", result)
         self.assertIn("U", result)
 
     def test_str_with_zero_user_id(self):
@@ -53,7 +53,7 @@ class NotificationStrTest(SimpleTestCase):
         mock_notif.type = "C"
         mock_notif.created_at = datetime(2024, 1, 1)
         result = Notification.__str__(mock_notif)
-        self.assertIn("unknown_user", result)
+        self.assertIn("Deleted User", result)
 
 
 class NotificationMarkReadTest(SimpleTestCase):
