@@ -1,5 +1,6 @@
 # Create your views here.
-from django.views.generic import DetailView,ListView
+from django.views.generic import DetailView, ListView
+
 from applications.attendance.models import AttendanceRecord, CheckInOutEvent
 
 
@@ -26,15 +27,13 @@ class AttendanceRecordDetail(DetailView):
             "pickup_person", "checked_by"
         ).all()
         return context
-    
-
 
 
 class CheckInOutEventList(ListView):
     template_name = "attendance/checkinout_event_list.html"
     context_object_name = "events"
     paginate_by = 25
-    
+
     def get_queryset(self):
         queryset = CheckInOutEvent.objects.all()
         event_type = self.request.GET.get("event_type")
@@ -42,22 +41,26 @@ class CheckInOutEventList(ListView):
             queryset = queryset.filter(event_type__in=["CI-AM", "CI-PM"])
         elif event_type == "checkout":
             queryset = queryset.filter(event_type__in=["CO-AM", "CO-PM"])
-        return queryset.order_by("-timestamp", "attendance_record__child__last_name", "attendance_record__child__first_name")
+        return queryset.order_by(
+            "-timestamp",
+            "attendance_record__child__last_name",
+            "attendance_record__child__first_name",
+        )
+
 
 class AttendanceRecordList(ListView):
     template_name = "attendance/attendance_record_list.html"
     context_object_name = "records"
     paginate_by = 25
-    queryset = AttendanceRecord.objects.all().order_by("-date","-child")
-    
+    queryset = AttendanceRecord.objects.all().order_by("-date", "-child")
 
     def get_queryset(self):
         queryset = AttendanceRecord.objects.select_related("child")
         status = self.request.GET.get("status")
         if status == "draft":
-            queryset = queryset.filter(status__in = ["D"])
+            queryset = queryset.filter(status__in=["D"])
         elif status == "final":
-            queryset = queryset.filter(status__in = ["F"])
+            queryset = queryset.filter(status__in=["F"])
         elif status == "modified":
-            queryset = queryset.filter(status__in = ["M"])
+            queryset = queryset.filter(status__in=["M"])
         return queryset.order_by("-date", "child__last_name", "child__first_name")

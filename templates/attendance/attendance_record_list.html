@@ -14,7 +14,7 @@
                                     Attendance Records  <strong>({{ page_obj.paginator.count }})</strong>
                                 </h4>
                                 <div class="table-responsive">
-                                     <ul class="nav nav-tabs">
+                                    <ul class="nav nav-tabs">
                                         <li class="nav-item">
                                             <a class="nav-link" href="?">All</a>
                                         </li>
@@ -28,13 +28,16 @@
                                             <a class="nav-link" href="?status=modified">Modified</a>
                                         </li>
                                         <nav>
-                                    <form class="form-inline">
-                                        // TODO: Wire Up Search for Child las and First Name 
-                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                                    </form>
-                                </nav>
-                                    </ul> 
+                                            <form class="form-inline">
+                                                // TODO: Wire Up Search for Child las and First Name
+                                                <input class="form-control mr-sm-2"
+                                                       type="search"
+                                                       placeholder="Search"
+                                                       aria-label="Search">
+                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                            </form>
+                                        </nav>
+                                    </ul>
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
@@ -52,9 +55,10 @@
                                                     <td>{{ record.child.last_name }}</td>
                                                     <td>{{ record.child.first_name }}</td>
                                                     <td>
-                                                    <span class="badge {% if record.status == 'F' %}badge-success{% elif record.status == 'D' %}badge-danger{% else %}badge-warning{% endif %} p-2">
-                                                    {{ record.get_status_display }}</td>
-                                                </span>
+                                                        <span class="badge {% if record.status == 'F' %}badge-success{% elif record.status == 'D' %}badge-danger{% else %}badge-warning{% endif %} p-2">
+                                                            {{ record.get_status_display }}
+                                                        </td>
+                                                    </span>
                                                     <td>
                                                         <a href="{% url 'attendance-record-detail' record.pk %}">
                                                             <button type="button" class="btn btn-outline-primary">Details</button>

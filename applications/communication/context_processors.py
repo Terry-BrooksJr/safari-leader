@@ -1,4 +1,4 @@
-from applications.communication.models import Announcement, Notification, Message
+from applications.communication.models import Announcement, Message, Notification
 
 
 def messaging_context(request):
@@ -7,5 +7,7 @@ def messaging_context(request):
         context["notifications"] = Notification.objects.filter(
             user=request.user, is_read=False
         ).order_by("-created_at")
-        context["messages"] = Message.objects.filter(recipient=request.user, is_read=False).order_by("-created_at")
+        context["messages"] = Message.objects.filter(
+            recipient=request.user, is_read=False
+        ).order_by("-created_at")
     return context

@@ -21,22 +21,29 @@ def _uname(prefix):
 
 def _make_child(last_name="Kid"):
     return Child.objects.create(
-        first_name="Test", last_name=last_name,
-        date_of_birth=date(2022, 1, 1), status="A",
+        first_name="Test",
+        last_name=last_name,
+        date_of_birth=date(2022, 1, 1),
+        status="A",
     )
 
 
 def _make_pickup(child):
     user = User.objects.create_user(username=_uname("pickup"), password="x")
     return AuthorizedPickupProfile.objects.create(
-        child=child, user=user, relationship="P", pickup_pin=1234,
+        child=child,
+        user=user,
+        relationship="P",
+        pickup_pin=1234,
     )
 
 
 def _make_staff():
     user = User.objects.create_user(username=_uname("staff"), password="x")
     return StaffProfile.objects.create(
-        user=user, hire_date=date(2020, 1, 1), personal_pin=4321,
+        user=user,
+        hire_date=date(2020, 1, 1),
+        personal_pin=4321,
         role_title="Instructor",
     )
 
@@ -79,8 +86,10 @@ class AttendanceRecordModelTest(TestCase):
             attendance_record=record, event_type="CO-PM"
         )
         handoff = HandoffEvent.objects.create(
-            attendance_record=record, event_type="DO-AM",
-            pickup_person=_make_pickup(self.child), checked_by=_make_staff(),
+            attendance_record=record,
+            event_type="DO-AM",
+            pickup_person=_make_pickup(self.child),
+            checked_by=_make_staff(),
         )
         # auto_now timestamps are not deterministic; set them explicitly.
         base = timezone.now()

@@ -51,9 +51,7 @@ class AttendanceRecord(models.Model):
     @property
     def timeline(self):
         """All events for the day (check-in/out + handoff), oldest first."""
-        events = list(self.check_in_out_events.all()) + list(
-            self.handoff_events.all()
-        )
+        events = list(self.check_in_out_events.all()) + list(self.handoff_events.all())
         return sorted(events, key=lambda event: event.timestamp)
 
     def finalize_record(self):

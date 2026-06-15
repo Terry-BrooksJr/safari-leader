@@ -21,9 +21,9 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 import applications.accounts.urls as DASHBOARD_URLS
+import applications.attendance.urls as ATTENDANCE_URLS
 import applications.children.urls as CHILDREN_URLS
 import applications.enrollment.urls as ENROLLMENT_URLS
-import applications.attendance.urls as ATTENDANCE_URLS
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/dashboard/", permanent=False)),

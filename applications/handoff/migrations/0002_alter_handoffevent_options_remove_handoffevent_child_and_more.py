@@ -7,23 +7,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('attendance', '0004_alter_attendancerecord_options_and_more'),
-        ('handoff', '0001_initial'),
+        ("attendance", "0004_alter_attendancerecord_options_and_more"),
+        ("handoff", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='handoffevent',
-            options={'ordering': ['timestamp']},
+            name="handoffevent",
+            options={"ordering": ["timestamp"]},
         ),
         migrations.RemoveField(
-            model_name='handoffevent',
-            name='child',
+            model_name="handoffevent",
+            name="child",
         ),
         migrations.AddField(
-            model_name='handoffevent',
-            name='attendance_record',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='handoff_events', to='attendance.attendancerecord'),
+            model_name="handoffevent",
+            name="attendance_record",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="handoff_events",
+                to="attendance.attendancerecord",
+            ),
             preserve_default=False,
         ),
     ]

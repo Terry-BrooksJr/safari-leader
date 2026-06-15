@@ -20,31 +20,35 @@ def _uname(prefix):
 class HandoffEventModelTest(TestCase):
     def setUp(self):
         self.child = Child.objects.create(
-            first_name="Test", last_name="Kid",
-            date_of_birth=date(2022, 1, 1), status="A",
+            first_name="Test",
+            last_name="Kid",
+            date_of_birth=date(2022, 1, 1),
+            status="A",
         )
         self.record = AttendanceRecord.objects.create(
             child=self.child, date=date(2026, 6, 1), status="F"
         )
-        pickup_user = User.objects.create_user(
-            username=_uname("pickup"), password="x"
-        )
+        pickup_user = User.objects.create_user(username=_uname("pickup"), password="x")
         self.pickup = AuthorizedPickupProfile.objects.create(
-            child=self.child, user=pickup_user, relationship="P",
+            child=self.child,
+            user=pickup_user,
+            relationship="P",
             pickup_pin=1234,
         )
-        staff_user = User.objects.create_user(
-            username=_uname("staff"), password="x"
-        )
+        staff_user = User.objects.create_user(username=_uname("staff"), password="x")
         self.staff = StaffProfile.objects.create(
-            user=staff_user, hire_date=date(2020, 1, 1), personal_pin=4321,
+            user=staff_user,
+            hire_date=date(2020, 1, 1),
+            personal_pin=4321,
             role_title="Instructor",
         )
 
     def _make_handoff(self, event_type="DO-AM"):
         return HandoffEvent.objects.create(
-            attendance_record=self.record, event_type=event_type,
-            pickup_person=self.pickup, checked_by=self.staff,
+            attendance_record=self.record,
+            event_type=event_type,
+            pickup_person=self.pickup,
+            checked_by=self.staff,
         )
 
     def test_child_property_resolves_through_record(self):

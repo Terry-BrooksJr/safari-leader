@@ -25,8 +25,12 @@ class ENROLLMENT_STATUS(models.TextChoices):
 
 
 class Enrollment(models.Model):
-    child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name="enrollments")
-    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name="enrollments")
+    child = models.ForeignKey(
+        Child, on_delete=models.CASCADE, related_name="enrollments"
+    )
+    program = models.ForeignKey(
+        Program, on_delete=models.CASCADE, related_name="enrollments"
+    )
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=5, choices=ENROLLMENT_STATUS.choices)

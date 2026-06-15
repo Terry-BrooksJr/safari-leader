@@ -109,7 +109,6 @@
                             {% endfor %}
                         </div>
                     </li>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center"
                            id="messagesDropdown"
@@ -127,7 +126,9 @@
                                 <a class="dropdown-item preview-item" href="#">
                                     <div class="preview-item-content">
                                         <h6 class="preview-subject font-weight-normal">{{ message.message|truncatewords:15 }}</h6>
-                                        <p class="font-weight-light small-text mb-0 text-muted">Send by {{ message.sender.first_name }} {{ message.sender.last_name|truncatechars:1 }} at {{ message.created_at }}</p>
+                                        <p class="font-weight-light small-text mb-0 text-muted">
+                                            Send by {{ message.sender.first_name }} {{ message.sender.last_name|truncatechars:1 }} at {{ message.created_at }}
+                                        </p>
                                     </div>
                                 </a>
                             {% empty %}
@@ -254,32 +255,26 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-    <a href="#"
-       class="nav-link dropdown-toggle"
-       id="attendanceDropdown"
-       role="button"
-       data-bs-toggle="dropdown"
-       aria-expanded="false">
-        <img src="{% static 'images/icons/attendance.png' %}"
-             class="mx-auto menu-icon"
-             alt="Attendance">
-        <span class="menu-title">Attendance</span>
-    </a>
-
-    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-        <li>
-            <a class="dropdown-item" href="{% url 'attendance-list' %}">
-                View Attendance Records
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="{% url 'checkinout-event-list' %}">
-                View Check-In/Check-Out Events
-            </a>
-        </li>
-
-    </ul>
-</li>
+                    <a href="#"
+                       class="nav-link dropdown-toggle"
+                       id="attendanceDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <img src="{% static 'images/icons/attendance.png' %}"
+                             class="mx-auto menu-icon"
+                             alt="Attendance">
+                        <span class="menu-title">Attendance</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'attendance-list' %}">View Attendance Records</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'checkinout-event-list' %}">View Check-In/Check-Out Events</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <img src="{% static "images/icons/staffing.png" %}"

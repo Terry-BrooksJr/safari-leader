@@ -45,15 +45,25 @@ class Message(models.Model):
     sender = models.ForeignKey(
         "accounts.User",
         on_delete=models.SET_NULL,
-        related_name="sender", null=True, blank=True
+        related_name="sender",
+        null=True,
+        blank=True,
     )
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        recipient = self.recipient.get_reciever_username() if self.recipient is not None else "unknown_user"
-        sender = self.sender.get_sender_username() if self.recipient is not None else "unknown_user"
+        recipient = (
+            self.recipient.get_reciever_username()
+            if self.recipient is not None
+            else "unknown_user"
+        )
+        sender = (
+            self.sender.get_sender_username()
+            if self.recipient is not None
+            else "unknown_user"
+        )
         return f"{sender} -> {recipient} at ({self.created_at})"
 
     def mark_read(self):
@@ -63,10 +73,10 @@ class Message(models.Model):
     def mark_unread(self):
         self.is_read = False
         self.save(update_fields=["is_read"])
-    
+
     def get_reciever_username(self) -> str:
         return self.recipient.username if self.recipient is not None else "Deleted User"
-    
+
     def get_sender_username(self) -> str:
         return self.sender.username if self.sender is not None else "Deleted User"
 
@@ -75,7 +85,8 @@ class Notification(models.Model):
     user = models.ForeignKey(
         "accounts.User",
         on_delete=models.SET_NULL,
-        related_name="notifications", null=True,
+        related_name="notifications",
+        null=True,
     )
     type = models.CharField(max_length=25, choices=NOTIFICATION_TYPE.choices)
     message = models.TextField()

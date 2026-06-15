@@ -64,21 +64,23 @@ class WeekdayPillsFilterTest(SimpleTestCase):
     def test_orders_monday_to_sunday_regardless_of_input_order(self):
         # JSONB does not preserve key order; the filter must still be Mon-first.
         scrambled = {
-            "friday": False, "monday": True, "sunday": False, "tuesday": True,
-            "saturday": False, "thursday": False, "wednesday": False,
+            "friday": False,
+            "monday": True,
+            "sunday": False,
+            "tuesday": True,
+            "saturday": False,
+            "thursday": False,
+            "wednesday": False,
         }
         abbrs = [day["abbr"] for day in weekday_pills(scrambled)]
-        self.assertEqual(
-            abbrs, ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        )
+        self.assertEqual(abbrs, ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
 
     def test_active_flags_follow_input(self):
-        result = {d["abbr"]: d["active"] for d in weekday_pills(
-            {"monday": True, "wednesday": True, "friday": True}
-        )}
-        self.assertEqual(
-            [k for k, v in result.items() if v], ["Mon", "Wed", "Fri"]
-        )
+        result = {
+            d["abbr"]: d["active"]
+            for d in weekday_pills({"monday": True, "wednesday": True, "friday": True})
+        }
+        self.assertEqual([k for k, v in result.items() if v], ["Mon", "Wed", "Fri"])
         self.assertFalse(result["Tue"])
         self.assertFalse(result["Sun"])
 
@@ -97,25 +99,38 @@ class WeekdayPillsFilterTest(SimpleTestCase):
         names = [day["name"] for day in weekday_pills({})]
         self.assertEqual(
             names,
-            ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-             "Saturday", "Sunday"],
+            [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+            ],
         )
 
 
 def _make_child(last_name="Child", status="A"):
     return Child.objects.create(
-        first_name="Test", last_name=last_name,
-        date_of_birth=date(2022, 1, 1), status=status,
+        first_name="Test",
+        last_name=last_name,
+        date_of_birth=date(2022, 1, 1),
+        status=status,
     )
 
 
 def _make_program(name="Program A", site_name="Site A"):
     site = Site.objects.create(
-        name=site_name, address1="100 Main St, Baltimore, MD 21201",
+        name=site_name,
+        address1="100 Main St, Baltimore, MD 21201",
         is_active=True,
     )
     return Program.objects.create(
-        site=site, name=name, program_type="PS", is_active=True,
+        site=site,
+        name=name,
+        program_type="PS",
+        is_active=True,
     )
 
 
@@ -129,8 +144,10 @@ class EnrollmentModelTest(TestCase):
 
     def _enroll(self, program, status):
         return Enrollment.objects.create(
-            child=self.child, program=program,
-            start_date=date(2025, 1, 1), status=status,
+            child=self.child,
+            program=program,
+            start_date=date(2025, 1, 1),
+            status=status,
         )
 
     def test_only_one_active_enrollment_per_child(self):
@@ -150,12 +167,12 @@ class EnrollmentModelTest(TestCase):
         other = _make_child(last_name="Other")
         self._enroll(self.program_a, "A")
         Enrollment.objects.create(
-            child=other, program=self.program_a,
-            start_date=date(2025, 1, 1), status="A",
+            child=other,
+            program=self.program_a,
+            start_date=date(2025, 1, 1),
+            status="A",
         )
-        self.assertEqual(
-            Enrollment.objects.filter(status="A").count(), 2
-        )
+        self.assertEqual(Enrollment.objects.filter(status="A").count(), 2)
 
     def test_site_property_resolves_through_program(self):
         enrollment = self._enroll(self.program_a, "A")

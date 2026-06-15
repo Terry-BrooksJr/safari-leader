@@ -1,7 +1,7 @@
 {% load schedule_extras %}
 <div class="weekday-pills" role="img" aria-label="Weekly schedule">
-  {% for d in days|weekday_pills %}
-    <span class="weekday-pill{% if d.active %} weekday-pill--on{% endif %}"
-          title="{{ d.name }}{% if d.active %} — scheduled{% else %} — off{% endif %}">{{ d.abbr }}</span>
-  {% endfor %}
+    {% for d in days|weekday_pills %}
+        <span class="weekday-pill{% if d.active %} weekday-pill--on{% endif %}"
+              title="{{ d.name }}{% if d.active %} — scheduled{% else %} — off{% endif %}">{{ d.abbr }}</span>
+    {% endfor %}
 </div>
