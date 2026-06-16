@@ -39,13 +39,13 @@ class Announcement(models.Model):
 class Message(models.Model):
     recipient = models.ForeignKey(
         "accounts.User",
-        on_delete=models.SET_NULL,
-        related_name="recipient",
+        on_delete=models.CASCADE,
+        related_name="received_messages",
     )
     sender = models.ForeignKey(
         "accounts.User",
         on_delete=models.SET_NULL,
-        related_name="sender",
+        related_name="sent_messages",
         null=True,
         blank=True,
     )
@@ -54,16 +54,8 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        recipient = (
-            self.recipient.get_reciever_username()
-            if self.recipient is not None
-            else "unknown_user"
-        )
-        sender = (
-            self.sender.get_sender_username()
-            if self.recipient is not None
-            else "unknown_user"
-        )
+        recipient = self.get_reciever_username()
+        sender = self.get_sender_username()
         return f"{sender} -> {recipient} at ({self.created_at})"
 
     def mark_read(self):

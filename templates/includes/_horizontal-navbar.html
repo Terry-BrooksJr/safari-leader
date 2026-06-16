@@ -50,264 +50,272 @@
                                         {% endif %}
                                     </div>
                                     <div class="preview-item-content">
-                                        <h6 class="preview-subject font-weight-normal">{{ notification.message|truncatewords:15 }}</h6>
+                                        <h6 class="preview-subject font-weight-normal">
+                                            <a href="{% url 'notification-detail' notification.pk %}">{{ notification.message|truncatewords:15 }}</a>
+                                        </h6>
                                         <p class="font-weight-light small-text mb-0 text-muted">{{ notification.created_at|timesince }} ago</p>
-                                    </div>
-                                </a>
-                            {% empty %}
-                                <div class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-light text-muted">
-                                            <i class="fa-solid fa-bell-slash"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <h6 class="preview-subject font-weight-normal">No Notifications</h6>
-                                        <p class="font-weight-light small-text mb-0 text-muted">You're all caught up 🎊</p>
+                                    </a>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <div class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-light text-muted">
+                                        <i class="fa-solid fa-bell-slash"></i>
                                     </div>
                                 </div>
-                            {% endfor %}
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
-                           id="announcementDropdown"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-email mx-0"></i>
-                            <span class="count bg-primary">{{ announcements|length }}</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
-                             aria-labelledby="announcementDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Announcements</p>
-                            {% for announcement in announcements %}
-                                <a class="dropdown-item preview-item" href="#">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-primary">
-                                            <i class="mdi mdi-bullhorn mx-0"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content flex-grow">
-                                        <h6 class="preview-subject ellipsis font-weight-normal">{{ announcement.title }}</h6>
-                                        <p class="font-weight-light small-text text-muted mb-0">{{ announcement.message|truncatewords:15 }}</p>
-                                    </div>
-                                </a>
-                            {% empty %}
-                                <div class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-light text-muted">
-                                            <i class="mdi mdi-bullhorn-outline mx-0"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content flex-grow">
-                                        <h6 class="preview-subject ellipsis font-weight-normal">No Announcements</h6>
-                                        <p class="font-weight-light small-text text-muted mb-0">Nothing to see here 🎉</p>
-                                    </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">No Notifications</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">You're all caught up 🎊</p>
                                 </div>
-                            {% endfor %}
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center"
-                           id="messagesDropdown"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-message-reply-text mx-0"></i>
-                            <span class="count bg-info">{{ messages|length }}</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
-                             aria-labelledby="messagesDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-                            {% for message in messages %}
-                                <a class="dropdown-item preview-item" href="#">
-                                    <div class="preview-item-content">
-                                        <h6 class="preview-subject font-weight-normal">{{ message.message|truncatewords:15 }}</h6>
-                                        <p class="font-weight-light small-text mb-0 text-muted">
-                                            Send by {{ message.sender.first_name }} {{ message.sender.last_name|truncatechars:1 }} at {{ message.created_at }}
-                                        </p>
-                                    </div>
-                                </a>
-                            {% empty %}
-                                <div class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-light text-muted">
-                                            <i class="fa-solid fa-bell-slash"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <h6 class="preview-subject font-weight-normal">No Messages</h6>
-                                        <p class="font-weight-light small-text mb-0 text-muted">You're all caught up 🎊</p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </li>
-                    <li class="nav-item nav-search d-none d-lg-block ms-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="search">
-                                    <i class="mdi mdi-magnify"></i>
-                                </span>
                             </div>
-                            <input type="text"
-                                   class="form-control"
-                                   placeholder="search"
-                                   aria-label="search"
-                                   aria-describedby="search">
-                        </div>
-                    </li>
-                </ul>
-                <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                    <a class="navbar-brand brand-logo" href="{% url 'dashboard' %}">
-                        <img src="{% static 'images/dashboard-brand-img.png' %}" alt="logo" />
-                    </a>
-                    <a class="navbar-brand brand-logo-mini" href="{% url 'dashboard' %}">
-                        <img src="{% static 'images/mini-dashboard-brand-img.png' %}" alt="logo" />
-                    </a>
-                </div>
-                <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item dropdown d-lg-flex d-none">
-                        <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm"
-                           id="nreportDropdown"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">Reports</a>
-                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
-                             aria-labelledby="nreportDropdown">
-                            <p class="mb-0 font-weight-medium float-left dropdown-header">Reports</p>
-                            <a class="dropdown-item">
-                                <i class="mdi mdi-file-pdf text-primary"></i>
-                                Pdf
-                            </a>
-                            <a class="dropdown-item">
-                                <i class="mdi mdi-file-excel text-primary"></i>
-                                Excel
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown d-lg-flex d-none">
-                        <button type="button" class="btn btn-inverse-primary btn-sm">Settings</button>
-                    </li>
-                    <li class="nav-item nav-profile dropdown">
-                        <a class="nav-link dropdown-toggle"
-                           href="#"
-                           id="profileDropdown"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <span class="nav-profile-name">{{ request.user.first_name|default:"User1" }}</span>
-                            <span class="online-status"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown"
-                             aria-labelledby="profileDropdown">
-                            <a class="dropdown-item">
-                                <i class="mdi mdi-settings text-primary"></i>
-                                Settings
-                            </a>
-                            <form method="post" action="{% url 'logout' %}" class="d-inline w-100">
-                                {% csrf_token %}
-                                <button type="submit" class="dropdown-item border-0 bg-transparent">
-                                    <i class="mdi mdi-logout text-primary"></i>
-                                    Logout
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
-                        type="button"
-                        data-bs-toggle="horizontal-menu-toggle"
-                        aria-label="Toggle navigation">
-                    <span class="mdi mdi-menu"></span>
-                </button>
-            </div>
-        </div>
-    </nav>
-    <nav class="bottom-navbar">
-        <div class="container">
-            <ul class="nav page-navigation">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dashboard' %}">
-                        <img src="{% static "images/icons/dashboard.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'children-list' %}" class="nav-link">
-                        <img src="{% static "images/icons/children.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Children</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'enrollment-list' %}" class="nav-link">
-                        <img src="{% static "images/icons/enrollment.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Enrollment</span>
-                        <i class="menu-arrow"></i>
-                    </a>
+                        {% endfor %}
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="#"
-                       class="nav-link dropdown-toggle"
-                       id="attendanceDropdown"
+                    <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
+                       id="announcementDropdown"
+                       href="#"
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        <img src="{% static 'images/icons/attendance.png' %}"
-                             class="mx-auto menu-icon"
-                             alt="Attendance">
-                        <span class="menu-title">Attendance</span>
+                        <i class="mdi mdi-email mx-0"></i>
+                        <span class="count bg-primary">{{ announcements|length }}</span>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-                        <li>
-                            <a class="dropdown-item" href="{% url 'attendance-list' %}">View Attendance Records</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'checkinout-event-list' %}">View Check-In/Check-Out Events</a>
-                        </li>
-                    </ul>
+                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
+                         aria-labelledby="announcementDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Announcements</p>
+                        {% for announcement in announcements %}
+                            <a class="dropdown-item preview-item" href="#">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-primary">
+                                        <i class="mdi mdi-bullhorn mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content flex-grow">
+                                    <h6 class="preview-subject ellipsis font-weight-normal">
+                                        <a href="{% url 'announcement-detail' announcement.pk %}">{{ announcement.title }}</a>
+                                    </h6>
+                                    <p class="font-weight-light small-text text-muted mb-0">{{ announcement.message|truncatewords:15 }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <div class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-light text-muted">
+                                        <i class="mdi mdi-bullhorn-outline mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content flex-grow">
+                                    <h6 class="preview-subject ellipsis font-weight-normal">No Announcements</h6>
+                                    <p class="font-weight-light small-text text-muted mb-0">Nothing to see here 🎉</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <img src="{% static "images/icons/staffing.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Staffing</span>
-                        <i class="menu-arrow"></i>
+                <li class="nav-item dropdown">
+                    <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center"
+                       id="messagesDropdown"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="mdi mdi-message-reply-text mx-0"></i>
+                        <span class="count bg-info">{{ messages|length }}</span>
                     </a>
+                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
+                         aria-labelledby="messagesDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+                        {% for message in messages %}
+                            <a class="dropdown-item preview-item" href="#">
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">
+                                        <a href="{% url 'message-detail' message.pk %}">{{ message.message|truncatewords:15 }}</a>
+                                    </h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Send by {{ message.sender.first_name }} {{ message.sender.last_name|truncatechars:1 }} at {{ message.created_at }}
+                                    </p>
+                                    \
+                                </div>
+                            </a>
+                        {% empty %}
+                            <div class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-light text-muted">
+                                        <i class="fa-solid fa-bell-slash"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">No Messages</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">You're all caught up 🎊</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <img src="{% static "images/icons/incidents.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Incidents</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <img src="{% static "images/icons/documents.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Documents</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <img src="{% static "images/icons/facilities.png" %}"
-                             class="mdi mdi-file-document-box mx-auto menu-icon">
-                        <span class="menu-title">Facilities</span>
-                        <i class="menu-arrow"></i>
-                    </a>
+                <li class="nav-item nav-search d-none d-lg-block ms-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="search">
+                                <i class="mdi mdi-magnify"></i>
+                            </span>
+                        </div>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="search"
+                               aria-label="search"
+                               aria-describedby="search">
+                    </div>
                 </li>
             </ul>
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <a class="navbar-brand brand-logo" href="{% url 'dashboard' %}">
+                    <img src="{% static 'images/dashboard-brand-img.png' %}" alt="logo" />
+                </a>
+                <a class="navbar-brand brand-logo-mini" href="{% url 'dashboard' %}">
+                    <img src="{% static 'images/mini-dashboard-brand-img.png' %}" alt="logo" />
+                </a>
+            </div>
+            <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item dropdown d-lg-flex d-none">
+                    <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm"
+                       id="nreportDropdown"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">Reports</a>
+                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
+                         aria-labelledby="nreportDropdown">
+                        <p class="mb-0 font-weight-medium float-left dropdown-header">Reports</p>
+                        <a class="dropdown-item">
+                            <i class="mdi mdi-file-pdf text-primary"></i>
+                            Pdf
+                        </a>
+                        <a class="dropdown-item">
+                            <i class="mdi mdi-file-excel text-primary"></i>
+                            Excel
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown d-lg-flex d-none">
+                    <button type="button" class="btn btn-inverse-primary btn-sm">Settings</button>
+                </li>
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="profileDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <span class="nav-profile-name">{{ request.user.first_name|default:"User1" }}</span>
+                        <span class="online-status"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown"
+                         aria-labelledby="profileDropdown">
+                        <a class="dropdown-item">
+                            <i class="mdi mdi-settings text-primary"></i>
+                            Settings
+                        </a>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline w-100">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item border-0 bg-transparent">
+                                <i class="mdi mdi-logout text-primary"></i>
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
+                    type="button"
+                    data-bs-toggle="horizontal-menu-toggle"
+                    aria-label="Toggle navigation">
+                <span class="mdi mdi-menu"></span>
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
+<nav class="bottom-navbar">
+    <div class="container">
+        <ul class="nav page-navigation">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <img src="{% static "images/icons/dashboard.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'children-list' %}" class="nav-link">
+                    <img src="{% static "images/icons/children.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Children</span>
+                    <i class="menu-arrow"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'enrollment-list' %}" class="nav-link">
+                    <img src="{% static "images/icons/enrollment.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Enrollment</span>
+                    <i class="menu-arrow"></i>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#"
+                   class="nav-link dropdown-toggle"
+                   id="attendanceDropdown"
+                   role="button"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <img src="{% static 'images/icons/attendance.png' %}"
+                         class="mx-auto menu-icon"
+                         alt="Attendance">
+                    <span class="menu-title">Attendance</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'attendance-list' %}">View Attendance Records</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'checkinout-event-list' %}">View Check-In/Check-Out Events</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <img src="{% static "images/icons/staffing.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Staffing</span>
+                    <i class="menu-arrow"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <img src="{% static "images/icons/incidents.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Incidents</span>
+                    <i class="menu-arrow"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <img src="{% static "images/icons/documents.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Documents</span>
+                    <i class="menu-arrow"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <img src="{% static "images/icons/facilities.png" %}"
+                         class="mdi mdi-file-document-box mx-auto menu-icon">
+                    <span class="menu-title">Facilities</span>
+                    <i class="menu-arrow"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 </div>

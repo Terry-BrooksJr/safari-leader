@@ -23,6 +23,7 @@ from django.views.generic import RedirectView
 import applications.accounts.urls as DASHBOARD_URLS
 import applications.attendance.urls as ATTENDANCE_URLS
 import applications.children.urls as CHILDREN_URLS
+import applications.communication.urls as COMMUNICATION_URLS
 import applications.enrollment.urls as ENROLLMENT_URLS
 
 urlpatterns = [
@@ -43,4 +44,5 @@ urlpatterns = [
     path("children/", include(CHILDREN_URLS)),
     path("registration/", include(ENROLLMENT_URLS)),
     path("attendance/", include(ATTENDANCE_URLS)),
+    path("communication/", include(COMMUNICATION_URLS)),
 ]
