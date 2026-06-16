@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('children', '0002_remove_custodyrestriction_restriction_type_and_more'),
+        ("children", "0002_remove_custodyrestriction_restriction_type_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='medicalnote',
-            name='date_created',
+            model_name="medicalnote",
+            name="date_created",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

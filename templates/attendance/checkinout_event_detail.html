@@ -3,7 +3,13 @@
 {% block title %}Check-In/Out Event - {{ event.child }} - Safari Leader{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-12 mb-4">
+        <div class="col-6 mb-4">
+            <a href="{% url 'child-detail' event.child.pk %}"
+               class="btn btn-outline-success btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to {{ event.child.first_name }} {{ event.child.last_name }}
+            </a>
+        </div>
+        <div class="col-6 mb-4">
             <a href="{% url 'checkinout-event-list' %}"
                class="btn btn-outline-secondary btn-sm">
                 <i class="mdi mdi-arrow-left"></i> Back to Events

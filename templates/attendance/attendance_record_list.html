@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Attendance Records - Safari Leader{% endblock %}
+{% block extra_css %}{% endblock %}
+{% block content %}
+    <div class="container-fluid page-body-wrapper">
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Attendance Records  <strong>({{ page_obj.paginator.count }})</strong>
+                                </h4>
+                                <div class="table-responsive">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?">All</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?status=draft">Draft</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?status=final">Final</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?status=modified">Modified</a>
+                                        </li>
+                                        <nav>
+                                            <form class="form-inline">
+                                                // TODO: Wire Up Search for Child las and First Name
+                                                <input class="form-control mr-sm-2"
+                                                       type="search"
+                                                       placeholder="Search"
+                                                       aria-label="Search">
+                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                            </form>
+                                        </nav>
+                                    </ul>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Child's Last Name</th>
+                                                <th>Child's First Name</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for record in records %}
+                                                <tr>
+                                                    <td>{{ record.date }}</td>
+                                                    <td>{{ record.child.last_name }}</td>
+                                                    <td>{{ record.child.first_name }}</td>
+                                                    <td>
+                                                        <span class="badge {% if record.status == 'F' %}badge-success{% elif record.status == 'D' %}badge-danger{% else %}badge-warning{% endif %} p-2">
+                                                            {{ record.get_status_display }}
+                                                        </td>
+                                                    </span>
+                                                    <td>
+                                                        <a href="{% url 'attendance-record-detail' record.pk %}">
+                                                            <button type="button" class="btn btn-outline-primary">Details</button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <td colspan="4" class="text-center">No records found.</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination mx-0">
+                                    <div class="mx-auto">
+                                        {% if page_obj.has_previous %}
+                                            <a class="px-3" href="?page=1"><i class="fa-solid fa-backward-fast" style="color: rgb(32, 143, 21);"></i></a>
+                                            <a class="px-3" href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-backward" style="color: rgb(32, 143, 21);"></i></a>
+                                        {% endif %}
+                                        <span class="current">Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong></span>
+                                        {% if page_obj.has_next %}
+                                            <a class="px-3" href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-forward" style="color: rgb(32, 143, 21);"></i></a>
+                                            <a class="px-3" href="?page={{ page_obj.paginator.num_pages }}"><i class="fa-solid fa-forward-fast" style="color: rgb(32, 143, 21);"></i></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

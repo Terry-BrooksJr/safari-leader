@@ -26,25 +26,25 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','safari-leader.com','127.0.0.1']
+ALLOWED_HOSTS = ["localhost", "safari-leader.com", "127.0.0.1"]
 FERNET_KEYS = os.environ["FERNET_KEYS"].split(",")
 SALT_KEY = FERNET_KEYS
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
     "storages",
     "address",
     "corsheaders",
-    "captcha", 
+    "captcha",
     "whitenoise",
     "applications.accounts",
     "applications.attendance",
@@ -56,69 +56,69 @@ INSTALLED_APPS = [
     "applications.handoff",
     "applications.incidents",
     "applications.staffing",
-    
 ]
 
 MIDDLEWARE = [
     "django_prometheus.middleware.PrometheusBeforeMiddleware",  # 1
-    'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.cache.UpdateCacheMiddleware",  # 6
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.LoginRequiredMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",  # 16
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
-LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/dashboard'
-LOGOUT_REDIRECT_URL = '/login'
-ROOT_URLCONF = 'core.urls'
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/dashboard"
+LOGOUT_REDIRECT_URL = "/login"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "applications.communication.context_processors.messaging_context",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES =         {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": os.getenv("POSTGRES_DB"),
-                "USER": os.getenv("PG_DATABASE_USER"),
-                "PASSWORD": os.getenv("PG_DATABASE_PASSWORD"),
-                "HOST": os.getenv("PG_DATABASE_HOST"),
-                "DISABLE_SERVER_SIDE_CURSORS": True,
-                "PORT": os.getenv("PG_DATABASE_PORT"),
-                "pool": {
-                    "max_size": 11,
-                    "name": "django-the-safari-leader",
-                    "max_idle": 15,
-                },
-            }
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("PG_DATABASE_USER"),
+        "PASSWORD": os.getenv("PG_DATABASE_PASSWORD"),
+        "HOST": os.getenv("PG_DATABASE_HOST"),
+        "DISABLE_SERVER_SIDE_CURSORS": True,
+        "PORT": os.getenv("PG_DATABASE_PORT"),
+        "pool": {
+            "max_size": 11,
+            "name": "django-the-safari-leader",
+            "max_idle": 15,
+        },
+    }
+}
 
 
 # Password validation
@@ -126,16 +126,16 @@ DATABASES =         {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -149,9 +149,9 @@ PASSWORD_HASHERS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'America/New_York'
+TIME_ZONE = "America/New_York"
 
 USE_I18N = True
 
@@ -177,7 +177,9 @@ AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_QUERYSTRING_AUTH = False
 AWS_QUERYSTRING_EXPIRE = 3600
 AWS_S3_FILE_OVERWRITE = True
-AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://nyc3.digitaloceanspaces.com")
+AWS_S3_ENDPOINT_URL = os.getenv(
+    "AWS_S3_ENDPOINT_URL", "https://nyc3.digitaloceanspaces.com"
+)
 STATIC_LOCATION = "static/production"
 STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
 STORAGES: dict[str, dict[str, str]] = {

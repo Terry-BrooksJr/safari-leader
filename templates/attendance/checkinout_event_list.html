@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Check-In Log - Safari Leader{% endblock %}
+{% block extra_css %}{% endblock %}
+{% block content %}
+    <div class="container-fluid page-body-wrapper">
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Check-in Log <strong>({{ page_obj.paginator.count }})</strong>
+                                </h4>
+                                <div class="table-responsive">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?">All</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?event_type=checkin">Check-Ins</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="?event_type=checkout">Check-Outs</a>
+                                        </li>
+                                        <nav>
+                                            <form class="form-inline">
+                                                // TODO: Wire Up Search for Child las and First Name
+                                                <input class="form-control mr-sm-2"
+                                                       type="search"
+                                                       placeholder="Search"
+                                                       aria-label="Search">
+                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                            </form>
+                                        </nav>
+                                    </ul>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Timestamp</th>
+                                                <th>Attendance Record</th>
+                                                <th>Child's Last Name</th>
+                                                <th>Child's First Name</th>
+                                                <th>Type</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for event in events %}
+                                                <tr>
+                                                    <td>{{ event.timestamp }}</td>
+                                                    <td>
+                                                        <a href="{% url 'attendance-record-detail' event.attendance_record.pk %}">{{ event.attendance_record }}</a>
+                                                    </td>
+                                                    <td>{{ event.attendance_record.child.last_name }}</td>
+                                                    <td>{{ event.attendance_record.child.first_name }}</td>
+                                                    <td>
+                                                        <span class="badge {% if event.event_type == 'CI-AM' or event.event_type == 'CI-PM' %}badge-success{% else %}badge-warning{% endif %} p-2">
+                                                            {{ event.get_event_type_display }}
+                                                        </td>
+                                                    </span>
+                                                    <td>
+                                                        <a href="{% url 'checkinout-event-detail' event.pk %}">
+                                                            <button type="button" class="btn btn-outline-primary">Details</button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <td colspan="4" class="text-center">No records found.</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination mx-0">
+                                    <div class="mx-auto">
+                                        {% if page_obj.has_previous %}
+                                            <a class="px-3" href="?page=1"><i class="fa-solid fa-backward-fast" style="color: rgb(32, 143, 21);"></i></a>
+                                            <a class="px-3" href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-backward" style="color: rgb(32, 143, 21);"></i></a>
+                                        {% endif %}
+                                        <span class="current">Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong></span>
+                                        {% if page_obj.has_next %}
+                                            <a class="px-3" href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-forward" style="color: rgb(32, 143, 21);"></i></a>
+                                            <a class="px-3" href="?page={{ page_obj.paginator.num_pages }}"><i class="fa-solid fa-forward-fast" style="color: rgb(32, 143, 21);"></i></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

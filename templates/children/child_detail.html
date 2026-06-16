@@ -1,7 +1,56 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}{{ child.first_name }} {{ child.last_name }} - Safari Leader{% endblock %}
-{% block extra_css %}{% endblock %}
+{% block extra_css %}
+    <style>
+    #student-name{
+        font-size:3.0rem !important;
+    }
+    .detail-link{
+    text-decoration: none;
+    color: black;
+}
+.card-header {
+    justify-content: space-between;
+
+}
+.detail-link:hover {
+        text-decoration: underline;
+        color: green;
+
+}
+    .entity-add-button {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border: 1px solid rgb(32, 143, 21);
+        border-radius: 50%;
+        background-color: rgb(32, 143, 21);
+        color: white;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .entity-add-button .entity-add-icon {
+        color: inherit;
+    }
+
+    .entity-add-button .entity-add-plus {
+        color: inherit;
+        font-size: 0.55em;
+        position: absolute;
+        right: 7px;
+        bottom: 7px;
+    }
+
+    .entity-add-button:hover {
+        background-color: white;
+        color: rgb(32, 143, 21);
+    }
+    </style>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-12 mb-4">
@@ -18,7 +67,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h1 class="card-title mb-1">{{ child.first_name }} {{ child.last_name }}</h1>
+                            <p id="student-name" class="display-6 card-title mb-1">{{ child.first_name }} {{ child.last_name }}</p>
                             <p class="text-muted mb-0">Date of Birth: {{ child.date_of_birth }}</p>
                             <p class="text-muted mb-0">Age: {{ child.age }}</p>
                             <p class="text-muted mb-0">Enrolled: {{ child.created_at }}</p>
@@ -38,9 +87,16 @@
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-account-group"></i> Guardians
-                    </h4>
+                    <div class="card-header d-flex">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-account-group"></i> Guardians
+                        </h4>
+                        <button class="badge entity-add-button"
+                                type="button"
+                                aria-label="Add guardian">
+                            <i class="entity-add-icon fa-solid fa-person-circle-plus"></i>
+                        </button>
+                    </div>
                     {% if child.childguardianrelationship_set.all %}
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -58,71 +114,85 @@
                                 <tbody>
                                     {% for rel in child.childguardianrelationship_set.all %}
                                         <tr>
-                                            <td>{{ rel.guardian.user.first_name }} {{ rel.guardian.user.last_name }}</td>
-                                            <td>{{ rel.get_relationship_display }}</td>
-                                            <td>{{ rel.guardian.contact_number }}</td>
                                             <td>
-                                                {% if rel.is_primary %}
-                                                    <i class="mdi mdi-check-circle text-success"></i>
-                                                {% else %}
-                                                    <i class="mdi mdi-close-circle text-muted"></i>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if rel.has_custody_rights %}
-                                                    <i class="mdi mdi-check-circle text-success"></i>
-                                                {% else %}
-                                                    <i class="mdi mdi-close-circle text-muted"></i>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if rel.can_pickup %}
-                                                    <i class="mdi mdi-check-circle text-success"></i>
-                                                {% else %}
-                                                    <i class="mdi mdi-close-circle text-muted"></i>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if rel.is_active %}
-                                                    <span class="badge badge-success">Active</span>
-                                                {% else %}
-                                                    <span class="badge badge-secondary">Inactive</span>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No guardians on file.</p>
-                    {% endif %}
-                </div>
+                                                <strong><a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+   href="{% url 'guardian-detail' rel.guardian.pk %}">{{ rel.guardian.user.first_name }} {{ rel.guardian.user.last_name }}</strong></a>
+                                        </td>
+                                        <td>{{ rel.get_relationship_display }}</td>
+                                        <td>{{ rel.guardian.contact_number }}</td>
+                                        <td>
+                                            {% if rel.is_primary %}
+                                                <i class="mdi mdi-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="mdi mdi-close-circle text-muted"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if rel.has_custody_rights %}
+                                                <i class="mdi mdi-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="mdi mdi-close-circle text-muted"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if rel.can_pickup %}
+                                                <i class="mdi mdi-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="mdi mdi-close-circle text-muted"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if rel.is_active %}
+                                                <span class="badge badge-success">Active</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">Inactive</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No guardians on file.</p>
+                {% endif %}
             </div>
         </div>
-        <!-- Authorized Pickups -->
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
+    </div>
+    <!-- Authorized Pickups -->
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-header d-flex">
                     <h4 class="card-title">
                         <i class="mdi mdi-car"></i> Authorized Pickups
                     </h4>
-                    {% if child.authorized_pickup.all %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
+                    <button class="badge entity-add-button position-relative"
+                            type="button"
+                            aria-label="Add pickup agent">
+                        <i class="entity-add-icon fa-solid fa-car-on"></i>
+                        <i class="entity-add-plus fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                {% if child.authorized_pickup.all %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="fw-bolder">Name</th>
+                                    <th class="fw-bolder">Relationship</th>
+                                    <th class="fw-bolder">Authorized</th>
+                                    <th class="fw-bolder">Active</th>
+                                    <th class="fw-bolder">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pickup in child.authorized_pickup.all %}
                                     <tr>
-                                        <th class="fw-bolder">Name</th>
-                                        <th class="fw-bolder">Relationship</th>
-                                        <th class="fw-bolder">Authorized</th>
-                                        <th class="fw-bolder">Active</th>
-                                        <th class="fw-bolder">Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for pickup in child.authorized_pickup.all %}
-                                        <tr>
-                                            <td>{{ pickup.user.first_name }} {{ pickup.user.last_name }}</td>
+                                        <td>
+                                            <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                               href="{% url 'authorized-pickup-detail' pickup.pk %}">{{ pickup.user.first_name }} {{ pickup.user.last_name }}
+                                            </td>
                                             <td>{{ pickup.get_relationship_display }}</td>
                                             <td>
                                                 {% if pickup.is_authorized %}
@@ -156,9 +226,17 @@
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-phone-alert"></i> Emergency Contacts
-                    </h4>
+                    <div class="card-header d-flex">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-phone-alert"></i> Emergency Contacts
+                        </h4>
+                        <button class="badge entity-add-button position-relative"
+                                type="button"
+                                aria-label="Add emergency contact">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <i class="entity-add-plus fa-solid fa-plus"></i>
+                        </button>
+                    </div>
                     {% if child.emergency_contact.all %}
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -175,7 +253,10 @@
                                 <tbody>
                                     {% for contact in child.emergency_contact.all %}
                                         <tr>
-                                            <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                                            <td>
+                                                <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                   href="{% url 'emergency-contact-detail' contact.pk %}">{{ contact.first_name }} {{ contact.last_name }}</a>
+                                            </td>
                                             <td>{{ contact.contact_number }}</td>
                                             <td>{{ contact.get_relationship_display }}</td>
                                             <td>
@@ -207,9 +288,17 @@
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-shield-alert"></i> Custody Restrictions
-                    </h4>
+                    <div class="card-header d-flex">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-shield-alert"></i> Custody Restrictions
+                        </h4>
+                        <button class="badge entity-add-button position-relative"
+                                type="button"
+                                aria-label="Add emergency contact">
+                            <i class="fa-solid fa-house-circle-exclamation"></i>
+                            <i class="entity-add-plus fa-solid fa-plus"></i>
+                        </button>
+                    </div>
                     {% if child.restrictions.all %}
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -222,392 +311,432 @@
                                 <tbody>
                                     {% for restriction in child.restrictions.all %}
                                         <tr>
-                                            <td>{{ restriction.notes|default:"-" }}</td>
                                             <td>
-                                                {% if restriction.is_active %}
-                                                    <span class="badge badge-danger">Active</span>
-                                                {% else %}
-                                                    <span class="badge badge-secondary">Inactive</span>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No custody restrictions on file.</p>
-                    {% endif %}
+                                                <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                   href="{% url 'custody-restriction-detail' restriction.pk %}">{{ restriction.notes|default:"-" }}
+                                                </td>
+                                                <td>
+                                                    {% if restriction.is_active %}
+                                                        <span class="badge badge-danger">Active</span>
+                                                    {% else %}
+                                                        <span class="badge badge-secondary">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No custody restrictions on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Allergies & Medical Notes -->
-    <div class="row">
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-alert-circle"></i> Allergies
-                    </h4>
-                    {% if child.allergies.all %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Allergen</th>
-                                        <th class="fw-bolder">Severity</th>
-                                        <th class="fw-bolder">Instructions</th>
-                                        <th class="fw-bolder">Active</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for allergy in child.allergies.all %}
+        <!-- Allergies & Medical Notes -->
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header d-flex">
+                            <h4 class="card-title">
+                                <i class="mdi mdi-alert-circle"></i> Allergies
+                            </h4>
+                            <button class="badge entity-add-button position-relative"
+                                    type="button"
+                                    aria-label="Add emergency contact">
+                                <i class="fa-solid fa-wheat-awn-circle-exclamation"></i>
+                                <i class="entity-add-plus fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        {% if child.allergies.all %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ allergy.allergen }}</td>
-                                            <td>
-                                                <span class="badge {% if allergy.severity == 'LT' or allergy.severity == 'F' %}badge-danger{% elif allergy.severity == 'S' %}badge-warning{% elif allergy.severity == 'MD' %}badge-info{% else %}badge-secondary{% endif %}">
-                                                    {{ allergy.get_severity_display }}
-                                                </span>
-                                            </td>
-                                            <td>{{ allergy.instructions }}</td>
-                                            <td>
-                                                {% if allergy.is_active %}
-                                                    <span class="badge badge-success">Active</span>
-                                                {% else %}
-                                                    <span class="badge badge-secondary">Inactive</span>
-                                                {% endif %}
-                                            </td>
+                                            <th class="fw-bolder">Allergen</th>
+                                            <th class="fw-bolder">Severity</th>
+                                            <th class="fw-bolder">Instructions</th>
+                                            <th class="fw-bolder">Active</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No allergies on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for allergy in child.allergies.all %}
+                                            <tr>
+                                                <td>
+                                                    <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                       href="{% url 'allergy-detail' allergy.pk %}">{{ allergy.allergen }}</a>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {% if allergy.severity == 'LT' or allergy.severity == 'F' %}badge-danger{% elif allergy.severity == 'S' %}badge-warning{% elif allergy.severity == 'MD' %}badge-info{% else %}badge-secondary{% endif %}">
+                                                        {{ allergy.get_severity_display }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ allergy.instructions }}</td>
+                                                <td>
+                                                    {% if allergy.is_active %}
+                                                        <span class="badge badge-success">Active</span>
+                                                    {% else %}
+                                                        <span class="badge badge-secondary">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No allergies on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-medical-bag"></i> Medical Notes
-                    </h4>
-                    {% if child.medical_notes.all %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Note</th>
-                                        <th class="fw-bolder">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for note in child.medical_notes.all %}
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header d-flex">
+                            <h4 class="card-title">
+                                <i class="mdi mdi-medical-bag"></i> Medical Notes
+                            </h4>
+                            <button class="badge entity-add-button position-relative"
+                                    type="button"
+                                    aria-label="Add emergency contact">
+                                <i class="fa-solid fa-notes-medical"></i>
+                            </button>
+                        </div>
+                        {% if child.medical_notes.all %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ note.note }}</td>
-                                            <td>
-                                                {% if note.is_active %}
-                                                    <span class="badge badge-success">Active</span>
-                                                {% else %}
-                                                    <span class="badge badge-secondary">Inactive</span>
-                                                {% endif %}
-                                            </td>
+                                            <th class="fw-bolder">Note</th>
+                                            <th class="fw-bolder">Status</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No medical notes on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for note in child.medical_notes.all %}
+                                            <tr>
+                                                <td>
+                                                    <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                       href="{% url 'medical-note-detail' note.pk %}">{{ note.note }}</a>>
+                                                </td>
+                                                <td>
+                                                    {% if note.is_active %}
+                                                        <span class="badge badge-success">Active</span>
+                                                    {% else %}
+                                                        <span class="badge badge-secondary">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No medical notes on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Enrollments & Schedules -->
-    <div class="row">
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-school"></i> Enrollments
-                    </h4>
-                    {% if child.enrollment_set.all %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Program</th>
-                                        <th class="fw-bolder">Site</th>
-                                        <th class="fw-bolder">Start Date</th>
-                                        <th class="fw-bolder">End Date</th>
-                                        <th class="fw-bolder">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for enrollment in child.enrollment_set.all %}
+        <!-- Enrollments & Schedules -->
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-school"></i> Enrollments
+                        </h4>
+                        {% if child.enrollments.all %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ enrollment.program }}</td>
-                                            <td>{{ enrollment.site }}</td>
-                                            <td>{{ enrollment.start_date }}</td>
-                                            <td>{{ enrollment.end_date|default:"-" }}</td>
-                                            <td>{{ enrollment.get_status_display }}</td>
+                                            <th class="fw-bolder">Program</th>
+                                            <th class="fw-bolder">Site</th>
+                                            <th class="fw-bolder">Start Date</th>
+                                            <th class="fw-bolder">End Date</th>
+                                            <th class="fw-bolder">Status</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No enrollments on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for enrollment in child.enrollments.all %}
+                                            <tr>
+                                                <td>
+                                                    <a class="detail-link link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                       href="{% url 'enrollment-detail' enrollment.pk %}">{{ enrollment.program }}</a>
+                                                </td>
+                                                <td>{{ enrollment.program.site }}</td>
+                                                <td>{{ enrollment.start_date }}</td>
+                                                <td>{{ enrollment.end_date|default:"-" }}</td>
+                                                <td>{{ enrollment.get_status_display }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No enrollments on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-calendar-clock"></i> Schedules
-                    </h4>
-                    {% if child.childschedule_set.all %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Program</th>
-                                        <th class="fw-bolder">Days</th>
-                                        <th class="fw-bolder">Start Time</th>
-                                        <th class="fw-bolder">End Time</th>
-                                        <th class="fw-bolder">Active</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for schedule in child.childschedule_set.all %}
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-calendar-clock"></i> Schedules
+                        </h4>
+                        {% if child.childschedule_set.all %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ schedule.program }}</td>
-                                            <td>{{ schedule.days_of_week }}</td>
-                                            <td>{{ schedule.start_time }}</td>
-                                            <td>{{ schedule.end_time }}</td>
-                                            <td>
-                                                {% if schedule.is_active %}
-                                                    <span class="badge badge-success">Active</span>
-                                                {% else %}
-                                                    <span class="badge badge-secondary">Inactive</span>
-                                                {% endif %}
-                                            </td>
+                                            <th class="fw-bolder">Program</th>
+                                            <th class="fw-bolder">Days</th>
+                                            <th class="fw-bolder">Start Time</th>
+                                            <th class="fw-bolder">End Time</th>
+                                            <th class="fw-bolder">Active</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No schedules on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for schedule in child.childschedule_set.all %}
+                                            <tr>
+                                                <td>{{ schedule.program }}</td>
+                                                <td>{% include "components/weekday_pills.html" with days=schedule.days_of_week %}</td>
+                                                <td>{{ schedule.start_time }}</td>
+                                                <td>{{ schedule.end_time }}</td>
+                                                <td>
+                                                    {% if schedule.is_active %}
+                                                        <span class="badge badge-success">Active</span>
+                                                    {% else %}
+                                                        <span class="badge badge-secondary">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No schedules on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Attendance & Check-In/Out -->
-    <div class="row">
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-clipboard-check"></i> Attendance Records
-                    </h4>
-                    {% if attendancerecords %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Date</th>
-                                        <th class="fw-bolder">Status</th>
-                                        <th class="fw-bolder">Recorded</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for record in attendancerecords %}
+        <!-- Attendance & Check-In/Out -->
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-clipboard-check"></i> Attendance Records
+                        </h4>
+                        {% if attendancerecords %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ record.date }}</td>
-                                            <td>{{ record.get_status_display }}</td>
-                                            <td>{{ record.created }}</td>
+                                            <th class="fw-bolder">Date</th>
+                                            <th class="fw-bolder">Status</th>
+                                            <th class="fw-bolder">Recorded</th>
                                         </tr>
-                                    {% endfor %}
-                                    {% include "partials/pagination.html" with page_obj=attendancerecords page_param="attendancerecords" %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No attendance records on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for record in attendancerecords %}
+                                            <tr>
+                                                <td>
+                                                    <a class="detail-link"
+                                                       href="{% url 'attendance-record-detail' record.pk %}">{{ record.date }}</a>
+                                                </td>
+                                                <td>{{ record.get_status_display }}</td>
+                                                <td>{{ record.created }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% include "partials/pagination.html" with page_obj=attendancerecords page_param="attendancerecords" %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No attendance records on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-login-variant"></i> Check-In/Out Events
-                    </h4>
-                    {% if checkinoutevents %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Type</th>
-                                        <th class="fw-bolder">Timestamp</th>
-                                        <th class="fw-bolder">Performed By</th>
-                                        <th class="fw-bolder">Recorded By</th>
-                                        <th class="fw-bolder">Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for event in checkinoutevents %}
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-login-variant"></i> Check-In/Out Events
+                        </h4>
+                        {% if checkinoutevents %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ event.get_event_type_display }}</td>
-                                            <td>{{ event.timestamp }}</td>
-                                            <td>{{ event.performed_by }}</td>
-                                            <td>{{ event.recorded_by }}</td>
-                                            <td>{{ event.notes|default:"-" }}</td>
+                                            <th class="fw-bolder">Type</th>
+                                            <th class="fw-bolder">Timestamp</th>
+                                            <th class="fw-bolder">Performed By</th>
+                                            <th class="fw-bolder">Recorded By</th>
+                                            <th class="fw-bolder">Notes</th>
                                         </tr>
-                                    {% endfor %}
-                                    {% include "partials/pagination.html" with page_obj=checkinoutevents page_param="checkinoutevents" %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No check-in/out events on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for event in checkinoutevents %}
+                                            <tr>
+                                                <td>
+                                                    <a class="detail-link"
+                                                       href="{% url 'checkinout-event-detail' event.pk %}">{{ event.get_event_type_display }}</a>
+                                                </td>
+                                                <td>{{ event.timestamp }}</td>
+                                                <td>{{ event.performed_by }}</td>
+                                                <td>{{ event.recorded_by }}</td>
+                                                <td>{{ event.notes|default:"-" }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% include "partials/pagination.html" with page_obj=checkinoutevents page_param="checkinoutevents" %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No check-in/out events on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Handoffs & Incidents -->
-    <div class="row">
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-hand-right"></i> Handoff Events
-                    </h4>
-                    {% if handoffevents %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Type</th>
-                                        <th class="fw-bolder">Timestamp</th>
-                                        <th class="fw-bolder">Pickup Person</th>
-                                        <th class="fw-bolder">Checked By</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for handoff in handoffevents %}
+        <!-- Handoffs & Incidents -->
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-hand-right"></i> Handoff Events
+                        </h4>
+                        {% if handoffevents %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ handoff.get_event_type_display }}</td>
-                                            <td>{{ handoff.timestamp }}</td>
-                                            <td>{{ handoff.pickup_person }}</td>
-                                            <td>{{ handoff.checked_by }}</td>
+                                            <th class="fw-bolder">Type</th>
+                                            <th class="fw-bolder">Timestamp</th>
+                                            <th class="fw-bolder">Pickup Person</th>
+                                            <th class="fw-bolder">Checked By</th>
                                         </tr>
-                                    {% endfor %}
-                                    {% include "partials/pagination.html" with page_obj=handoffevents page_param="handoffevents" %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No handoff events on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for handoff in handoffevents %}
+                                            <tr>
+                                                <td>{{ handoff.get_event_type_display }}</td>
+                                                <td>{{ handoff.timestamp }}</td>
+                                                <td>{{ handoff.pickup_person }}</td>
+                                                <td>{{ handoff.checked_by }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% include "partials/pagination.html" with page_obj=handoffevents page_param="handoffevents" %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No handoff events on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-alert"></i> Incident Reports
-                    </h4>
-                    {% if incidentreports %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Type</th>
-                                        <th class="fw-bolder">Severity</th>
-                                        <th class="fw-bolder">Occurred</th>
-                                        <th class="fw-bolder">Reported By</th>
-                                        <th class="fw-bolder">Description</th>
-                                        <th class="fw-bolder">Resolved</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for incident in incidentreports %}
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="mdi mdi-alert"></i> Incident Reports
+                        </h4>
+                        {% if incidentreports %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ incident.get_incident_type_display }}</td>
-                                            <td>{{ incident.get_severity_display }}</td>
-                                            <td>{{ incident.occurred_on }}</td>
-                                            <td>{{ incident.reported_by }}</td>
-                                            <td>{{ incident.description|truncatewords:20 }}</td>
-                                            <td>
-                                                {% if incident.is_resolved %}
-                                                    <i class="mdi mdi-check-circle text-success"></i>
-                                                {% else %}
-                                                    <i class="mdi mdi-clock text-warning"></i>
-                                                {% endif %}
-                                            </td>
+                                            <th class="fw-bolder">Type</th>
+                                            <th class="fw-bolder">Severity</th>
+                                            <th class="fw-bolder">Occurred</th>
+                                            <th class="fw-bolder">Reported By</th>
+                                            <th class="fw-bolder">Description</th>
+                                            <th class="fw-bolder">Resolved</th>
                                         </tr>
-                                    {% endfor %}
-                                    {% include "partials/pagination.html" with page_obj=incidentreports page_param="incidentreports" %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No incident reports on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for incident in incidentreports %}
+                                            <tr>
+                                                <td>{{ incident.get_incident_type_display }}</td>
+                                                <td>{{ incident.get_severity_display }}</td>
+                                                <td>{{ incident.occurred_on }}</td>
+                                                <td>{{ incident.reported_by }}</td>
+                                                <td>{{ incident.description|truncatewords:20 }}</td>
+                                                <td>
+                                                    {% if incident.is_resolved %}
+                                                        <i class="mdi mdi-check-circle text-success"></i>
+                                                    {% else %}
+                                                        <i class="mdi mdi-clock text-warning"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% include "partials/pagination.html" with page_obj=incidentreports page_param="incidentreports" %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No incident reports on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Documents -->
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="mdi mdi-file-document"></i> Documents
-                    </h4>
-                    {% if child.documents.all %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="fw-bolder">Type</th>
-                                        <th class="fw-bolder">Uploaded By</th>
-                                        <th class="fw-bolder">Date Created</th>
-                                        <th class="fw-bolder">File</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for document in child.documents.all %}
+        <!-- Documents -->
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header d-flex">
+                            <h4 class="card-title">
+                                <i class="mdi mdi-file-document"></i> Documents
+                            </h4>
+                            <button class="badge entity-add-button position-relative"
+                                    type="button"
+                                    aria-label="Add emergency contact">
+                                <i class="fa-solid fa-notes-medical"></i>
+                            </button>
+                        </div>
+                        {% if child.documents.all %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>{{ document.get_document_type_display }}</td>
-                                            <td>{{ document.uploaded_by }}</td>
-                                            <td>{{ document.date_created }}</td>
-                                            <td>
-                                                <a href="{{ document.file.url }}">Download</a>
-                                            </td>
+                                            <th class="fw-bolder">Type</th>
+                                            <th class="fw-bolder">Uploaded By</th>
+                                            <th class="fw-bolder">Date Created</th>
+                                            <th class="fw-bolder">File</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No documents on file.</p>
-                    {% endif %}
+                                    </thead>
+                                    <tbody>
+                                        {% for document in child.documents.all %}
+                                            <tr>
+                                                <td>{{ document.get_document_type_display }}</td>
+                                                <td>{{ document.uploaded_by }}</td>
+                                                <td>{{ document.date_created }}</td>
+                                                <td>
+                                                    <a href="{{ document.file.url }}">Download</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No documents on file.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock content %}
+    {% endblock content %}

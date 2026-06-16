@@ -3,8 +3,14 @@
 {% block title %}Attendance Record - {{ record.child }} - Safari Leader{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-12 mb-4">
-            <a href="{% url 'attendance-record-list' %}"
+        <div class="col-6 mb-4">
+            <a href="{% url 'child-detail' record.child.pk %}"
+               class="btn btn-outline-success btn-sm">
+                <i class="mdi mdi-arrow-left"></i> Back to {{ record.child.first_name }} {{ record.child.last_name }}
+            </a>
+        </div>
+        <div class="col-6 mb-4">
+            <a href="{% url 'attendance-list' %}"
                class="btn btn-outline-secondary btn-sm">
                 <i class="mdi mdi-arrow-left"></i> Back to Attendance Records
             </a>
@@ -67,6 +73,43 @@
                         </div>
                     {% else %}
                         <p class="text-muted">No check-in/out events for this record.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="mdi mdi-swap-horizontal"></i> Handoff Events
+                    </h4>
+                    {% if handoffs %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Timestamp</th>
+                                        <th>Pickup Person</th>
+                                        <th>Checked By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for handoff in handoffs %}
+                                        <tr>
+                                            <td>{{ handoff.get_event_type_display }}</td>
+                                            <td>{{ handoff.timestamp }}</td>
+                                            <td>{{ handoff.pickup_person|default:"-" }}</td>
+                                            <td>{{ handoff.checked_by|default:"-" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No handoff events for this record.</p>
                     {% endif %}
                 </div>
             </div>

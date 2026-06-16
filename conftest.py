@@ -9,6 +9,7 @@ or export the required env vars manually.
 The defaults below cover the case where pytest imports this conftest early enough
 to set them before Django settings are loaded.
 """
+
 import os
 
 _TEST_DEFAULTS = {
