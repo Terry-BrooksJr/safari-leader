@@ -2,8 +2,10 @@
 <nav class="app-side-nav" id="appSideNav" aria-label="Main navigation" aria-hidden="true">
     <div class="app-side-nav__header">
         <a class="app-side-nav__brand" href="{% url 'dashboard' %}">
+            <div class="d-flex justify-content-center w-100">
             <img src="{% static 'images/mini-dashboard-brand-img.png' %}" alt="Safari Leader">
         </a>
+    </div>
         <button type="button" class="app-side-nav__close" id="side-nav-close" aria-label="Close navigation">
             <i class="mdi mdi-close"></i>
         </button>

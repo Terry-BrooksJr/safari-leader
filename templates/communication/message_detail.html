@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ message.title }} - Safari Leader{% endblock %}
+{% block title %}Message from {{ message.sender.first_name }} - Safari Leader{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-12 mb-4">
