@@ -34,7 +34,9 @@ class Role(models.Model):
         blank=True, null=True
     )  # TODO: Overide Djagno.objects.delete methods to add this date
 
-
+    def __str__(self):
+        return self.name
+    
 class RoleAssignment(ModelModifer, models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="assignment")
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
@@ -46,3 +48,6 @@ class RoleAssignment(ModelModifer, models.Model):
     )
     is_active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.last_name}, {self.user.first_name} ({self.role.name})"
