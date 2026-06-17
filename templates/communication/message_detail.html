@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Message from {{ message.sender.first_name }} - Safari Leader{% endblock %}
+{% block title %}Message from {% if message.sender %} {{ message.sender.first_name|default:message.get_sender_username }} - Safari Leader{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-12 mb-4">
@@ -49,6 +49,9 @@
                         <i class="mdi mdi-message-text"></i> Message
                     </h4>
                     <p>{{ message.message }}</p>
+                </div>
+                <div class="">
+                    <>
                 </div>
             </div>
         </div>

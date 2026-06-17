@@ -3,8 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from applications.children.models import Child
 from applications.facilities.models import Program
-
-
+from applications.staffing.models import StaffProfile
 def days_of_week_template():
     return {
         "sunday": False,
@@ -56,6 +55,7 @@ class ChildSchedule(models.Model):
     child = models.ForeignKey(Child, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    instructor = models.ForeignKey(StaffProfile, on_delete=models.DO_NOTHING)
     days_of_week = models.JSONField(default=days_of_week_template)
     is_active = models.BooleanField(default=True)
     start_time = models.TimeField()

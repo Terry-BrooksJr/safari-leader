@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+import uuid
 from applications.facilities.models import Site
 from applications.staffing.models import StaffProfile
 
@@ -37,6 +37,11 @@ class Announcement(models.Model):
 
 
 class Message(models.Model):
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4(), 
+        editable=False
+    )
     recipient = models.ForeignKey(
         "accounts.User",
         on_delete=models.CASCADE,

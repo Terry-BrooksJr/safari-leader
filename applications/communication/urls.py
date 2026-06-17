@@ -10,7 +10,7 @@ from applications.communication.views import (
 )
 
 urlpatterns = [
-    path("message/<int:pk>", MessageDetails.as_view(), name="message-detail"),
+    path("message/<uuid:pk>", MessageDetails.as_view(), name="message-detail"),
     path(
         "notification/<int:pk>",
         NotificationDetails.as_view(),
