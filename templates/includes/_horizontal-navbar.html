@@ -4,9 +4,11 @@
         <div class="container-fluid">
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-between">
                 <ul class="navbar-nav navbar-nav-left">
+                    {% if request.resolver_match.url_name != 'dashboard' %}
                     <li class="nav-item ms-0 me-5 d-lg-flex d-none">
-                        <a href="#" class="nav-link horizontal-nav-left-menu"><i class="mdi mdi-format-list-bulleted"></i></a>
+                        <a href="#" class="nav-link horizontal-nav-left-menu"><i  id="side-nav-trigger" class="mdi mdi-format-list-bulleted"></i></a>
                     </li>
+                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center"
                            id="notificationDropdown"
@@ -21,7 +23,7 @@
                              aria-labelledby="notificationDropdown">
                             <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
                             {% for notification in notifications %}
-                                <a class="dropdown-item preview-item" href="#">
+                                <a class="dropdown-item preview-item" href="{% url 'notification-detail' notification.pk %}">
                                     <div class="preview-thumbnail">
                                         {% if notification.type == "U" %}
                                             <div class="preview-icon bg-danger">
@@ -50,13 +52,10 @@
                                         {% endif %}
                                     </div>
                                     <div class="preview-item-content">
-                                        <h6 class="preview-subject font-weight-normal">
-                                            <a href="{% url 'notification-detail' notification.pk %}">{{ notification.message|truncatewords:15 }}</a>
-                                        </h6>
+                                        <h6 class="preview-subject font-weight-normal">{{ notification.message|truncatewords:12 }}</h6>
                                         <p class="font-weight-light small-text mb-0 text-muted">{{ notification.created_at|timesince }} ago</p>
-                                    </a>
-                                </div>
-                            </a>
+                                    </div>
+                                </a>
                         {% empty %}
                             <div class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
@@ -86,16 +85,14 @@
                          aria-labelledby="announcementDropdown">
                         <p class="mb-0 font-weight-normal float-left dropdown-header">Announcements</p>
                         {% for announcement in announcements %}
-                            <a class="dropdown-item preview-item" href="#">
+                            <a class="dropdown-item preview-item" href="{% url 'announcement-detail' announcement.pk %}">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-primary">
                                         <i class="mdi mdi-bullhorn mx-0"></i>
                                     </div>
                                 </div>
                                 <div class="preview-item-content flex-grow">
-                                    <h6 class="preview-subject ellipsis font-weight-normal">
-                                        <a href="{% url 'announcement-detail' announcement.pk %}">{{ announcement.title }}</a>
-                                    </h6>
+                                    <h6 class="preview-subject font-weight-medium mb-1">{{ announcement.title }}</h6>
                                     <p class="font-weight-light small-text text-muted mb-0">{{ announcement.message|truncatewords:15 }}</p>
                                 </div>
                             </a>
@@ -128,15 +125,12 @@
                          aria-labelledby="messagesDropdown">
                         <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
                         {% for message in messages %}
-                            <a class="dropdown-item preview-item" href="#">
+                            <a class="dropdown-item preview-item" href="{% url 'message-detail' message.pk %}">
                                 <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">
-                                        <a href="{% url 'message-detail' message.pk %}">{{ message.message|truncatewords:15 }}</a>
-                                    </h6>
+                                    <h6 class="preview-subject font-weight-normal mb-1">{{ message.message|truncatewords:12 }}</h6>
                                     <p class="font-weight-light small-text mb-0 text-muted">
-                                        Send by {{ message.sender.first_name }} {{ message.sender.last_name|truncatechars:1 }} at {{ message.created_at }}
+                                        {{ message.sender.first_name }} {{ message.sender.last_name|slice:":1" }}. &middot; {{ message.created_at|date:"M j, g:i A" }}
                                     </p>
-                                    \
                                 </div>
                             </a>
                         {% empty %}
@@ -236,6 +230,7 @@
         </div>
     </div>
 </nav>
+{% if request.resolver_match.url_name == 'dashboard' %}
 <nav class="bottom-navbar">
     <div class="container">
         <ul class="nav page-navigation">
@@ -318,4 +313,5 @@
         </ul>
     </div>
 </nav>
+{% endif %}
 </div>

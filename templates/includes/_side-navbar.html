@@ -1,0 +1,76 @@
+{% load static %}
+<nav class="app-side-nav" id="appSideNav" aria-label="Main navigation" aria-hidden="true">
+    <div class="app-side-nav__header">
+        <a class="app-side-nav__brand" href="{% url 'dashboard' %}">
+            <img src="{% static 'images/mini-dashboard-brand-img.png' %}" alt="Safari Leader">
+        </a>
+        <button type="button" class="app-side-nav__close" id="side-nav-close" aria-label="Close navigation">
+            <i class="mdi mdi-close"></i>
+        </button>
+    </div>
+    <ul class="app-side-nav__list">
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="{% url 'dashboard' %}">
+                <img src="{% static 'images/icons/dashboard.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Dashboard</span>
+            </a>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="{% url 'children-list' %}">
+                <img src="{% static 'images/icons/children.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Children</span>
+            </a>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="{% url 'enrollment-list' %}">
+                <img src="{% static 'images/icons/enrollment.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Enrollment</span>
+            </a>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link app-side-nav__link--toggle"
+               href="#sideNavAttendance"
+               data-bs-toggle="collapse"
+               role="button"
+               aria-expanded="false"
+               aria-controls="sideNavAttendance">
+                <img src="{% static 'images/icons/attendance.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Attendance</span>
+                <i class="mdi mdi-chevron-down app-side-nav__caret"></i>
+            </a>
+            <ul class="collapse app-side-nav__submenu" id="sideNavAttendance">
+                <li>
+                    <a class="app-side-nav__sublink" href="{% url 'attendance-list' %}">View Attendance Records</a>
+                </li>
+                <li>
+                    <a class="app-side-nav__sublink" href="{% url 'checkinout-event-list' %}">View Check-In/Check-Out Events</a>
+                </li>
+            </ul>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="#">
+                <img src="{% static 'images/icons/staffing.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Staffing</span>
+            </a>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="#">
+                <img src="{% static 'images/icons/incidents.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Incidents</span>
+            </a>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="#">
+                <img src="{% static 'images/icons/documents.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Documents</span>
+            </a>
+        </li>
+        <li class="app-side-nav__item">
+            <a class="app-side-nav__link" href="#">
+                <img src="{% static 'images/icons/facilities.png' %}" class="app-side-nav__icon" alt="">
+                <span class="app-side-nav__text">Facilities</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<div class="app-side-nav__overlay" id="side-nav-overlay"></div>

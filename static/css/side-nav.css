@@ -1,0 +1,136 @@
+/* Collapsible side navigation (shown on all pages except the Dashboard).
+   Toggled by #side-nav-trigger in the top navbar. */
+
+.app-side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 260px;
+  background: #ffffff;
+  box-shadow: 2px 0 18px rgba(26, 77, 46, 0.18);
+  z-index: 1080;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-side-nav.app-side-nav--open {
+  transform: translateX(0);
+}
+
+.app-side-nav__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: #1A4D2E;
+  border-bottom: 2px solid #E8A838;
+}
+
+.app-side-nav__brand img {
+  max-height: 38px;
+  width: auto;
+}
+
+.app-side-nav__close {
+  background: transparent;
+  border: 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.app-side-nav__close:hover {
+  color: #E8A838;
+}
+
+.app-side-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  flex: 1 1 auto;
+}
+
+.app-side-nav__item {
+  margin: 0;
+}
+
+.app-side-nav__link {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  color: #1A4D2E;
+  font-weight: 600;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.app-side-nav__link:hover,
+.app-side-nav__link:focus {
+  background: rgba(32, 143, 21, 0.08);
+  border-left-color: #E8A838;
+  color: #1A4D2E;
+}
+
+.app-side-nav__icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  margin-right: 0.85rem;
+}
+
+.app-side-nav__text {
+  flex: 1 1 auto;
+}
+
+.app-side-nav__caret {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.app-side-nav__link--toggle[aria-expanded="true"] .app-side-nav__caret {
+  transform: rotate(180deg);
+}
+
+.app-side-nav__submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: rgba(26, 77, 46, 0.04);
+}
+
+.app-side-nav__sublink {
+  display: block;
+  padding: 0.65rem 1.25rem 0.65rem 3.1rem;
+  color: #4a4a4a;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.app-side-nav__sublink:hover,
+.app-side-nav__sublink:focus {
+  background: rgba(32, 143, 21, 0.1);
+  color: #1A4D2E;
+}
+
+.app-side-nav__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1075;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.app-side-nav__overlay.app-side-nav__overlay--visible {
+  opacity: 1;
+  visibility: visible;
+}
