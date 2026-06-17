@@ -1,6 +1,8 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-import uuid
+
 from applications.facilities.models import Site
 from applications.staffing.models import StaffProfile
 
