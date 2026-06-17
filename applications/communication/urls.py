@@ -14,7 +14,7 @@ urlpatterns = [
     path(
         "notification/<int:pk>",
         NotificationDetails.as_view(),
-        name="notifications-detail",
+        name="notification-detail",
     ),
     path(
         "annoucement/<int:pk>",
