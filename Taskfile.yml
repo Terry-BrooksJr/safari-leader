@@ -270,7 +270,7 @@ tasks:
     # run:test uses `coverage run --rcfile=pyproject.toml` + `coverage xml -o cobertura.xml`,
     # so the cobertura.xml it produces is governed by the same [tool.coverage.*] config as
     # test:coverage.  Depending on run:test (the leaner CI task) is intentional.
-    deps: [ run:test ]
+    deps: [ test:coverage ]
     cmds:
       - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r cobertura.xml
     requires:
