@@ -231,7 +231,7 @@
               </div>
               <div class="col-lg-4">
                 <div class="position-relative">
-                  <img src="{% static 'images/dashboard/live.png' %}" class="w-100" alt="">
+                  <img src="{{ weather.icon }}" class="w-100" alt="">
                   <div class="live-info badge badge-success">Live</div>
                 </div>
               </div>
@@ -431,85 +431,24 @@
 <script src="{% static 'js/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
     <script>
-async function getForecast(geographic_data) {
-    const { latitude, longitude } = geographic_data;
-    
-    // Ensure coordinates exist and are roughly within US bounds
-    if (!latitude || !longitude) {
-        console.warn('Invalid coordinates provided');
-        return null;
-    }
 
-    try {
-        // Limit precision to 4 decimal places as recommended by some NWS implementations
-        const url = `https://api.weather.gov/points/${Number(latitude).toFixed(4)},${Number(longitude).toFixed(4)}`;
-        const response = await fetch(url);
 
-        if (response.status === 404) {
-            console.warn(`No weather grid found for location: ${latitude}, ${longitude}`);
-            return null;
-        }
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.properties.forecast;
-
-    } catch (error) {
-        console.error('Unable to get forecast URL:', error);
-        return null;
-    }
-}
-
-	async function getWeatherData(forecast_url) {
-		try {
-			const response = await fetch(forecast_url);
-
-			if (!response.ok) {
-				throw new Error(`HTTP ${response.status}`);
-			}
-
-			const data = await response.json();
-			return data.properties.periods[0];
-
-		} catch (error) {
-			console.error('Unable to get weather data:', error);
-			return null;
-		}
-	}
-
-	async function getWeather() {
-		const forecast = await getForecast({{ coordinates|safe }});
-
-		if (!forecast) return;
-
-		const weather = await getWeatherData(forecast);
-
-		if (!weather) return;
+window.addEventListener("DOMContentLoaded", (event) => {
 
 		const now = new Date();
 		const dayLong = now.toLocaleString('default', { weekday: 'long' });
 		const date = String(now.getDate()).padStart(2, '0');
-    let city = "{{ coordinates.city }}"
-    let region = "{{ coordinates.region }}"
-		document.getElementById("weather-city").textContent = `${city}, ${region}` ;
+		document.getElementById("weather-city").textContent = "{{ weather.city }}, {{weather.region }}" ;
 
 		document.getElementById("weather-time").textContent =
 			`${dayLong} ${date} ${now.toLocaleTimeString()}`;
 
 		document.getElementById("weather-shortForecast").textContent =
-			weather.shortForecast;
+			"{{ weather.shortForecast }}";
 
-		document.getElementById("weather-temp").textContent =
-			`${weather.temperature}°${weather.temperatureUnit}`;
-	}
-  console.info("Getting Weather Data")
-window.addEventListener("DOMContentLoaded", (event) => {
-    getWeather();
+		document.getElementById("weather-temp").textContent = "{{ weather.temp}}"
 });
-console.log("Collected Weather Data...")
 </script>
 {% endblock %}
 

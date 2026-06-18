@@ -5,7 +5,7 @@ import encrypted_fields.fields
 from django.conf import settings
 from django.db import migrations, models
 
-import common.helpers
+import common.helpers.model
 
 
 class Migration(migrations.Migration):
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
         migrations.CreateModel(
             name="StaffProfile",
@@ -122,7 +122,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
         migrations.CreateModel(
             name="Shift",
@@ -154,6 +154,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
     ]

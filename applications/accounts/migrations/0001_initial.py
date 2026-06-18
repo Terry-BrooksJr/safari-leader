@@ -5,7 +5,7 @@ import django.contrib.auth.validators
 import django.utils.timezone
 from django.db import migrations, models
 
-import common.helpers
+import common.helpers.model
 
 
 class Migration(migrations.Migration):
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
                 ("is_active", models.BooleanField(default=True)),
                 ("created", models.DateField(auto_now_add=True)),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
         migrations.CreateModel(
             name="User",

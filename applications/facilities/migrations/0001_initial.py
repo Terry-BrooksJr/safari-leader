@@ -4,7 +4,7 @@ import address.models
 import django.db.models.deletion
 from django.db import migrations, models
 
-import common.helpers
+import common.helpers.model
 
 
 class Migration(migrations.Migration):
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
         migrations.CreateModel(
             name="Room",
@@ -85,7 +85,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
         migrations.CreateModel(
             name="Program",
@@ -121,6 +121,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(common.helpers.ModelModifer, models.Model),
+            bases=(common.helpers.model.ModelModifer, models.Model),
         ),
     ]

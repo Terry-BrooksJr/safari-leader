@@ -5,7 +5,7 @@ from encrypted_fields.fields import EncryptedIntegerField
 
 from applications.accounts.models import User
 from applications.facilities.models import Program, Room, Site
-from common.helpers import ModelModifer
+from common.helpers.model import ModelModifer
 
 
 class StaffProfile(models.Model):
