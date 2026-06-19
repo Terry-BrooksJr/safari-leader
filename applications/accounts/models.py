@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from common.helpers import ModelModifer
+from common.helpers.model import ModelModifer
 
 
 # Create your models here.
@@ -34,6 +34,9 @@ class Role(models.Model):
         blank=True, null=True
     )  # TODO: Overide Djagno.objects.delete methods to add this date
 
+    def __str__(self):
+        return self.name
+
 
 class RoleAssignment(ModelModifer, models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="assignment")
@@ -46,3 +49,6 @@ class RoleAssignment(ModelModifer, models.Model):
     )
     is_active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.last_name}, {self.user.first_name} ({self.role.name})"

@@ -57,6 +57,7 @@ jobs:
           doppler --version
 
       - name: Run tests with coverage (Doppler)
+        id: coverage-testing
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
           DOPPLER_PROJECT: ${{ vars.DOPPLER_PROJECT }}
@@ -65,11 +66,15 @@ jobs:
           doppler run --project "$DOPPLER_PROJECT" --config "$DOPPLER_CONFIG" --token "$DOPPLER_TOKEN" -- \
             task test:coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      - uses: actions/checkout@v2
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./cobertura.xml
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      
+          coverage-reports: ${{ steps.coverage-testing.outputs.report }}
+          # or a comma-separated list for multiple reports
+          # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>
 
   security-scan:
     runs-on: ubuntu-latest

@@ -14,15 +14,18 @@
                                     Children Roster <strong>({{ page_obj.paginator.count }})</strong>
                                 </h4>
                                 <div class="table-responsive">
-                                    <ul class="nav nav-tabs">
+                                    <ul class="nav nav-tabs filter-tabs">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?">All</a>
+                                            <a class="nav-link {% if not request.GET.status %}active{% endif %}"
+                                               href="?">All</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?status=active">Active</a>
+                                            <a class="nav-link {% if request.GET.status == 'active' %}active{% endif %}"
+                                               href="?status=active">Active</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?status=inactive">Inactive</a>
+                                            <a class="nav-link {% if request.GET.status == 'inactive' %}active{% endif %}"
+                                               href="?status=inactive">Inactive</a>
                                         </li>
                                     </ul>
                                     <table class="table table-hover">

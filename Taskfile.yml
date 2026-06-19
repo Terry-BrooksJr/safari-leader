@@ -11,7 +11,7 @@ silent: true
 vars:
   # Single source-of-truth for lintable code — every lint task references this.
   # Directories are recursed; standalone root-level .py files are listed explicitly.
-  PY_SOURCES: applications common core run .deploy conftest.py pytest_dozens_plugin.py
+  PY_SOURCES: applications common core run .deploy conftest.py
 tasks:
   default:
     cmds:
@@ -270,7 +270,7 @@ tasks:
     # run:test uses `coverage run --rcfile=pyproject.toml` + `coverage xml -o cobertura.xml`,
     # so the cobertura.xml it produces is governed by the same [tool.coverage.*] config as
     # test:coverage.  Depending on run:test (the leaner CI task) is intentional.
-    deps: [ run:test ]
+    deps: [ test:coverage ]
     cmds:
       - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r cobertura.xml
     requires:

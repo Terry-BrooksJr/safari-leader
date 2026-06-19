@@ -14,18 +14,22 @@
                                     Attendance Records  <strong>({{ page_obj.paginator.count }})</strong>
                                 </h4>
                                 <div class="table-responsive">
-                                    <ul class="nav nav-tabs">
+                                    <ul class="nav nav-tabs filter-tabs">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?">All</a>
+                                            <a class="nav-link {% if not request.GET.status %}active{% endif %}"
+                                               href="?">All</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?status=draft">Draft</a>
+                                            <a class="nav-link {% if request.GET.status == 'draft' %}active{% endif %}"
+                                               href="?status=draft">Draft</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?status=final">Final</a>
+                                            <a class="nav-link {% if request.GET.status == 'final' %}active{% endif %}"
+                                               href="?status=final">Final</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="?status=modified">Modified</a>
+                                            <a class="nav-link {% if request.GET.status == 'modified' %}active{% endif %}"
+                                               href="?status=modified">Modified</a>
                                         </li>
                                         <nav>
                                             <form class="form-inline">
