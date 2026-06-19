@@ -220,7 +220,8 @@
       <div class="col-sm-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            <div class="row">
+            {% if weather %}
+            <div id="weather-panel" class="row">
               <div class="col-lg-8">
                 <h3 id="weather-city" class="font-weight-bold text-dark"></h3>
                 <p id="weather-time" class="text-dark"></p>
@@ -236,6 +237,20 @@
                 </div>
               </div>
             </div>
+          {% else  %}
+            <div id="weather-panel" class="row">
+              <div class="col-lg-12">
+                <h3 id="weather-city" class="font-weight-bold text-dark"></h3>
+                  <div class="d-flex justify-content-center ">
+                  <i class="fa-solid fa-cloud-bolt fa-2xl" style="color: rgb(34, 80, 30);"></i>
+                <h3 id="weather-time" class="text-dark"> <br>Weather Data Unavailable</h3>
+                <div class="d-lg-flex align-items-baseline mb-3">
+                  <h1 class="text-dark font-weight-bold"><span id="weather-temp"></span></h1>
+                  <p id="weather-shortForecast" class="text-muted ms-3"></p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
             <div class="row">
               <div class="col-sm-12 mt-4 mt-lg-0">
                 <div class="bg-primary text-white px-4 py-4 card">
@@ -430,10 +445,8 @@
 {% block extra_js %}
 <script src="{% static 'js/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
-    <script>
-
-
-
+{% if weather %}
+<script>
 window.addEventListener("DOMContentLoaded", (event) => {
 
 		const now = new Date();
@@ -450,5 +463,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
 		document.getElementById("weather-temp").textContent = "{{ weather.temp}}"
 });
 </script>
+{% endif %}
 {% endblock %}
 

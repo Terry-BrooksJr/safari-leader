@@ -1,5 +1,5 @@
-from typing import Any, Dict, Optional
-
+from typing import Any, Dict, Optional, Union
+from loguru import logger 
 import requests
 
 
@@ -12,7 +12,7 @@ class WeatherMan:
     """
 
     @classmethod
-    def get_client_ip(cls, request):
+    def get_client_ip(cls, request) -> str:
         """Retrieve the client's IP address from a Django request object.
 
         This function checks for a forwarded-for header first, falling back to the
@@ -24,12 +24,14 @@ class WeatherMan:
         Returns:
             str: The IP address of the client extracted from the request.
         """
-        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-        return (
-            x_forwarded_for.split(",")[0].strip()
-            if x_forwarded_for
-            else request.META.get("REMOTE_ADDR")
-        )
+        try:
+            x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+            ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.META.get("REMOTE_ADDR")
+            logger.success('Successfully Captured User IP Address for Weather Forecasting')
+            return str(ip)
+        except Exception as e: 
+            logger.warning(f'Error: Unable to Capture User IP Address for Weather Forcasting: {e}')
+            return "0.0.0.0"
 
     @classmethod
     def get_geographic_data(cls, ip: str) -> Dict[str, Any]:
@@ -46,20 +48,27 @@ class WeatherMan:
             latitude, longitude, city, region, and country, or an empty dict if
             the lookup fails or the IP is local.
         """
-        response = requests.get(f"https://ipwho.is/{ip}")
-        if response.status_code != 200:
+        try:
+            if ip in {"0.0.0.0", "127.0.0.1", "localhost"}:
+                logger.warning(f"Error: Invaild or Local IP Address Provided. Unable to Forecast: {ip}")
+                return {}
+            response = requests.get(f"https://ipwho.is/{ip}", timeout=5)
+            if response.status_code != 200:
+                return {}
+            data = response.json()
+            geo_data = {
+                "ip": ip,
+                "latitude": data["latitude"],
+                "longitude": data["longitude"],
+                "city": data["city"],
+                "region": data["region"],
+                "country": data["country"],
+            }
+            logger.success('Successfully Queried User IP Address for Geographic Data')
+            return geo_data
+        except Exception as e: 
+            logger.warning(f'Error: Unable to Query User IP Address for Geographic Data: {e}')
             return {}
-        data = response.json()
-        if ip in {"0.0.0.0", "127.0.0.1", "localhost"}:
-            return {}
-        return {
-            "ip": ip,
-            "latitude": data["latitude"],
-            "longitude": data["longitude"],
-            "city": data["city"],
-            "region": data["region"],
-            "country": data["country"],
-        }
 
     @classmethod
     def get_forecast(cls, geographic_data: Dict[str, Any]) -> Optional[str]:
@@ -77,17 +86,17 @@ class WeatherMan:
             otherwise None when the coordinates are invalid or a lookup error
             occurs.
         """
-        longitude = geographic_data["longitude"]
-        latitude = geographic_data["latitude"]
+        longitude = geographic_data.get("longitude")
+        latitude = geographic_data.get("latitude")
 
         if not latitude or not longitude:
-            print("Invalid coordinates provided")
+            logger.error("Error: Invalid coordinates provided")
             return None
 
         try:
             return cls.get_forcaset_url(latitude, longitude)
         except Exception as error:
-            print(f"Unable to get forecast URL: {error}")
+            logger.warning(f"Unable to get forecast URL: {error}")
             return None
 
     @classmethod
@@ -105,32 +114,36 @@ class WeatherMan:
             Optional[str]: The URL for the hourly weather forecast if available,
             otherwise None when the grid is not found or an HTTP error occurs.
         """
-        url = f"https://api.weather.gov/points/{latitude},{longitude}"
-        print(url)
-        response = requests.get(url)
-        if response.status_code == 404:
-            print(f"No weather grid found for location: {latitude}, {longitude}")
-            return None
-
-        if not response.ok:
-            print(f"Error: {response.status_code}")
-            return None
-
-        data = response.json()
-        return data["properties"]["forecastHourly"]
-
-    @classmethod
-    def getWeatherData(cls, geo_data, forecast_url) -> Optional[Dict[str, Any]]:
-        try:
-            response = requests.get(forecast_url)
+        try: 
+            url = f"https://api.weather.gov/points/{latitude},{longitude}"
+            response = requests.get(url, timeout=5)
+            if response.status_code == 404:
+                logger.warning(f"No weather grid found for location: {latitude}, {longitude}")
+                return None
 
             if not response.ok:
-                print(f"Error: {response.status_code}")
+                logger.error(f"HTTP Error: {response.status_code}")
+                return None
+
+            data = response.json()
+            return data["properties"]["forecastHourly"]
+        except Exception as e: 
+            logger.warning(f"Error: {str(e)}")
+
+    @classmethod
+    def getWeatherData(cls, geo_data, forecast_url) -> Dict[str, Any]:
+        try:
+            response = requests.get(forecast_url, timeout=5)
+
+            if not response.ok:
+                logger.warning(f"Error: {response.status_code}")
+                return {}
 
             data = response.json()
             return cls.parse_weather_data(geo_data, data["properties"]["periods"][0])
         except Exception as error:
-            print(f"Unable to get weather data: {error}")
+            logger.warning(f"Unable to get weather data: {error}")
+            return {}
 
     @classmethod
     def parse_weather_data(
@@ -145,7 +158,7 @@ class WeatherMan:
         }
 
     @classmethod
-    def forecast(cls, request):
+    def forecast(cls, request) -> Dict[str, Any]:
         """Generate a weather forecast summary for the client making the request.
 
         This method resolves the client's IP address, derives geolocation data,
@@ -159,6 +172,16 @@ class WeatherMan:
             data for the client's location, or None if the forecast cannot be
             retrieved.
         """
+        logger.debug('Beginning Server Side Weather Forecasting...')
         ip = cls.get_client_ip(request)
-        geo_data = cls.get_geographic_data(ip)
-        return cls.getWeatherData(geo_data, cls.get_forecast(geo_data))
+        if ip != "0.0.0.0":
+            geo_data = cls.get_geographic_data(ip)
+            if geo_data != {}:
+                logger.debug("Successfully Collected IP address and Geographic Data...")
+                results = cls.getWeatherData(geo_data, cls.get_forecast(geo_data))
+                if results != {}:
+                    logger.success("Successfully Obtained and Parsed Weather Data!")
+                    return results
+        logger.error('Server Side Weather Forecasting Failed!')
+        return {}
+        
