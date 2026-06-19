@@ -27,6 +27,9 @@ class WeatherMan:
         try:
             x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
             ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.META.get("REMOTE_ADDR")
+            if ip is None:
+                logger.warning('No IP address available in request headers')
+                return "0.0.0.0"
             logger.success('Successfully Captured User IP Address for Weather Forecasting')
             return str(ip)
         except Exception as e: 
@@ -50,7 +53,7 @@ class WeatherMan:
         """
         try:
             if ip in {"0.0.0.0", "127.0.0.1", "localhost"}:
-                logger.warning(f"Error: Invaild or Local IP Address Provided. Unable to Forecast: {ip}")
+                logger.warning(f"Error: Invalid or Local IP Address Provided. Unable to Forecast: {ip}")
                 return {}
             response = requests.get(f"https://ipwho.is/{ip}", timeout=5)
             if response.status_code != 200:
