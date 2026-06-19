@@ -1,6 +1,7 @@
-from typing import Any, Dict, Optional, Union
-from loguru import logger 
+from typing import Any, Dict, Optional
+
 import requests
+from loguru import logger
 
 
 class WeatherMan:
@@ -26,14 +27,22 @@ class WeatherMan:
         """
         try:
             x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-            ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.META.get("REMOTE_ADDR")
+            ip = (
+                x_forwarded_for.split(",")[0].strip()
+                if x_forwarded_for
+                else request.META.get("REMOTE_ADDR")
+            )
             if ip is None:
-                logger.warning('No IP address available in request headers')
+                logger.warning("No IP address available in request headers")
                 return "0.0.0.0"
-            logger.success('Successfully Captured User IP Address for Weather Forecasting')
+            logger.success(
+                "Successfully Captured User IP Address for Weather Forecasting"
+            )
             return str(ip)
-        except Exception as e: 
-            logger.warning(f'Error: Unable to Capture User IP Address for Weather Forcasting: {e}')
+        except Exception as e:
+            logger.warning(
+                f"Error: Unable to Capture User IP Address for Weather Forcasting: {e}"
+            )
             return "0.0.0.0"
 
     @classmethod
@@ -53,7 +62,9 @@ class WeatherMan:
         """
         try:
             if ip in {"0.0.0.0", "127.0.0.1", "localhost"}:
-                logger.warning(f"Error: Invalid or Local IP Address Provided. Unable to Forecast: {ip}")
+                logger.warning(
+                    f"Error: Invalid or Local IP Address Provided. Unable to Forecast: {ip}"
+                )
                 return {}
             response = requests.get(f"https://ipwho.is/{ip}", timeout=5)
             if response.status_code != 200:
@@ -67,10 +78,12 @@ class WeatherMan:
                 "region": data["region"],
                 "country": data["country"],
             }
-            logger.success('Successfully Queried User IP Address for Geographic Data')
+            logger.success("Successfully Queried User IP Address for Geographic Data")
             return geo_data
-        except Exception as e: 
-            logger.warning(f'Error: Unable to Query User IP Address for Geographic Data: {e}')
+        except Exception as e:
+            logger.warning(
+                f"Error: Unable to Query User IP Address for Geographic Data: {e}"
+            )
             return {}
 
     @classmethod
@@ -117,11 +130,13 @@ class WeatherMan:
             Optional[str]: The URL for the hourly weather forecast if available,
             otherwise None when the grid is not found or an HTTP error occurs.
         """
-        try: 
+        try:
             url = f"https://api.weather.gov/points/{latitude},{longitude}"
             response = requests.get(url, timeout=5)
             if response.status_code == 404:
-                logger.warning(f"No weather grid found for location: {latitude}, {longitude}")
+                logger.warning(
+                    f"No weather grid found for location: {latitude}, {longitude}"
+                )
                 return None
 
             if not response.ok:
@@ -130,7 +145,7 @@ class WeatherMan:
 
             data = response.json()
             return data["properties"]["forecastHourly"]
-        except Exception as e: 
+        except Exception as e:
             logger.warning(f"Error: {str(e)}")
 
     @classmethod
@@ -175,7 +190,7 @@ class WeatherMan:
             data for the client's location, or None if the forecast cannot be
             retrieved.
         """
-        logger.debug('Beginning Server Side Weather Forecasting...')
+        logger.debug("Beginning Server Side Weather Forecasting...")
         ip = cls.get_client_ip(request)
         if ip != "0.0.0.0":
             geo_data = cls.get_geographic_data(ip)
@@ -185,6 +200,5 @@ class WeatherMan:
                 if results != {}:
                     logger.success("Successfully Obtained and Parsed Weather Data!")
                     return results
-        logger.error('Server Side Weather Forecasting Failed!')
+        logger.error("Server Side Weather Forecasting Failed!")
         return {}
-        
