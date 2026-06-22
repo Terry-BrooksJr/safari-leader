@@ -34,6 +34,58 @@ class EnrollmentIntakeForm(forms.Form):
     after is_valid().
     """
 
+    # Boolean fields rendered as Bootstrap switches.
+    BOOLEAN_FIELDS = [
+        "parent_is_primary_contact",
+        "parent_has_custody_rights",
+        "parent_can_pickup",
+        "has_allergy",
+        "has_medical_note",
+        "has_custody_restriction",
+        "schedule_sunday",
+        "schedule_monday",
+        "schedule_tuesday",
+        "schedule_wednesday",
+        "schedule_thursday",
+        "schedule_friday",
+        "schedule_saturday",
+        "create_emergency_contact",
+        "emergency_is_authorized",
+    ]
+
+    # Schedule day fields, in render/storage order.
+    DAY_FIELDS = [
+        "schedule_sunday",
+        "schedule_monday",
+        "schedule_tuesday",
+        "schedule_wednesday",
+        "schedule_thursday",
+        "schedule_friday",
+        "schedule_saturday",
+    ]
+
+    # Optional sections gated by a flag field. When the flag is checked, every
+    # mapped field becomes required with the associated error message.
+    OPTIONAL_GROUPS = [
+        (
+            "has_allergy",
+            {
+                "allergy_allergen": "Allergen is required when adding an allergy.",
+                "allergy_severity": "Severity is required when adding an allergy.",
+                "allergy_instructions": "Instructions are required when adding an allergy.",
+            },
+        ),
+        (
+            "create_emergency_contact",
+            {
+                "emergency_first_name": "Emergency contact first name is required.",
+                "emergency_last_name": "Emergency contact last name is required.",
+                "emergency_contact_number": "Emergency contact number is required.",
+                "emergency_relationship": "Emergency contact relationship is required.",
+            },
+        ),
+    ]
+
     # Parent / guardian user fields
     parent_first_name = forms.CharField(max_length=150)
     parent_last_name = forms.CharField(max_length=150)
@@ -66,6 +118,12 @@ class EnrollmentIntakeForm(forms.Form):
         required=False,
     )
     allergy_instructions = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+    )
+    # Optional medical note fields
+    has_medical_note = forms.BooleanField(required=False)
+    medical_note = forms.CharField(
         widget=forms.Textarea,
         required=False,
     )
@@ -118,30 +176,17 @@ class EnrollmentIntakeForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._set_querysets()
+        self._setup_boolean_switches()
+        self._setup_labels()
+        self._setup_helper()
+
+    def _set_querysets(self):
         self.fields["program"].queryset = Program.objects.filter(is_active=True)
         self.fields["instructor"].queryset = StaffProfile.objects.all()
-        self.helper = FormHelper()
-        self.helper.form_method = "post"
-        self.helper.form_tag = False
 
-        self.boolean_fields = [
-            "parent_is_primary_contact",
-            "parent_has_custody_rights",
-            "parent_can_pickup",
-            "has_allergy",
-            "has_custody_restriction",
-            "schedule_sunday",
-            "schedule_monday",
-            "schedule_tuesday",
-            "schedule_wednesday",
-            "schedule_thursday",
-            "schedule_friday",
-            "schedule_saturday",
-            "create_emergency_contact",
-            "emergency_is_authorized",
-        ]
-
-        for field_name in self.boolean_fields:
+    def _setup_boolean_switches(self):
+        for field_name in self.BOOLEAN_FIELDS:
             existing_classes = self.fields[field_name].widget.attrs.get("class", "")
             self.fields[field_name].widget.attrs.update(
                 {
@@ -150,6 +195,7 @@ class EnrollmentIntakeForm(forms.Form):
                 }
             )
 
+    def _setup_labels(self):
         self.fields["parent_is_primary_contact"].label = "Parent is primary contact"
         self.fields["parent_has_custody_rights"].label = "Parent has custody rights"
         self.fields["parent_can_pickup"].label = "Parent can pickup"
@@ -167,8 +213,15 @@ class EnrollmentIntakeForm(forms.Form):
         for field_name, label in day_labels.items():
             self.fields[field_name].label = label
 
+    def _setup_helper(self):
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.form_tag = False
         self.helper.disable_csrf = True
-        self.helper.layout = Layout(
+        self.helper.layout = self._build_layout()
+
+    def _build_layout(self):
+        return Layout(
             HTML(
                 f'<img src="{static("images/img-child-enrollment-form-header.png")}" class="w-75 d-block mx-auto" alt="Child enrollment form header">'
             ),
@@ -228,7 +281,22 @@ class EnrollmentIntakeForm(forms.Form):
                     ),
                     css_id="allergy-fields-container",
                 ),
-                Field("has_custody_restriction"),
+                Div(
+                    Div(
+                        Field("has_medical_note"),
+                        css_class="form-check form-switch safari-switch-row mb-3",
+                    ),
+                    Field("medical_note"),
+                    css_id="medical-note-fields-container",
+                ),
+                Div(
+                    Div(
+                        Field("has_custody_restriction"),
+                        css_class="form-check form-switch safari-switch-row mb-3",
+                    ),
+                    Field("custody_restriction_notes"),
+                    css_id="custody-restriction-fields-container",
+                ),
                 HTML("<hr class='border border-primary border-3 opacity-100'>"),
                 Fieldset(
                     "Enrollment",
@@ -302,13 +370,9 @@ class EnrollmentIntakeForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        if cleaned_data.get("has_allergy"):
-            required_allergy_fields = {
-                "allergy_allergen": "Allergen is required when adding an allergy.",
-                "allergy_severity": "Severity is required when adding an allergy.",
-                "allergy_instructions": "Instructions are required when adding an allergy.",
-            }
-            self._require_optional_group_fields(cleaned_data, required_allergy_fields)
+        for flag_field, required_fields in self.OPTIONAL_GROUPS:
+            if cleaned_data.get(flag_field):
+                self._require_optional_group_fields(cleaned_data, required_fields)
 
         if cleaned_data.get("has_medical_note") and not cleaned_data.get(
             "medical_note"
@@ -325,15 +389,6 @@ class EnrollmentIntakeForm(forms.Form):
                 "custody_restriction_notes",
                 "Restriction notes are required when adding a custody restriction.",
             )
-
-        if cleaned_data.get("create_emergency_contact"):
-            required_emergency_fields = {
-                "emergency_first_name": "Emergency contact first name is required.",
-                "emergency_last_name": "Emergency contact last name is required.",
-                "emergency_contact_number": "Emergency contact number is required.",
-                "emergency_relationship": "Emergency contact relationship is required.",
-            }
-            self._require_optional_group_fields(cleaned_data, required_emergency_fields)
 
         start_date = cleaned_data.get("enrollment_start_date")
         end_date = cleaned_data.get("enrollment_end_date")
@@ -371,107 +426,24 @@ class EnrollmentIntakeForm(forms.Form):
         User = get_user_model()
 
         with transaction.atomic():
-            parent_user = User.objects.create_user(
-                username=data["parent_email"],
-                email=data["parent_email"],
-                first_name=data["parent_first_name"],
-                last_name=data["parent_last_name"],
+            parent_user = self._create_parent_user(User, data)
+            guardian_role = self._get_guardian_role()
+            child = self._create_child(data)
+            role_assignment = self._assign_role(parent_user, guardian_role, child)
+            guardian_profile = self._create_guardian_profile(parent_user, data)
+            child_guardian_relationship = self._link_child_guardian(
+                child, guardian_profile, data
             )
-
-            guardian_role, _ = Role.objects.get_or_create(
-                name=ROLES.GUARDIAN,
-                defaults={"description": "Guardian"},
+            authorized_pickup_profile = self._create_authorized_pickup(
+                child, parent_user, data
             )
-
-            child = Child.objects.create(
-                first_name=data["child_first_name"],
-                last_name=data["child_last_name"],
-                date_of_birth=data["child_date_of_birth"],
-                status=data["child_status"],
+            allergy, medical_note, custody_restriction = self._create_support_records(
+                child, data
             )
-
-            role_assignment = RoleAssignment.objects.create(
-                user=parent_user,
-                role=guardian_role,
-                child=child,
+            enrollment, child_schedule = self._create_enrollment_and_schedule(
+                child, data
             )
-
-            guardian_profile = GuardianProfile.objects.create(
-                user=parent_user,
-                contact_number=data["parent_contact_number"],
-                is_primary_contact=data["parent_is_primary_contact"],
-            )
-
-            child_guardian_relationship = ChildGuardianRelationship.objects.create(
-                child=child,
-                guardian=guardian_profile,
-                relationship=data["parent_relationship"],
-                is_primary=data["parent_is_primary_contact"],
-                has_custody_rights=data["parent_has_custody_rights"],
-                can_pickup=data["parent_can_pickup"],
-            )
-
-            authorized_pickup_profile = AuthorizedPickupProfile.objects.create(
-                child=child,
-                user=parent_user,
-                relationship=data["parent_relationship"],
-                is_authorized=data["parent_can_pickup"],
-                pickup_pin=data["parent_pickup_pin"],
-                verification_notes=data["parent_verification_notes"],
-            )
-
-            allergy = None
-            if data.get("has_allergy"):
-                allergy = Allergy.objects.create(
-                    child=child,
-                    allergen=data["allergy_allergen"],
-                    severity=data["allergy_severity"],
-                    instructions=data["allergy_instructions"],
-                )
-
-            medical_note = None
-            if data.get("has_medical_note"):
-                medical_note = MedicalNote.objects.create(
-                    child=child,
-                    note=data["medical_note"],
-                )
-
-            custody_restriction = None
-            if data.get("has_custody_restriction"):
-                custody_restriction = CustodyRestriction.objects.create(
-                    child=child,
-                    notes=data["custody_restriction_notes"],
-                )
-
-            enrollment = Enrollment.objects.create(
-                child=child,
-                program=data["program"],
-                start_date=data["enrollment_start_date"],
-                end_date=data["enrollment_end_date"],
-                status=data["enrollment_status"],
-            )
-
-            child_schedule = ChildSchedule.objects.create(
-                child=child,
-                program=data["program"],
-                enrollment=enrollment,
-                instructor=data["instructor"],
-                days_of_week=self._build_days_of_week(),
-                start_time=data["schedule_start_time"],
-                end_time=data["schedule_end_time"],
-            )
-
-            emergency_contact = None
-            if data.get("create_emergency_contact"):
-                emergency_contact = EmergencyContact.objects.create(
-                    child=child,
-                    first_name=data["emergency_first_name"],
-                    last_name=data["emergency_last_name"],
-                    contact_number=data["emergency_contact_number"],
-                    relationship=data["emergency_relationship"],
-                    is_authorized=data["emergency_is_authorized"],
-                    verification_notes=data["emergency_verification_notes"],
-                )
+            emergency_contact = self._create_emergency_contact_if_needed(child, data)
 
         return {
             "parent_user": parent_user,
@@ -489,15 +461,128 @@ class EnrollmentIntakeForm(forms.Form):
             "emergency_contact": emergency_contact,
         }
 
+    def _create_parent_user(self, User, data):
+        return User.objects.create_user(
+            username=data["parent_email"],
+            email=data["parent_email"],
+            first_name=data["parent_first_name"],
+            last_name=data["parent_last_name"],
+        )
+
+    def _get_guardian_role(self):
+        guardian_role, _ = Role.objects.get_or_create(
+            name=ROLES.GUARDIAN,
+            defaults={"description": "Guardian"},
+        )
+        return guardian_role
+
+    def _create_child(self, data):
+        return Child.objects.create(
+            first_name=data["child_first_name"],
+            last_name=data["child_last_name"],
+            date_of_birth=data["child_date_of_birth"],
+            status=data["child_status"],
+        )
+
+    def _assign_role(self, parent_user, guardian_role, child):
+        return RoleAssignment.objects.create(
+            user=parent_user,
+            role=guardian_role,
+            child=child,
+        )
+
+    def _create_guardian_profile(self, parent_user, data):
+        return GuardianProfile.objects.create(
+            user=parent_user,
+            contact_number=data["parent_contact_number"],
+            is_primary_contact=data["parent_is_primary_contact"],
+        )
+
+    def _link_child_guardian(self, child, guardian_profile, data):
+        return ChildGuardianRelationship.objects.create(
+            child=child,
+            guardian=guardian_profile,
+            relationship=data["parent_relationship"],
+            is_primary=data["parent_is_primary_contact"],
+            has_custody_rights=data["parent_has_custody_rights"],
+            can_pickup=data["parent_can_pickup"],
+        )
+
+    def _create_authorized_pickup(self, child, parent_user, data):
+        return AuthorizedPickupProfile.objects.create(
+            child=child,
+            user=parent_user,
+            relationship=data["parent_relationship"],
+            is_authorized=data["parent_can_pickup"],
+            pickup_pin=data["parent_pickup_pin"],
+            verification_notes=data["parent_verification_notes"],
+        )
+
+    def _create_support_records(self, child, data):
+        allergy = None
+        if data.get("has_allergy"):
+            allergy = Allergy.objects.create(
+                child=child,
+                allergen=data["allergy_allergen"],
+                severity=data["allergy_severity"],
+                instructions=data["allergy_instructions"],
+            )
+
+        medical_note = None
+        if data.get("has_medical_note"):
+            medical_note = MedicalNote.objects.create(
+                child=child,
+                note=data["medical_note"],
+            )
+
+        custody_restriction = None
+        if data.get("has_custody_restriction"):
+            custody_restriction = CustodyRestriction.objects.create(
+                child=child,
+                notes=data["custody_restriction_notes"],
+            )
+
+        return allergy, medical_note, custody_restriction
+
+    def _create_enrollment_and_schedule(self, child, data):
+        enrollment = Enrollment.objects.create(
+            child=child,
+            program=data["program"],
+            start_date=data["enrollment_start_date"],
+            end_date=data["enrollment_end_date"],
+            status=data["enrollment_status"],
+        )
+
+        child_schedule = ChildSchedule.objects.create(
+            child=child,
+            program=data["program"],
+            enrollment=enrollment,
+            instructor=data["instructor"],
+            days_of_week=self._build_days_of_week(),
+            start_time=data["schedule_start_time"],
+            end_time=data["schedule_end_time"],
+        )
+
+        return enrollment, child_schedule
+
+    def _create_emergency_contact_if_needed(self, child, data):
+        if not data.get("create_emergency_contact"):
+            return None
+
+        return EmergencyContact.objects.create(
+            child=child,
+            first_name=data["emergency_first_name"],
+            last_name=data["emergency_last_name"],
+            contact_number=data["emergency_contact_number"],
+            relationship=data["emergency_relationship"],
+            is_authorized=data["emergency_is_authorized"],
+            verification_notes=data["emergency_verification_notes"],
+        )
+
     def _build_days_of_week(self):
         return {
-            "sunday": self.cleaned_data["schedule_sunday"],
-            "monday": self.cleaned_data["schedule_monday"],
-            "tuesday": self.cleaned_data["schedule_tuesday"],
-            "wednesday": self.cleaned_data["schedule_wednesday"],
-            "thursday": self.cleaned_data["schedule_thursday"],
-            "friday": self.cleaned_data["schedule_friday"],
-            "saturday": self.cleaned_data["schedule_saturday"],
+            name.replace("schedule_", ""): self.cleaned_data[name]
+            for name in self.DAY_FIELDS
         }
 
     def _require_optional_group_fields(self, cleaned_data, required_fields):
