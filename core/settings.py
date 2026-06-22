@@ -196,3 +196,10 @@ PRIVATE_MEDIA_LOCATION: str = "media/restricted"
 MEDIA_DIRECTORY: str = "media/restricted/compliance/"
 PRIVATE_FILE_STORAGE: str = "common.backends.storage_backends.PrivateMediaStorage"
 PRIVATE_MEDIA_URL: str = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PRIVATE_MEDIA_LOCATION}/"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = (
+        "bootstrap",
+        "uni_form",
+        "bootstrap5",
+        "bootstrap4",
+    )

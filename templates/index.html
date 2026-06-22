@@ -3,304 +3,368 @@
 
 {% block title %}Dashboard - Safari Leader{% endblock %}
 
-{% block extra_css %}{% endblock %}
+  {% block extra_css %}
+    <style>
+    .parent-switches {
+      padding-left: 2rem;
+    }
 
-{% block content %}
-<div class="row">
-  <div class="col-sm-6 mb-4 mb-xl-0">
-    <div class="d-lg-flex align-items-center">
-      <div>
-        <h3 class="text-dark font-weight-bold mb-2">Hi, {{ user.first_name |default:"Safari Leader" }}! Welcome back!</h3>
-        <h6 class="font-weight-normal mb-2">Last login was {{ user.last_login|timesince }}.</h6>
-      </div> 
-      <div class="ms-lg-5 d-lg-flex d-none">
-          <button type="button" class="btn bg-white btn-icon">
-            <i class="mdi mdi-view-grid text-success"></i>
-          </button>
-          <button type="button" class="btn bg-white btn-icon ms-2">
-            <i class="mdi mdi-format-list-bulleted font-weight-bold text-primary"></i>
-          </button>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="d-flex align-items-center justify-content-md-end">
-      <div class="pe-1 mb-3 mb-xl-0">
-          <button type="button" class="btn btn-outline-inverse-info btn-icon-text">
-            Feedback
-            <i class="mdi mdi-message-outline btn-icon-append"></i>
-          </button>
-      </div>
-      <div class="pe-1 mb-3 mb-xl-0">
-          <button type="button" class="btn btn-outline-inverse-info btn-icon-text">
-            Help
-            <i class="mdi mdi-help-circle-outline btn-icon-append"></i>
-          </button>
-      </div>
-      <div class="pe-1 mb-3 mb-xl-0">
-          <button type="button" class="btn btn-outline-inverse-info btn-icon-text">
-            Print
-            <i class="mdi mdi-printer btn-icon-append"></i>
-          </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row mt-4">
-  <div class="col-lg-8 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-lg-4">
-            <h4 class="card-title">Sales Difference</h4>
-            <canvas id="salesDifference"></canvas>
-            <p class="mt-3 mb-4 mb-lg-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-          </div>
-          <div class="col-lg-5">
-            <h4 class="card-title">Best Sellers</h4>
-            <div class="row">
-              <div class="col-sm-4">
-                <ul class="graphl-legend-rectangle">
-                  <li><span class="bg-danger"></span>Automotive</li>
-                  <li><span class="bg-warning"></span>Books</li>
-                  <li><span class="bg-info"></span>Software</li>
-                  <li><span class="bg-success"></span>Video games</li>
-                </ul>
-              </div>
-              <div class="col-sm-8 grid-margin">
-                <canvas id="bestSellers"></canvas>
-              </div>
-            </div>
-            <p class="mt-3 mb-4 mb-lg-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-          </div>
-          <div class="col-lg-3">
-            <h4 class="card-title">Social Media Statistics</h4>
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="progress progress-lg grouped mb-2">
-                  <div class="progress-bar bg-danger" role="progressbar" style="width: 40%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                  <div class="progress-bar bg-info" role="progressbar" style="width: 10%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  <div class="progress-bar bg-warning" role="progressbar" style="width: 20%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <ul class="graphl-legend-rectangle">
-                  <li><span class="bg-danger"></span>Instagram (15%)</li>
-                  <li><span class="bg-warning"></span>Facebook (20%)</li>
-                  <li><span class="bg-info"></span>Website (25%)</li>
-                  <li><span class="bg-success"></span>Youtube (40%)</li>
-                </ul>
-              </div>
-            </div>
-            <p class="mb-0 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4 mb-3 mb-lg-0">
-    <div class="card congratulation-bg text-center">
-      <div class="card-body pb-0">
-        <img src="{% static 'images/dashboard/face29.png' %}" alt="">
-        <h2 class="mt-3 text-white mb-3 font-weight-bold">Congratulations {{ request.user.get_short_name|default:"User" }}</h2>
-        <p>You have done 57.6% more sales today. Check your new badge in your profile.</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-8 flex-column d-flex stretch-card">
+    .parent-switches .form-check {
+      padding-left: 0;
+      white-space: nowrap;
+    }
+
+    .parent-switches .form-check-input {
+      float: none;
+      margin-left: 0;
+      margin-top: 0;
+    }
+
+    .safari-switch-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .safari-switch-row label {
+      margin-bottom: 0;
+    }
+
+    /* Days of the week rendered as toggle buttons */
+    .day-toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .day-toggle {
+      position: relative;
+      flex: 1 1 0;
+      min-width: 64px;
+    }
+
+    .day-toggle .mb-3,
+    .day-toggle .form-check {
+      margin-bottom: 0;
+      padding-left: 0;
+      min-height: auto;
+    }
+
+    /* Hide the underlying checkbox; the label becomes the clickable button */
+    .day-toggle .form-check-input {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+      pointer-events: none;
+    }
+
+    .day-toggle .form-check-label {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.6rem 0.5rem;
+      text-align: center;
+      font-weight: 700;
+      color: var(--bs-primary, #1A4D2E);
+      background-color: #fff;
+      border: 2px solid var(--bs-primary, #1A4D2E);
+      border-radius: 0.65rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease, color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .day-toggle .form-check-label:hover {
+      box-shadow: 0 0 0 0.18rem rgba(26, 77, 46, 0.2);
+    }
+
+    /* Selected day gets a filled, contrasting color */
+    .day-toggle .form-check-input:checked + .form-check-label {
+      color: #fff;
+      background-color: var(--bs-primary, #1A4D2E);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Visible keyboard focus ring */
+    .day-toggle .form-check-input:focus-visible + .form-check-label {
+      outline: 2px solid var(--bs-warning, #E8A838);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .parent-switches {
+        padding-left: 0;
+        margin-top: 1rem;
+      }
+    }
+    </style>
+  {% endblock %}
+
+  {% block content %}
     <div class="row">
-      <div class="col-lg-4 d-flex grid-margin stretch-card">
-        <div class="card bg-primary">
-          <div class="card-body text-white">
-            <h3 class="font-weight-bold mb-3">18,39 (75GB)</h3>
-            <div class="progress mb-3">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <p class="pb-0 mb-0">Bandwidth usage</p>
+      <div class="col-sm-6 mb-4 mb-xl-0">
+        <div class="d-lg-flex align-items-center">
+          <div>
+            <h3 class="text-dark font-weight-bold mb-2">
+              Hi, {{ user.first_name |default:"Safari Leader" }}! Welcome back!
+            </h3>
+            <h6 class="font-weight-normal mb-2">Last login was {{ user.last_login|timesince }}.</h6>
+          </div>
+          <div class="ms-lg-5 d-lg-flex d-none">
+            <button type="button" class="btn bg-white btn-icon">
+              <i class="mdi mdi-view-grid text-success"></i>
+            </button>
+            <button type="button" class="btn bg-white btn-icon ms-2">
+              <i
+                class="mdi mdi-format-list-bulleted font-weight-bold text-primary"
+              ></i>
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 d-flex grid-margin stretch-card">
-        <div class="card sale-diffrence-border">
-          <div class="card-body">
-            <h2 class="text-dark mb-2 font-weight-bold">$6475</h2>
-            <h4 class="card-title mb-2">Sales Difference</h4>
-            <small class="text-muted">APRIL 2019</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 d-flex grid-margin stretch-card">
-        <div class="card sale-visit-statistics-border">
-          <div class="card-body">
-            <h2 class="text-dark mb-2 font-weight-bold">$3479</h2>
-            <h4 class="card-title mb-2">Visit Statistics</h4>
-            <small class="text-muted">APRIL 2019</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12 grid-margin d-flex stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-              <h4 class="card-title mb-2">Sales Difference</h4>
-              <div class="dropdown">
-                <a href="#" class="text-success btn btn-link px-1"><i class="mdi mdi-refresh"></i></a>
-                <a href="#" class="text-success btn btn-link px-1 dropdown-toggle dropdown-arrow-none" data-bs-toggle="dropdown" id="settingsDropdownsales">
-                  <i class="mdi mdi-dots-horizontal"></i></a>
-                  <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="settingsDropdownsales">
-                    <a class="dropdown-item">
-                      <i class="mdi mdi-grease-pencil text-primary"></i>
-                      Edit
-                    </a>
-                    <a class="dropdown-item">
-                      <i class="mdi mdi-delete text-primary"></i>
-                      Delete
-                    </a>
-                  </div>
-              </div>
-            </div>
-            <div>
-              <ul class="nav nav-tabs tab-no-active-fill" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active ps-2 pe-2" id="revenue-for-last-month-tab" data-bs-toggle="tab" href="#revenue-for-last-month" role="tab" aria-controls="revenue-for-last-month" aria-selected="true">Revenue for last month</a>
+      <div class="col-sm-6">
+        <div class="d-flex align-items-center justify-content-md-end">
+          <div class="pe-1 mb-3 mb-xl-0">
+            <div class="dropdown">
+              <button
+                class="btn btn-outline-inverse-info btn-icon-text dropdown-toggle"
+                type="button"
+                id="enrollDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Enroll
+                <i class="mdi mdi-account-plus btn-icon-append"></i>
+              </button>
+
+              <ul class="dropdown-menu" aria-labelledby="enrollDropdown">
+                <li>
+                  <a id="open-enrollment-modal" class="dropdown-item" href="#">
+                    New Student
+                  </a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link ps-2 pe-2" id="server-loading-tab" data-bs-toggle="tab" href="#server-loading" role="tab" aria-controls="server-loading" aria-selected="false">Server loading</a>
+                <li>
+                  <a class="dropdown-item" href="#">New Pickup Agent</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link ps-2 pe-2" id="data-managed-tab" data-bs-toggle="tab" href="#data-managed" role="tab" aria-controls="data-managed" aria-selected="false">Data managed</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link ps-2 pe-2" id="sales-by-traffic-tab" data-bs-toggle="tab" href="#sales-by-traffic" role="tab" aria-controls="sales-by-traffic" aria-selected="false">Sales by traffic</a>
+                <li>
+                  <a class="dropdown-item" href="#">Summer Program Enrollment</a>
                 </li>
               </ul>
-              <div class="tab-content tab-no-active-fill-tab-content">
-                <div class="tab-pane fade show active" id="revenue-for-last-month" role="tabpanel" aria-labelledby="revenue-for-last-month-tab">
-                  <div class="d-lg-flex justify-content-between">
-                    <p class="mb-4">+5.2% vs last 7 days</p>
-                    <div id="revenuechart-legend" class="revenuechart-legend">f</div>
-                  </div>
-                  <canvas id="revenue-for-last-month-chart"></canvas>
-                </div>
-                <div class="tab-pane fade" id="server-loading" role="tabpanel" aria-labelledby="server-loading-tab">
-                  <div class="d-flex justify-content-between">
-                    <p class="mb-4">+5.2% vs last 7 days</p>
-                    <div id="serveLoading-legend" class="revenuechart-legend">f</div>
-                  </div>
-                  <canvas id="serveLoading"></canvas>
-                </div>
-                <div class="tab-pane fade" id="data-managed" role="tabpanel" aria-labelledby="data-managed-tab">
-                  <div class="d-flex justify-content-between">
-                    <p class="mb-4">+5.2% vs last 7 days</p>
-                    <div id="dataManaged-legend" class="revenuechart-legend">f</div>
-                  </div>
-                  <canvas id="dataManaged"></canvas>
-                </div>
-                <div class="tab-pane fade" id="sales-by-traffic" role="tabpanel" aria-labelledby="sales-by-traffic-tab">
-                  <div class="d-flex justify-content-between">
-                    <p class="mb-4">+5.2% vs last 7 days</p>
-                    <div id="salesTrafic-legend" class="revenuechart-legend">f</div>
-                  </div>
-                  <canvas id="salesTrafic"></canvas>
-                </div>
-              </div>
             </div>
+          </div>
+          <div class="pe-1 mb-3 mb-xl-0">
+            <button
+              type="button"
+              class="btn btn-outline-inverse-info btn-icon-text"
+            >
+              Help
+              <i class="mdi mdi-help-circle-outline btn-icon-append"></i>
+            </button>
+          </div>
+          <div class="pe-1 mb-3 mb-xl-0">
+            <button
+              type="button"
+              class="btn btn-outline-inverse-info btn-icon-text"
+            >
+              Print In-House Report
+              <i class="mdi mdi-printer btn-icon-append"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-sm-4 flex-column d-flex stretch-card">
-    <div class="row flex-grow">
-      <div class="col-sm-12 grid-margin stretch-card">
+    <div class="row mt-4">
+      <div class="col-lg-8 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            {% if weather %}
-            <div id="weather-panel" class="row">
-              <div class="col-lg-8">
-                <h3 id="weather-city" class="font-weight-bold text-dark"></h3>
-                <p id="weather-time" class="text-dark"></p>
-                <div class="d-lg-flex align-items-baseline mb-3">
-                  <h1 class="text-dark font-weight-bold"><span id="weather-temp"></span></h1>
-                  <p id="weather-shortForecast" class="text-muted ms-3"></p>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="position-relative">
-                  <img src="{{ weather.icon }}" class="w-100" alt="">
-                  <div class="live-info badge badge-success">Live</div>
-                </div>
-              </div>
-            </div>
-          {% else  %}
-            <div id="weather-panel" class="row">
-              <div class="col-lg-12">
-                <h3 id="weather-city" class="font-weight-bold text-dark"></h3>
-                  <div class="d-flex justify-content-center ">
-                  <i class="fa-solid fa-cloud-bolt fa-2xl" style="color: rgb(34, 80, 30);"></i>
-                <h3 id="weather-time" class="text-dark"> <br>Weather Data Unavailable</h3>
-                <div class="d-lg-flex align-items-baseline mb-3">
-                  <h1 class="text-dark font-weight-bold"><span id="weather-temp"></span></h1>
-                  <p id="weather-shortForecast" class="text-muted ms-3"></p>
-                </div>
-              </div>
-            </div>
-          {% endif %}
             <div class="row">
-              <div class="col-sm-12 mt-4 mt-lg-0">
-                <div class="bg-primary text-white px-4 py-4 card">
-                  <div class="row">
-                    <div class="col-sm-6 pl-lg-5">
-                      <h2>$1635</h2>
-                      <p class="mb-0">Your Income</p>
-                    </div>
-                    <div class="col-sm-6 climate-info-border mt-lg-0 mt-2">
-                      <h2>$2650</h2>
-                      <p class="mb-0">Your Spending</p>
-                    </div>
-                  </div>
-                </div>
+              <div class="col-lg-4">
+                <h4 class="card-title">Sales Difference</h4>
+                <canvas id="salesDifference"></canvas>
+                <p class="mt-3 mb-4 mb-lg-0">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
               </div>
-            </div>
-            <div class="row pt-3 mt-md-1">
-              <div class="col">
-                <div class="d-flex purchase-detail-legend align-items-center">
-                  <div id="circleProgress1" class="p-2"></div>
-                  <div>
-                    <p class="font-weight-medium text-dark text-small">Sessions</p>
-                    <h3 class="font-weight-bold text-dark mb-0">26.80%</h3>
+              <div class="col-lg-5">
+                <h4 class="card-title">Best Sellers</h4>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <ul class="graphl-legend-rectangle">
+                      <li>
+                        <span class="bg-danger"></span>
+                        Automotive
+                      </li>
+                      <li>
+                        <span class="bg-warning"></span>
+                        Books
+                      </li>
+                      <li>
+                        <span class="bg-info"></span>
+                        Software
+                      </li>
+                      <li>
+                        <span class="bg-success"></span>
+                        Video games
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-sm-8 grid-margin">
+                    <canvas id="bestSellers"></canvas>
                   </div>
                 </div>
+                <p class="mt-3 mb-4 mb-lg-0">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
               </div>
-              <div class="col">
-                <div class="d-flex purchase-detail-legend align-items-center">
-                  <div id="circleProgress2" class="p-2"></div>
-                  <div>
-                    <p class="font-weight-medium text-dark text-small">Users</p>
-                    <h3 class="font-weight-bold text-dark mb-0">56.80%</h3>
+              <div class="col-lg-3">
+                <h4 class="card-title">Social Media Statistics</h4>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="progress progress-lg grouped mb-2">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 40%"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                      <div
+                        class="progress-bar bg-info"
+                        role="progressbar"
+                        style="width: 10%"
+                        aria-valuenow="50"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                      <div
+                        class="progress-bar bg-warning"
+                        role="progressbar"
+                        style="width: 20%"
+                        aria-valuenow="50"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                      <div
+                        class="progress-bar bg-success"
+                        role="progressbar"
+                        style="width: 30%"
+                        aria-valuenow="50"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <ul class="graphl-legend-rectangle">
+                      <li>
+                        <span class="bg-danger"></span>
+                        Instagram (15%)
+                      </li>
+                      <li>
+                        <span class="bg-warning"></span>
+                        Facebook (20%)
+                      </li>
+                      <li>
+                        <span class="bg-info"></span>
+                        Website (25%)
+                      </li>
+                      <li>
+                        <span class="bg-success"></span>
+                        Youtube (40%)
+                      </li>
+                    </ul>
                   </div>
                 </div>
+                <p class="mb-0 mt-2">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-sm-12 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-12">
+      <div class="col-lg-4 mb-3 mb-lg-0">
+        <div class="card congratulation-bg text-center">
+          <div class="card-body pb-0">
+            <img src="{% static 'images/dashboard/face29.png' %}" alt="" />
+            <h2 class="mt-3 text-white mb-3 font-weight-bold">
+              Congratulations {{ request.user.get_short_name|default:"User" }}
+            </h2>
+            <p>
+              You have done 57.6% more sales today. Check your new badge in your
+              profile.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8 flex-column d-flex stretch-card">
+        <div class="row">
+          <div class="col-lg-4 d-flex grid-margin stretch-card">
+            <div class="card bg-primary">
+              <div class="card-body text-white">
+                <h3 class="font-weight-bold mb-3">18,39 (75GB)</h3>
+                <div class="progress mb-3">
+                  <div
+                    class="progress-bar bg-warning"
+                    role="progressbar"
+                    style="width: 40%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+                <p class="pb-0 mb-0">Bandwidth usage</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 d-flex grid-margin stretch-card">
+            <div class="card sale-diffrence-border">
+              <div class="card-body">
+                <h2 class="text-dark mb-2 font-weight-bold">$6475</h2>
+                <h4 class="card-title mb-2">Sales Difference</h4>
+                <small class="text-muted">APRIL 2019</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 d-flex grid-margin stretch-card">
+            <div class="card sale-visit-statistics-border">
+              <div class="card-body">
+                <h2 class="text-dark mb-2 font-weight-bold">$3479</h2>
+                <h4 class="card-title mb-2">Visit Statistics</h4>
+                <small class="text-muted">APRIL 2019</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 grid-margin d-flex stretch-card">
+            <div class="card">
+              <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
-                  <h4 class="card-title mb-0">Visits Today</h4>
+                  <h4 class="card-title mb-2">Sales Difference</h4>
                   <div class="dropdown">
-                    <a href="#" class="text-success btn btn-link px-1"><i class="mdi mdi-refresh"></i></a>
-                    <a href="#" class="text-success btn btn-link px-1 dropdown-toggle dropdown-arrow-none" data-bs-toggle="dropdown" id="profileDropdownvisittoday"><i class="mdi mdi-dots-horizontal"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdownvisittoday">
+                    <a href="#" class="text-success btn btn-link px-1">
+                      <i class="mdi mdi-refresh"></i>
+                    </a>
+                    <a
+                      href="#"
+                      class="text-success btn btn-link px-1 dropdown-toggle dropdown-arrow-none"
+                      data-bs-toggle="dropdown"
+                      id="settingsDropdownsales"
+                    >
+                      <i class="mdi mdi-dots-horizontal"></i>
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                      aria-labelledby="settingsDropdownsales"
+                    >
                       <a class="dropdown-item">
                         <i class="mdi mdi-grease-pencil text-primary"></i>
                         Edit
@@ -312,157 +376,517 @@
                     </div>
                   </div>
                 </div>
-                <p class="mt-1">Calculated in last 30 days</p>
-                <div class="d-lg-flex align-items-center justify-content-between">
-                  <h1 class="font-weight-bold text-dark">4332</h1>
-                  <div class="mb-3">
-                    <button type="button" class="btn btn-outline-light text-dark font-weight-normal">Day</button>
-                    <button type="button" class="btn btn-outline-light text-dark font-weight-normal">Month</button>
+                <div>
+                  <ul class="nav nav-tabs tab-no-active-fill" role="tablist">
+                    <li class="nav-item">
+                      <a
+                        class="nav-link active ps-2 pe-2"
+                        id="revenue-for-last-month-tab"
+                        data-bs-toggle="tab"
+                        href="#revenue-for-last-month"
+                        role="tab"
+                        aria-controls="revenue-for-last-month"
+                        aria-selected="true"
+                      >
+                        Revenue for last month
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a
+                        class="nav-link ps-2 pe-2"
+                        id="server-loading-tab"
+                        data-bs-toggle="tab"
+                        href="#server-loading"
+                        role="tab"
+                        aria-controls="server-loading"
+                        aria-selected="false"
+                      >
+                        Server loading
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a
+                        class="nav-link ps-2 pe-2"
+                        id="data-managed-tab"
+                        data-bs-toggle="tab"
+                        href="#data-managed"
+                        role="tab"
+                        aria-controls="data-managed"
+                        aria-selected="false"
+                      >
+                        Data managed
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a
+                        class="nav-link ps-2 pe-2"
+                        id="sales-by-traffic-tab"
+                        data-bs-toggle="tab"
+                        href="#sales-by-traffic"
+                        role="tab"
+                        aria-controls="sales-by-traffic"
+                        aria-selected="false"
+                      >
+                        Sales by traffic
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="tab-content tab-no-active-fill-tab-content">
+                    <div
+                      class="tab-pane fade show active"
+                      id="revenue-for-last-month"
+                      role="tabpanel"
+                      aria-labelledby="revenue-for-last-month-tab"
+                    >
+                      <div class="d-lg-flex justify-content-between">
+                        <p class="mb-4">+5.2% vs last 7 days</p>
+                        <div
+                          id="revenuechart-legend"
+                          class="revenuechart-legend"
+                        ></div>
+                      </div>
+                      <canvas id="revenue-for-last-month-chart"></canvas>
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="server-loading"
+                      role="tabpanel"
+                      aria-labelledby="server-loading-tab"
+                    >
+                      <div class="d-flex justify-content-between">
+                        <p class="mb-4">+5.2% vs last 7 days</p>
+                        <div
+                          id="serveLoading-legend"
+                          class="revenuechart-legend"
+                        ></div>
+                      </div>
+                      <canvas id="serveLoading"></canvas>
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="data-managed"
+                      role="tabpanel"
+                      aria-labelledby="data-managed-tab"
+                    >
+                      <div class="d-flex justify-content-between">
+                        <p class="mb-4">+5.2% vs last 7 days</p>
+                        <div
+                          id="dataManaged-legend"
+                          class="revenuechart-legend"
+                        ></div>
+                      </div>
+                      <canvas id="dataManaged"></canvas>
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="sales-by-traffic"
+                      role="tabpanel"
+                      aria-labelledby="sales-by-traffic-tab"
+                    >
+                      <div class="d-flex justify-content-between">
+                        <p class="mb-4">+5.2% vs last 7 days</p>
+                        <div
+                          id="salesTrafic-legend"
+                          class="revenuechart-legend"
+                        ></div>
+                      </div>
+                      <canvas id="salesTrafic"></canvas>
+                    </div>
                   </div>
                 </div>
-                <canvas id="visitorsToday"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 flex-column d-flex stretch-card">
+        <div class="row flex-grow">
+          <div class="col-sm-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                {% if weather %}
+                  <div id="weather-panel" class="row">
+                    <div class="col-lg-8">
+                      <h3 id="weather-city" class="font-weight-bold text-dark"></h3>
+                      <p id="weather-time" class="text-dark"></p>
+                      <div class="d-lg-flex align-items-baseline mb-3">
+                        <h1 class="text-dark font-weight-bold">
+                          <span id="weather-temp"></span>
+                        </h1>
+                        <p id="weather-shortForecast" class="text-muted ms-3"></p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="position-relative">
+                        <img src="{{ weather.icon }}" class="w-100" alt="" />
+                        <div class="live-info badge badge-success">Live</div>
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <div id="weather-panel" class="row">
+                    <div class="col-lg-12">
+                      <h3 id="weather-city" class="font-weight-bold text-dark"></h3>
+                      <div class="d-flex justify-content-center">
+                        <i
+                          class="fa-solid fa-cloud-bolt fa-2xl"
+                          style="color: rgb(34, 80, 30)"
+                        ></i>
+                        <h3 id="weather-time" class="text-dark">
+                          <br />
+                          Weather Data Unavailable
+                        </h3>
+                        <div class="d-lg-flex align-items-baseline mb-3">
+                          <h1 class="text-dark font-weight-bold">
+                            <span id="weather-temp"></span>
+                          </h1>
+                          <p id="weather-shortForecast" class="text-muted ms-3"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+                <div class="row">
+                  <div class="col-sm-12 mt-4 mt-lg-0">
+                    <div class="bg-primary text-white px-4 py-4 card">
+                      <div class="row">
+                        <div class="col-sm-6 pl-lg-5">
+                          <h2>$1635</h2>
+                          <p class="mb-0">Your Income</p>
+                        </div>
+                        <div class="col-sm-6 climate-info-border mt-lg-0 mt-2">
+                          <h2>$2650</h2>
+                          <p class="mb-0">Your Spending</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row pt-3 mt-md-1">
+                  <div class="col">
+                    <div class="d-flex purchase-detail-legend align-items-center">
+                      <div id="circleProgress1" class="p-2"></div>
+                      <div>
+                        <p class="font-weight-medium text-dark text-small">
+                          Sessions
+                        </p>
+                        <h3 class="font-weight-bold text-dark mb-0">26.80%</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="d-flex purchase-detail-legend align-items-center">
+                      <div id="circleProgress2" class="p-2"></div>
+                      <div>
+                        <p class="font-weight-medium text-dark text-small">Users</p>
+                        <h3 class="font-weight-bold text-dark mb-0">56.80%</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <h4 class="card-title mb-0">Visits Today</h4>
+                      <div class="dropdown">
+                        <a href="#" class="text-success btn btn-link px-1">
+                          <i class="mdi mdi-refresh"></i>
+                        </a>
+                        <a
+                          href="#"
+                          class="text-success btn btn-link px-1 dropdown-toggle dropdown-arrow-none"
+                          data-bs-toggle="dropdown"
+                          id="profileDropdownvisittoday"
+                        >
+                          <i class="mdi mdi-dots-horizontal"></i>
+                        </a>
+                        <div
+                          class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                          aria-labelledby="profileDropdownvisittoday"
+                        >
+                          <a class="dropdown-item">
+                            <i class="mdi mdi-grease-pencil text-primary"></i>
+                            Edit
+                          </a>
+                          <a class="dropdown-item">
+                            <i class="mdi mdi-delete text-primary"></i>
+                            Delete
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="mt-1">Calculated in last 30 days</p>
+                    <div
+                      class="d-lg-flex align-items-center justify-content-between"
+                    >
+                      <h1 class="font-weight-bold text-dark">4332</h1>
+                      <div class="mb-3">
+                        <button
+                          type="button"
+                          class="btn btn-outline-light text-dark font-weight-normal"
+                        >
+                          Day
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-light text-dark font-weight-normal"
+                        >
+                          Month
+                        </button>
+                      </div>
+                    </div>
+                    <canvas id="visitorsToday"></canvas>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-lg-2 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-          <h2 class="text-success font-weight-bold">18390</h2>
-          <i class="mdi mdi-account-outline mdi-18px text-dark"></i>
+    <div class="row">
+      <div class="col-lg-2 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body pb-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="text-success font-weight-bold">18390</h2>
+              <i class="mdi mdi-account-outline mdi-18px text-dark"></i>
+            </div>
+          </div>
+          <canvas id="newClient"></canvas>
+          <div class="line-chart-row-title">MY NEW CLIENTS</div>
         </div>
       </div>
-      <canvas id="newClient"></canvas>
-      <div class="line-chart-row-title">MY NEW CLIENTS</div>
-    </div>
-  </div>
-  <div class="col-lg-2 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-          <h2 class="text-danger font-weight-bold">839</h2>
-          <i class="mdi mdi-refresh mdi-18px text-dark"></i>
+      <div class="col-lg-2 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body pb-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="text-danger font-weight-bold">839</h2>
+              <i class="mdi mdi-refresh mdi-18px text-dark"></i>
+            </div>
+          </div>
+          <canvas id="allProducts"></canvas>
+          <div class="line-chart-row-title">All Products</div>
         </div>
       </div>
-      <canvas id="allProducts"></canvas>
-      <div class="line-chart-row-title">All Products</div>
-    </div>
-  </div>
-  <div class="col-lg-2 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-          <h2 class="text-info font-weight-bold">244</h2>
-          <i class="mdi mdi-file-document-outline mdi-18px text-dark"></i>
+      <div class="col-lg-2 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body pb-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="text-info font-weight-bold">244</h2>
+              <i class="mdi mdi-file-document-outline mdi-18px text-dark"></i>
+            </div>
+          </div>
+          <canvas id="invoices"></canvas>
+          <div class="line-chart-row-title">NEW INVOICES</div>
         </div>
       </div>
-      <canvas id="invoices"></canvas>
-      <div class="line-chart-row-title">NEW INVOICES</div>
-    </div>
-  </div>
-  <div class="col-lg-2 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-          <h2 class="text-warning font-weight-bold">3259</h2>
-          <i class="mdi mdi-folder-outline mdi-18px text-dark"></i>
+      <div class="col-lg-2 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body pb-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="text-warning font-weight-bold">3259</h2>
+              <i class="mdi mdi-folder-outline mdi-18px text-dark"></i>
+            </div>
+          </div>
+          <canvas id="projects"></canvas>
+          <div class="line-chart-row-title">All PROJECTS</div>
         </div>
       </div>
-      <canvas id="projects"></canvas>
-      <div class="line-chart-row-title">All PROJECTS</div>
-    </div>
-  </div>
-  <div class="col-lg-2 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-          <h2 class="text-secondary font-weight-bold">586</h2>
-          <i class="mdi mdi-cart-outline mdi-18px text-dark"></i>
+      <div class="col-lg-2 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body pb-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="text-secondary font-weight-bold">586</h2>
+              <i class="mdi mdi-cart-outline mdi-18px text-dark"></i>
+            </div>
+          </div>
+          <canvas id="orderRecieved"></canvas>
+          <div class="line-chart-row-title">Orders Received</div>
         </div>
       </div>
-      <canvas id="orderRecieved"></canvas>
-      <div class="line-chart-row-title">Orders Received</div>
-    </div>
-  </div>
-  <div class="col-lg-2 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-          <h2 class="text-dark font-weight-bold">7826</h2>
-          <i class="mdi mdi-cash text-dark mdi-18px"></i>
-        </div>
-      </div>
-      <canvas id="transactions"></canvas>
-      <div class="line-chart-row-title">TRANSACTIONS</div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-6 grid-margin grid-margin-md-0 stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between">
-          <h4 class="card-title">Support Tracker</h4>
-          <h4 class="text-success font-weight-bold">Tickets<span class="text-dark ms-3">163</span></h4>
-        </div>
-        <div id="support-tracker-legend" class="support-tracker-legend"></div>
-        <canvas id="supportTracker"></canvas>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 grid-margin grid-margin-md-0 stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-lg-flex align-items-center justify-content-between mb-4">
-          <h4 class="card-title">Product Orders</h4>
-          <p class="text-dark">+5.2% vs last 7 days</p>
-        </div>
-        <div class="product-order-wrap padding-reduced">
-          <div id="productorder-gage" class="gauge productorder-gage"></div>
+      <div class="col-lg-2 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body pb-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="text-dark font-weight-bold">7826</h2>
+              <i class="mdi mdi-cash text-dark mdi-18px"></i>
+            </div>
+          </div>
+          <canvas id="transactions"></canvas>
+          <div class="line-chart-row-title">TRANSACTIONS</div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+    <div class="row">
+      <div class="col-sm-6 grid-margin grid-margin-md-0 stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+              <h4 class="card-title">Support Tracker</h4>
+              <h4 class="text-success font-weight-bold">
+                Tickets
+                <span class="text-dark ms-3">163</span>
+              </h4>
+            </div>
+            <div id="support-tracker-legend" class="support-tracker-legend"></div>
+            <canvas id="supportTracker"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 grid-margin grid-margin-md-0 stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-lg-flex align-items-center justify-content-between mb-4">
+              <h4 class="card-title">Product Orders</h4>
+              <p class="text-dark">+5.2% vs last 7 days</p>
+            </div>
+            <div class="product-order-wrap padding-reduced">
+              <div id="productorder-gage" class="gauge productorder-gage"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "includes/_intake_form.html" %}
+  {% endblock %}
 
-{% endblock %}
+  {% block extra_js_vendors %}
+    <script src="{% static 'vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'vendors/progressbar.js/progressbar.min.js' %}"></script>
 
-{% block extra_js_vendors %}
-<script src="{% static 'vendors/chart.js/Chart.min.js' %}"></script>
-<script src="{% static 'vendors/progressbar.js/progressbar.min.js' %}"></script>
-<script src="{% static 'vendors/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js' %}"></script>
-<script src="{% static 'vendors/justgage/raphael-2.1.4.min.js' %}"></script>
-<script src="{% static 'vendors/justgage/justgage.js' %}"></script>
-
-{% endblock %}
+  {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/jquery.cookie.js' %}"></script>
-<script src="{% static 'js/dashboard.js' %}"></script>
-{% if weather %}
-<script>
-window.addEventListener("DOMContentLoaded", (event) => {
+  {% if weather %}
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const now = new Date();
+        const dayLong = now.toLocaleString("default", { weekday: "long" });
+        const date = String(now.getDate()).padStart(2, "0");
 
-		const now = new Date();
-		const dayLong = now.toLocaleString('default', { weekday: 'long' });
-		const date = String(now.getDate()).padStart(2, '0');
-		document.getElementById("weather-city").textContent = "{{ weather.city }}, {{weather.region }}" ;
+        const cityEl = document.getElementById("weather-city");
+        const timeEl = document.getElementById("weather-time");
+        const forecastEl = document.getElementById("weather-shortForecast");
+        const tempEl = document.getElementById("weather-temp");
 
-		document.getElementById("weather-time").textContent =
-			`${dayLong} ${date} ${now.toLocaleTimeString()}`;
+        if (cityEl) {
+          cityEl.textContent = "{{ weather.city|default:'Weather'|escapejs }}";
+        }
 
-		document.getElementById("weather-shortForecast").textContent =
-			"{{ weather.shortForecast }}";
+        if (timeEl) {
+          timeEl.textContent = `${dayLong} ${date} ${now.toLocaleTimeString()}`;
+        }
 
-		document.getElementById("weather-temp").textContent = "{{ weather.temp}}"
-});
-</script>
-{% endif %}
+        if (forecastEl) {
+          forecastEl.textContent = "{{ weather.shortForecast|default:''|escapejs }}";
+        }
+
+        if (tempEl) {
+          tempEl.textContent = "{{ weather.temp|default:''|escapejs }}";
+        }
+      });
+    </script>
+  {% endif %}
+
+  <script>
+let enrollmentFormState = {};
+
+function saveFormState(form) {
+  enrollmentFormState = {};
+
+  new FormData(form).forEach((value, key) => {
+    if (key in enrollmentFormState) {
+      enrollmentFormState[key] = [].concat(enrollmentFormState[key], value);
+    } else {
+      enrollmentFormState[key] = value;
+    }
+  });
+
+  form.querySelectorAll("input[type='checkbox']").forEach((input) => {
+    enrollmentFormState[input.name] = input.checked;
+  });
+}
+
+function restoreFormState(form) {
+  Object.entries(enrollmentFormState).forEach(([key, value]) => {
+    form.querySelectorAll(`[name="${key}"]`).forEach((field) => {
+      if (field.type === "checkbox") {
+        field.checked = Boolean(value);
+      } else if (field.type === "radio") {
+        field.checked = field.value === value;
+      } else {
+        field.value = value;
+      }
+    });
+  });
+}
+
+function showEnrollmentModal() {
+  const formHtml = document.getElementById("enrollment-form-template").innerHTML;
+
+  Swal.fire({
+    html: formHtml,
+    width: "1521px",
+    showCancelButton: true,
+    confirmButtonText: "Create Enrollment",
+    cancelButtonText: "Close Form",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    focusConfirm: false,
+
+    didOpen: () => {
+      const form = Swal.getPopup().querySelector("#enrollment-form");
+      restoreFormState(form);
+    },
+
+    // Save state here — popup DOM is still accessible
+    willClose: () => {
+      const form = Swal.getPopup().querySelector("#enrollment-form");
+      if (form) saveFormState(form);
+    },
+
+    preConfirm: () => {
+      const form = Swal.getPopup().querySelector("#enrollment-form");
+      form.submit();
+      return false;
+    },
+  }).then((result) => {
+    if (result.dismiss === Swal.DismissReason.cancel) {
+      showCloseConfirmation();
+    }
+  });
+}
+
+function showCloseConfirmation() {
+  Swal.fire({
+    title: "Close this form?",
+    text: "Your entered data will stay available if you keep editing.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, close it",
+    cancelButtonText: "No, keep editing",
+  }).then((result) => {
+    if (!result.isConfirmed) {
+      showEnrollmentModal();
+    } else {
+      enrollmentFormState = {};
+    }
+  });
+}
+
+const openEnrollmentTrigger = document.getElementById("open-enrollment-modal");
+if (openEnrollmentTrigger) {
+  openEnrollmentTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    showEnrollmentModal();
+  });
+}
+  </script>
 {% endblock %}
-

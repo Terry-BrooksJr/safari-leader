@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Children - Safari Leader{% endblock %}
+{% block title %}Notification Log - Safari Leader{% endblock %}
 {% block extra_css %}{% endblock %}
 {% block content %}
     <div class="container-fluid page-body-wrapper">
@@ -11,47 +11,43 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">
-                                    Children Roster <strong>({{ page_obj.paginator.count }})</strong>
+                                    Notification Log <strong>({{ page_obj.paginator.count }})</strong>
                                 </h4>
                                 <div class="table-responsive">
-                                    <ul class="nav nav-tabs filter-tabs">
+                                    <ul class="nav nav-tabs">
                                         <li class="nav-item">
-                                            <a class="nav-link {% if not request.GET.status %}active{% endif %}"
-                                               href="?">All</a>
+                                            <a class="nav-link" href="?">Current</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link {% if request.GET.status == 'active' %}active{% endif %}"
-                                               href="?status=active">Active</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link {% if request.GET.status == 'inactive' %}active{% endif %}"
-                                               href="?status=inactive">Inactive</a>
+                                            <a class="nav-link" href="?read=true">Archived</a>
                                         </li>
                                     </ul>
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Last Name</th>
-                                                <th>First Name</th>
-                                                <th>Date of Birth</th>
+                                                <th>Date</th>
+                                                <th>Message</th>
+                                                <th>Sites</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for child in children %}
+                                            {% for message in messages %}
                                                 <tr>
-                                                    <td>{{ child.last_name }}</td>
-                                                    <td>{{ child.first_name }}</td>
-                                                    <td>{{ child.date_of_birth |date:"F j, Y"  }}</td>
                                                     <td>
-                                                        <a href="{% url 'child-detail' child.pk %}">
-                                                            <button type="button" class="btn btn-outline-primary">Details</button>
+                                                        {{ message.created_at|date:"F j, Y" }}
+                                                    </td>
+                                                    <td>{{ message.sender.first_name }} {{ message.sender.last_name }}</td>
+                                                    <td>{{ message.message |truncatewords:10 }}</td>
+                                                    <td>
+                                                        <a href="{% url 'message-detail' message.pk %}">
+                                                            <button type="button" class="btn btn-outline-primary">Open</button>
                                                         </a>
                                                     </td>
                                                 </tr>
                                             {% empty %}
                                                 <tr>
-                                                    <td colspan="4" class="text-center">No children found.</td>
+                                                    <td colspan="4" class="text-center">No Notifications found for Your Sites.</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>

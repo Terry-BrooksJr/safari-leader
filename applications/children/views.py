@@ -13,7 +13,6 @@ from applications.children.models import (
 )
 from applications.handoff.models import HandoffEvent
 
-
 def paginate_queryset(request, queryset, page_param, per_page):
     paginator = Paginator(queryset, per_page)
     return paginator.get_page(request.GET.get(page_param))

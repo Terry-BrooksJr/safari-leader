@@ -1,0 +1,15 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div id="enrollment-form-template" class="d-none">
+
+  <form id="enrollment-form" method="post" action="#">
+
+    {% csrf_token %}
+
+    {% crispy form %}
+
+  </form>
+
+</div>
+
