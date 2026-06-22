@@ -274,10 +274,14 @@ class EnrollmentIntakeForm(forms.Form):
                         Field("has_allergy"),
                         css_class="form-check form-switch safari-switch-row mb-3",
                     ),
-                    Row(
-                        Column(Field("allergy_allergen"), css_class="col-md-4"),
-                        Column(Field("allergy_severity"), css_class="col-md-4"),
-                        Column(Field("allergy_instructions"), css_class="col-md-4"),
+                    Div(
+                        Row(
+                            Column(Field("allergy_allergen"), css_class="col-md-4"),
+                            Column(Field("allergy_severity"), css_class="col-md-4"),
+                            Column(Field("allergy_instructions"), css_class="col-md-4"),
+                        ),
+                        css_id="allergy-fields",
+                        css_class="conditional-fields",
                     ),
                     css_id="allergy-fields-container",
                 ),
@@ -286,7 +290,11 @@ class EnrollmentIntakeForm(forms.Form):
                         Field("has_medical_note"),
                         css_class="form-check form-switch safari-switch-row mb-3",
                     ),
-                    Field("medical_note"),
+                    Div(
+                        Field("medical_note"),
+                        css_id="medical-note-fields",
+                        css_class="conditional-fields",
+                    ),
                     css_id="medical-note-fields-container",
                 ),
                 Div(
@@ -294,7 +302,11 @@ class EnrollmentIntakeForm(forms.Form):
                         Field("has_custody_restriction"),
                         css_class="form-check form-switch safari-switch-row mb-3",
                     ),
-                    Field("custody_restriction_notes"),
+                    Div(
+                        Field("custody_restriction_notes"),
+                        css_id="custody-restriction-fields",
+                        css_class="conditional-fields",
+                    ),
                     css_id="custody-restriction-fields-container",
                 ),
                 HTML("<hr class='border border-primary border-3 opacity-100'>"),
@@ -344,17 +356,27 @@ class EnrollmentIntakeForm(forms.Form):
                         css_class="col-md",
                     ),
                 ),
-                Row(
-                    Column(Field("emergency_first_name"), css_class="col-md-3"),
-                    Column(Field("emergency_last_name"), css_class="col-md-3"),
-                    Column(Field("emergency_contact_number"), css_class="col-md-3"),
-                    Column(Field("emergency_relationship"), css_class="col-md-3"),
+                Div(
+                    Row(
+                        Column(Field("emergency_first_name"), css_class="col-md-3"),
+                        Column(Field("emergency_last_name"), css_class="col-md-3"),
+                        Column(
+                            Field("emergency_contact_number"), css_class="col-md-3"
+                        ),
+                        Column(Field("emergency_relationship"), css_class="col-md-3"),
+                    ),
+                    Row(
+                        Field("emergency_is_authorized"),
+                        css_class="form-check form-switch safari-switch-row",
+                    ),
+                    Div(
+                        Field("emergency_verification_notes"),
+                        css_id="emergency-authorized-fields",
+                        css_class="conditional-fields",
+                    ),
+                    css_id="emergency-contact-fields",
+                    css_class="conditional-fields",
                 ),
-                Row(
-                    Field("emergency_is_authorized"),
-                    css_class="form-check form-switch safari-switch-row",
-                ),
-                Field("emergency_verification_notes"),
             ),
         )
 
