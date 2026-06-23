@@ -106,10 +106,6 @@ class EnrollmentIntakeForm(forms.Form):
     child_date_of_birth = forms.DateField(
         widget=forms.DateInput(attrs={"type": "date"})
     )
-    child_status = forms.ChoiceField(
-        choices=STUDENT_STATUS.choices,
-        initial=STUDENT_STATUS.ENROLLED,
-    )
     # Optional allergy fields
     has_allergy = forms.BooleanField(required=False)
     allergy_allergen = forms.CharField(max_length=50, required=False)
@@ -137,14 +133,6 @@ class EnrollmentIntakeForm(forms.Form):
     program = forms.ModelChoiceField(queryset=Program.objects.none())
     enrollment_start_date = forms.DateField(
         widget=forms.DateInput(attrs={"type": "date"})
-    )
-    enrollment_end_date = forms.DateField(
-        widget=forms.DateInput(attrs={"type": "date"}),
-        required=False,
-    )
-    enrollment_status = forms.ChoiceField(
-        choices=ENROLLMENT_STATUS.choices,
-        initial=ENROLLMENT_STATUS.PENDING,
     )
     # Schedule fields
     instructor = forms.ModelChoiceField(queryset=StaffProfile.objects.none())
@@ -253,18 +241,30 @@ class EnrollmentIntakeForm(forms.Form):
                     ),
                     Column(
                         Div(
-                            Field("parent_is_primary_contact"),
-                            css_class="form-check form-switch d-flex align-items-center gap-2 mb-2 safari-switch-row",
-                        ),
-                        Div(
-                            Field("parent_has_custody_rights"),
-                            css_class="form-check form-switch d-flex align-items-center gap-2 mb-2 safari-switch-row",
-                        ),
-                        Div(
-                            Field("parent_can_pickup"),
-                            css_class="form-check form-switch d-flex align-items-,center gap-2 mb-2 safari-switch-row",
+                            Div(
+                                Field("parent_is_primary_contact"),
+                                css_class="form-check form-switch d-flex align-items-center gap-2 mb-2 safari-switch-row",
+                            ),
+                            Div(
+                                Field("parent_has_custody_rights"),
+                                css_class="form-check form-switch d-flex align-items-center gap-2 mb-2 safari-switch-row",
+                            ),
+                            Div(
+                                Field("parent_can_pickup"),
+                                css_class="form-check form-switch d-flex align-items-center gap-2 mb-2 safari-switch-row",
+                            ),
+                            css_class="parent-switches-group",
                         ),
                         css_class="col-md-5 parent-switches",
+                    ),
+                ),
+                HTML("<hr class='border border-primary border-3 opacity-100'>"),
+                Fieldset(
+                    "Child Information",
+                    Row(
+                        Column(Field("child_first_name"), css_class="col-md-4"),
+                        Column(Field("child_last_name"), css_class="col-md-4"),
+                        Column(Field("child_date_of_birth"), css_class="col-md-4"),
                     ),
                 ),
                 HTML("<hr class='border border-primary border-3 opacity-100'>"),
@@ -272,7 +272,7 @@ class EnrollmentIntakeForm(forms.Form):
                     "Health and Safety",
                     Div(
                         Field("has_allergy"),
-                        css_class="form-check form-switch safari-switch-row mb-3",
+                        css_class="form-check form-switch safari-switch-row justify-content-center mb-3",
                     ),
                     Div(
                         Row(
@@ -288,7 +288,7 @@ class EnrollmentIntakeForm(forms.Form):
                 Div(
                     Div(
                         Field("has_medical_note"),
-                        css_class="form-check form-switch safari-switch-row mb-3",
+                        css_class="form-check form-switch safari-switch-row justify-content-center mb-3",
                     ),
                     Div(
                         Field("medical_note"),
@@ -300,7 +300,7 @@ class EnrollmentIntakeForm(forms.Form):
                 Div(
                     Div(
                         Field("has_custody_restriction"),
-                        css_class="form-check form-switch safari-switch-row mb-3",
+                        css_class="form-check form-switch safari-switch-row justify-content-center mb-3",
                     ),
                     Div(
                         Field("custody_restriction_notes"),
@@ -315,9 +315,7 @@ class EnrollmentIntakeForm(forms.Form):
                     Field("program"),
                     Div(
                         Field("enrollment_start_date", css_class="col-md-6"),
-                        Field("enrollment_end_date", css_class="col-md-6"),
                     ),
-                    Field("enrollment_status"),
                 ),
                 HTML("<hr class='border border-primary border-3 opacity-100'>"),
                 Fieldset(
@@ -351,7 +349,7 @@ class EnrollmentIntakeForm(forms.Form):
                     Row(
                         Column(
                             Field("create_emergency_contact"),
-                            css_class="form-check form-switch safari-switch-row",
+                            css_class="form-check form-switch safari-switch-row justify-content-center",
                         ),
                         css_class="col-md",
                     ),
@@ -367,7 +365,7 @@ class EnrollmentIntakeForm(forms.Form):
                     ),
                     Row(
                         Field("emergency_is_authorized"),
-                        css_class="form-check form-switch safari-switch-row",
+                        css_class="form-check form-switch safari-switch-row justify-content-center",
                     ),
                     Div(
                         Field("emergency_verification_notes"),
@@ -410,14 +408,6 @@ class EnrollmentIntakeForm(forms.Form):
             self.add_error(
                 "custody_restriction_notes",
                 "Restriction notes are required when adding a custody restriction.",
-            )
-
-        start_date = cleaned_data.get("enrollment_start_date")
-        end_date = cleaned_data.get("enrollment_end_date")
-        if start_date and end_date and end_date < start_date:
-            self.add_error(
-                "enrollment_end_date",
-                "Enrollment end date cannot be before the start date.",
             )
 
         start_time = cleaned_data.get("schedule_start_time")
@@ -485,7 +475,7 @@ class EnrollmentIntakeForm(forms.Form):
 
     def _create_parent_user(self, User, data):
         return User.objects.create_user(
-            username=data["parent_email"],
+            username=f'{data["parent_last_name"]}.{data["parent_first_name"]}',
             email=data["parent_email"],
             first_name=data["parent_first_name"],
             last_name=data["parent_last_name"],
@@ -503,7 +493,7 @@ class EnrollmentIntakeForm(forms.Form):
             first_name=data["child_first_name"],
             last_name=data["child_last_name"],
             date_of_birth=data["child_date_of_birth"],
-            status=data["child_status"],
+            status=STUDENT_STATUS.ENROLLED,
         )
 
     def _assign_role(self, parent_user, guardian_role, child):
@@ -571,8 +561,7 @@ class EnrollmentIntakeForm(forms.Form):
             child=child,
             program=data["program"],
             start_date=data["enrollment_start_date"],
-            end_date=data["enrollment_end_date"],
-            status=data["enrollment_status"],
+            status=ENROLLMENT_STATUS.PENDING,
         )
 
         child_schedule = ChildSchedule.objects.create(
