@@ -22,7 +22,9 @@ class ROLES(models.TextChoices):
 
 class User(AbstractUser):
     pass
-
+    is_instructor = models.BooleanField(default=False)
+    is_director = models.BooleanField(default=False)
+    is_clerical = models.BooleanField(default=False)
 
 class Role(models.Model):
     name = models.CharField(

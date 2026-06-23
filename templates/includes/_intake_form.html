@@ -1,0 +1,25 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{# Use a <template> so the form's ids stay inert until cloned into the modal. #}
+{# A plain hidden <div> would keep a second live copy of every id in the DOM, #}
+{# and the day-toggle <label for="..."> clicks would resolve to the hidden    #}
+{# copy instead of the visible modal one, leaving the buttons un-toggleable.   #}
+<template id="enrollment-form-template">
+
+  <form id="enrollment-form" method="post" action="{% url 'enroll' %}">
+   <!-- Safeguard to display global form errors -->
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    
+    {% csrf_token %}
+
+    {% crispy form %}
+
+  </form>
+
+</template>
+

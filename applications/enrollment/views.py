@@ -14,3 +14,6 @@ class EnrollmentDetailView(DetailView):
     template_name = "enrollment/enrollment_detail.html"
     context_object_name = "enrollment"
     queryset = Enrollment.objects.select_related("child", "program", "program__site")
+
+
+
