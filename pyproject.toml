@@ -53,7 +53,7 @@ ruff = "^0.15.2"
 djlint = "^1.36.4"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.0"
+pytest = "^9.0"
 pytest-django = "^4.8"
 pytest-cov = "^6.0"
 coverage = {extras = ["toml"], version = "^7.4"}
